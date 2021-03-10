@@ -1,0 +1,16 @@
+[package]
+name = "superstruct"
+version = "0.1.0"
+authors = ["Michael Sproul <michael@sigmaprime.io>"]
+edition = "2018"
+
+[lib]
+name = "superstruct"
+proc-macro = true
+
+[dependencies]
+darling = "0.12.2"
+itertools = "0.10.0"
+proc-macro2 = "1.0.24"
+quote = "1.0.9"
+syn = "1.0.62"
