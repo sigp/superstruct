@@ -41,6 +41,9 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let type_name = &item.ident;
     let visibility = item.vis;
+    // Extract the generics to use for the top-level type and all variant structs.
+    let decl_generics = &item.generics;
+    // Generics used for the impl block.
     let (impl_generics, ty_generics, where_clause) = &item.generics.split_for_impl();
 
     let opts = StructOpts::from_list(&attr_args).unwrap();
@@ -94,6 +97,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         }
     }
 
+    // Generate structs for all of the variants.
     let derive_all = opts
         .derive_all
         .as_ref()
@@ -108,7 +112,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     #derive_all,
                 )*
             )]
-            #visibility struct #struct_name #ty_generics #where_clause {
+            #visibility struct #struct_name #decl_generics {
                 #(
                     #fields,
                 )*
@@ -123,9 +127,9 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         #(
             #top_level_attrs
         )*
-        #visibility enum #type_name #ty_generics #where_clause {
+        #visibility enum #type_name #decl_generics {
             #(
-                #variant_names(#struct_names),
+                #variant_names(#struct_names #ty_generics),
             )*
         }
     };
@@ -172,7 +176,7 @@ fn make_field_getter(
     let return_expr = if getter_opts.copy {
         quote! { inner.#field_name }
     } else {
-        quote! { &inner.$field_name }
+        quote! { &inner.#field_name }
     };
     let type_name_repeat = iter::repeat(type_name).take(variant_names.len());
     let return_expr_repeat = iter::repeat(&return_expr).take(variant_names.len());
