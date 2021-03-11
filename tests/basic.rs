@@ -1,7 +1,7 @@
 use superstruct::superstruct;
 
-#[superstruct(variants(Base, Ext), derive_all(Debug))]
-#[derive(Debug)]
+#[superstruct(variants(Base, Ext), variant_attributes(derive(Debug, PartialEq)))]
+#[derive(Debug, PartialEq)]
 pub struct Block {
     #[superstruct(getter(copy))]
     slot: u64,

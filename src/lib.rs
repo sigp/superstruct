@@ -4,16 +4,16 @@ use proc_macro::TokenStream;
 use quote::{format_ident, quote};
 use std::collections::HashMap;
 use std::iter::{self, FromIterator};
-use syn::{parse_macro_input, Attribute, AttributeArgs, Ident, ItemStruct, Type};
+use syn::{parse_macro_input, Attribute, AttributeArgs, Ident, ItemStruct, NestedMeta, Type};
 
 /// Top-level configuration via the `superstruct` attribute.
 #[derive(Debug, FromMeta)]
 struct StructOpts {
     /// List of variant names of the superstruct being derived.
     variants: HashMap<Ident, ()>,
-    /// List of traits to derive for all variants.
+    /// List of attributes to apply to the variant structs.
     #[darling(default)]
-    derive_all: Option<HashMap<Ident, ()>>,
+    variant_attributes: Option<NestedMetaList>,
 }
 
 /// Field-level configuration.
@@ -32,6 +32,19 @@ struct GetterOpts {
     copy: bool,
     #[darling(default)]
     rename: Option<Ident>,
+}
+
+#[derive(Debug)]
+struct NestedMetaList {
+    metas: Vec<NestedMeta>,
+}
+
+impl FromMeta for NestedMetaList {
+    fn from_list(items: &[NestedMeta]) -> Result<Self, darling::Error> {
+        Ok(Self {
+            metas: items.iter().cloned().collect(),
+        })
+    }
 }
 
 #[proc_macro_attribute]
@@ -98,20 +111,17 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     }
 
     // Generate structs for all of the variants.
-    let derive_all = opts
-        .derive_all
+    let struct_attributes = opts
+        .variant_attributes
         .as_ref()
-        .map(|traits| traits.keys().cloned().collect_vec())
-        .unwrap_or_else(Vec::new);
+        .map_or(&[][..], |attrs| &attrs.metas);
 
     for (variant_name, struct_name) in variant_names.iter().zip(struct_names.iter()) {
         let fields = &variant_fields[variant_name];
         let variant_code = quote! {
-            #[derive(
-                #(
-                    #derive_all,
-                )*
-            )]
+            #(
+                #[#struct_attributes]
+            )*
             #visibility struct #struct_name #decl_generics {
                 #(
                     #fields,
