@@ -31,6 +31,8 @@ struct GetterOpts {
     #[darling(default)]
     copy: bool,
     #[darling(default)]
+    no_mut: bool,
+    #[darling(default)]
     rename: Option<Ident>,
 }
 
@@ -122,7 +124,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             #(
                 #[#struct_attributes]
             )*
-            #visibility struct #struct_name #decl_generics {
+            #visibility struct #struct_name #decl_generics #where_clause {
                 #(
                     #fields,
                 )*
@@ -137,7 +139,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         #(
             #top_level_attrs
         )*
-        #visibility enum #type_name #decl_generics {
+        #visibility enum #type_name #decl_generics #where_clause {
             #(
                 #variant_names(#struct_names #ty_generics),
             )*
@@ -157,10 +159,27 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         )
     });
 
+    let mut_getters = common_fields
+        .iter()
+        .filter(|(_, getter_opts)| !getter_opts.no_mut)
+        .map(|(field, getter_opts)| {
+            let field_name = field.ident.as_ref().expect("named fields only");
+            make_mut_field_getter(
+                type_name,
+                &variant_names,
+                field_name,
+                &field.ty,
+                getter_opts,
+            )
+        });
+
     let impl_block = quote! {
         impl #impl_generics #type_name #ty_generics #where_clause {
             #(
                 #getters
+            )*
+            #(
+                #mut_getters
             )*
         }
     };
@@ -191,10 +210,35 @@ fn make_field_getter(
     let type_name_repeat = iter::repeat(type_name).take(variant_names.len());
     let return_expr_repeat = iter::repeat(&return_expr).take(variant_names.len());
     quote! {
-        fn #fn_name(&self) -> #return_type {
+        pub fn #fn_name(&self) -> #return_type {
             match self {
                 #(
                     #type_name_repeat::#variant_names(ref inner) => {
+                        #return_expr_repeat
+                    }
+                )*
+            }
+        }
+    }
+}
+
+/// Generate a mutable getter method for a field.
+fn make_mut_field_getter(
+    type_name: &Ident,
+    variant_names: &[Ident],
+    field_name: &Ident,
+    field_type: &Type,
+    getter_opts: &GetterOpts,
+) -> proc_macro2::TokenStream {
+    let fn_name = format_ident!("{}_mut", getter_opts.rename.as_ref().unwrap_or(field_name));
+    let return_expr = quote! { &mut inner.#field_name };
+    let type_name_repeat = iter::repeat(type_name).take(variant_names.len());
+    let return_expr_repeat = iter::repeat(&return_expr).take(variant_names.len());
+    quote! {
+        pub fn #fn_name(&mut self) -> &mut #field_type {
+            match self {
+                #(
+                    #type_name_repeat::#variant_names(ref mut inner) => {
                         #return_expr_repeat
                     }
                 )*
