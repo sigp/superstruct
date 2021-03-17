@@ -1,10 +1,14 @@
 use darling::FromMeta;
 use itertools::Itertools;
 use proc_macro::TokenStream;
+use proc_macro2::Span;
 use quote::{format_ident, quote};
 use std::collections::HashMap;
 use std::iter::{self, FromIterator};
-use syn::{parse_macro_input, Attribute, AttributeArgs, Ident, ItemStruct, NestedMeta, Type};
+use syn::{
+    parse_macro_input, Attribute, AttributeArgs, GenericParam, Ident, ItemStruct, Lifetime,
+    LifetimeDef, NestedMeta, Type,
+};
 
 /// Top-level configuration via the `superstruct` attribute.
 #[derive(Debug, FromMeta)]
@@ -147,7 +151,29 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     };
     output_items.push(enum_item.into());
 
-    // Construct the impl block.
+    // Construct a top-level reference type.
+    // TODO: check that variants aren't called `Ref`
+    let ref_ty_name = format_ident!("{}Ref", type_name);
+    let ref_ty_lifetime = Lifetime::new("'__superstruct", Span::call_site());
+
+    // Muahaha, this is dank.
+    let mut ref_ty_decl_generics = decl_generics.clone();
+    ref_ty_decl_generics.params.insert(
+        0,
+        GenericParam::Lifetime(LifetimeDef::new(ref_ty_lifetime.clone())),
+    );
+    let (ref_impl_generics, ref_ty_generics, _) = &ref_ty_decl_generics.split_for_impl();
+    // TODO: reconsider including top-level attributes on reference type
+    let ref_ty = quote! {
+        #visibility enum #ref_ty_name #ref_ty_decl_generics #where_clause {
+            #(
+                #variant_names(&#ref_ty_lifetime #struct_names #ty_generics),
+            )*
+        }
+    };
+    output_items.push(ref_ty.into());
+
+    // Construct the main impl block.
     let getters = common_fields.iter().map(|(field, getter_opts)| {
         let field_name = field.ident.as_ref().expect("named fields only");
         make_field_getter(
@@ -175,6 +201,14 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let impl_block = quote! {
         impl #impl_generics #type_name #ty_generics #where_clause {
+            fn to_ref<#ref_ty_lifetime>(&#ref_ty_lifetime self) -> #ref_ty_name #ref_ty_generics {
+                match self {
+                    #(
+                        #type_name::#variant_names(ref inner)
+                            => #ref_ty_name::#variant_names(inner),
+                    )*
+                }
+            }
             #(
                 #getters
             )*
@@ -184,6 +218,27 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         }
     };
     output_items.push(impl_block.into());
+
+    // Construct the impl block for the *Ref type.
+    let ref_getters = common_fields.iter().map(|(field, getter_opts)| {
+        let field_name = field.ident.as_ref().expect("named fields only");
+        make_field_getter(
+            &ref_ty_name,
+            &variant_names,
+            field_name,
+            &field.ty,
+            getter_opts,
+        )
+    });
+
+    let ref_impl_block = quote! {
+        impl #ref_impl_generics #ref_ty_name #ref_ty_generics #where_clause {
+            #(
+                #ref_getters
+            )*
+        }
+    };
+    output_items.push(ref_impl_block.into());
 
     TokenStream::from_iter(output_items)
 }
@@ -207,14 +262,12 @@ fn make_field_getter(
     } else {
         quote! { &inner.#field_name }
     };
-    let type_name_repeat = iter::repeat(type_name).take(variant_names.len());
-    let return_expr_repeat = iter::repeat(&return_expr).take(variant_names.len());
     quote! {
         pub fn #fn_name(&self) -> #return_type {
             match self {
                 #(
-                    #type_name_repeat::#variant_names(ref inner) => {
-                        #return_expr_repeat
+                    #type_name::#variant_names(ref inner) => {
+                        #return_expr
                     }
                 )*
             }
@@ -232,14 +285,12 @@ fn make_mut_field_getter(
 ) -> proc_macro2::TokenStream {
     let fn_name = format_ident!("{}_mut", getter_opts.rename.as_ref().unwrap_or(field_name));
     let return_expr = quote! { &mut inner.#field_name };
-    let type_name_repeat = iter::repeat(type_name).take(variant_names.len());
-    let return_expr_repeat = iter::repeat(&return_expr).take(variant_names.len());
     quote! {
         pub fn #fn_name(&mut self) -> &mut #field_type {
             match self {
                 #(
-                    #type_name_repeat::#variant_names(ref mut inner) => {
-                        #return_expr_repeat
+                    #type_name::#variant_names(ref mut inner) => {
+                        #return_expr
                     }
                 )*
             }

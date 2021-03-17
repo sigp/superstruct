@@ -23,4 +23,7 @@ fn wow() {
     println!("{:?}", block1);
     println!("{:?}", block2);
     println!("{}", block1.slot());
+
+    let block_ref = block1.to_ref();
+    println!("{:?}", block_ref.slot());
 }
