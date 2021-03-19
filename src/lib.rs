@@ -181,6 +181,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             &variant_names,
             field_name,
             &field.ty,
+            None,
             getter_opts,
         )
     });
@@ -227,6 +228,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             &variant_names,
             field_name,
             &field.ty,
+            Some(&ref_ty_lifetime),
             getter_opts,
         )
     });
@@ -249,13 +251,18 @@ fn make_field_getter(
     variant_names: &[Ident],
     field_name: &Ident,
     field_type: &Type,
+    lifetime: Option<&Lifetime>,
     getter_opts: &GetterOpts,
 ) -> proc_macro2::TokenStream {
     let fn_name = getter_opts.rename.as_ref().unwrap_or(field_name);
     let return_type = if getter_opts.copy {
         quote! { #field_type }
     } else {
-        quote! { &#field_type}
+        if let Some(lifetime) = lifetime {
+            quote! { &#lifetime #field_type}
+        } else {
+            quote! { &#field_type}
+        }
     };
     let return_expr = if getter_opts.copy {
         quote! { inner.#field_name }

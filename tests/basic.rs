@@ -5,15 +5,20 @@ use superstruct::superstruct;
 pub struct Block {
     #[superstruct(getter(copy))]
     slot: u64,
+    data: Vec<u8>,
     #[superstruct(only(Ext))]
     description: &'static str,
 }
 
 #[test]
 fn wow() {
-    let base = BlockBase { slot: 10 };
+    let base = BlockBase {
+        slot: 10,
+        data: vec![],
+    };
     let lmao = BlockExt {
         slot: 11,
+        data: vec![10],
         description: "oooeee look at this",
     };
 
