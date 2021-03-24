@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use std::iter::{self, FromIterator};
 use syn::{
     parse_macro_input, Attribute, AttributeArgs, GenericParam, Ident, ItemStruct, Lifetime,
-    LifetimeDef, NestedMeta, Type,
+    LifetimeDef, NestedMeta, Type, TypeGenerics,
 };
 
 /// Top-level configuration via the `superstruct` attribute.
@@ -200,9 +200,18 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             )
         });
 
+    let cast_methods = variant_names
+        .iter()
+        .flat_map(|variant_name| {
+            let caster = make_as_variant_method(type_name, variant_name, ty_generics, false);
+            let caster_mut = make_as_variant_method(type_name, variant_name, ty_generics, true);
+            vec![caster, caster_mut]
+        })
+        .collect_vec();
+
     let impl_block = quote! {
         impl #impl_generics #type_name #ty_generics #where_clause {
-            fn to_ref<#ref_ty_lifetime>(&#ref_ty_lifetime self) -> #ref_ty_name #ref_ty_generics {
+            pub fn to_ref<#ref_ty_lifetime>(&#ref_ty_lifetime self) -> #ref_ty_name #ref_ty_generics {
                 match self {
                     #(
                         #type_name::#variant_names(ref inner)
@@ -210,6 +219,9 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     )*
                 }
             }
+            #(
+                #cast_methods
+            )*
             #(
                 #getters
             )*
@@ -300,6 +312,40 @@ fn make_mut_field_getter(
                         #return_expr
                     }
                 )*
+            }
+        }
+    }
+}
+
+/// Generate a `as_<variant_name>{_mut}` method.
+fn make_as_variant_method(
+    type_name: &Ident,
+    variant_name: &Ident,
+    type_generics: &TypeGenerics,
+    mutable: bool,
+) -> proc_macro2::TokenStream {
+    let variant_ty = format_ident!("{}{}", type_name, variant_name);
+    let (suffix, arg, ret_ty, binding) = if mutable {
+        (
+            "_mut",
+            quote! { &mut self },
+            quote! { &mut #variant_ty #type_generics },
+            quote! { ref mut inner },
+        )
+    } else {
+        (
+            "",
+            quote! { &self },
+            quote! { &#variant_ty #type_generics },
+            quote! { ref inner },
+        )
+    };
+    let fn_name = format_ident!("as_{}{}", variant_name.to_string().to_lowercase(), suffix);
+    quote! {
+        pub fn #fn_name(#arg) -> Option<#ret_ty> {
+            match self {
+                #type_name::#variant_name(#binding) => Some(inner),
+                _ => None,
             }
         }
     }
