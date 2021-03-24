@@ -6,7 +6,7 @@ use quote::{format_ident, quote};
 use std::collections::HashMap;
 use std::iter::{self, FromIterator};
 use syn::{
-    parse_macro_input, Attribute, AttributeArgs, GenericParam, Ident, ItemStruct, Lifetime,
+    parse_macro_input, Attribute, AttributeArgs, Expr, GenericParam, Ident, ItemStruct, Lifetime,
     LifetimeDef, NestedMeta, Type, TypeGenerics,
 };
 
@@ -18,6 +18,9 @@ struct StructOpts {
     /// List of attributes to apply to the variant structs.
     #[darling(default)]
     variant_attributes: Option<NestedMetaList>,
+    /// Error type and expression to use for casting methods.
+    #[darling(default)]
+    cast_error: CastErrOpts,
 }
 
 /// Field-level configuration.
@@ -38,6 +41,14 @@ struct GetterOpts {
     no_mut: bool,
     #[darling(default)]
     rename: Option<Ident>,
+}
+
+#[derive(Debug, Default, FromMeta)]
+struct CastErrOpts {
+    #[darling(default)]
+    ty: Option<String>,
+    #[darling(default)]
+    expr: Option<String>,
 }
 
 #[derive(Debug)]
@@ -203,8 +214,20 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let cast_methods = variant_names
         .iter()
         .flat_map(|variant_name| {
-            let caster = make_as_variant_method(type_name, variant_name, ty_generics, false);
-            let caster_mut = make_as_variant_method(type_name, variant_name, ty_generics, true);
+            let caster = make_as_variant_method(
+                type_name,
+                variant_name,
+                ty_generics,
+                &opts.cast_error,
+                false,
+            );
+            let caster_mut = make_as_variant_method(
+                type_name,
+                variant_name,
+                ty_generics,
+                &opts.cast_error,
+                true,
+            );
             vec![caster, caster_mut]
         })
         .collect_vec();
@@ -322,6 +345,7 @@ fn make_as_variant_method(
     type_name: &Ident,
     variant_name: &Ident,
     type_generics: &TypeGenerics,
+    cast_err_opts: &CastErrOpts,
     mutable: bool,
 ) -> proc_macro2::TokenStream {
     let variant_ty = format_ident!("{}{}", type_name, variant_name);
@@ -340,12 +364,23 @@ fn make_as_variant_method(
             quote! { ref inner },
         )
     };
+    let (ret_res_ty, err_expr) = if let Some(ref err_ty_str) = cast_err_opts.ty {
+        let err_ty: Type = syn::parse_str(err_ty_str).expect("cast_error type not valid");
+        let err_expr_str = cast_err_opts
+            .expr
+            .as_ref()
+            .expect("must provide a cast_error(expr(..)) with ty");
+        let err_expr: Expr = syn::parse_str(err_expr_str).expect("cast_error expr not valid");
+        (quote! { Result<#ret_ty, #err_ty> }, quote! { #err_expr })
+    } else {
+        (quote! { Result<#ret_ty, ()> }, quote! { () })
+    };
     let fn_name = format_ident!("as_{}{}", variant_name.to_string().to_lowercase(), suffix);
     quote! {
-        pub fn #fn_name(#arg) -> Option<#ret_ty> {
+        pub fn #fn_name(#arg) -> #ret_res_ty {
             match self {
-                #type_name::#variant_name(#binding) => Some(inner),
-                _ => None,
+                #type_name::#variant_name(#binding) => Ok(inner),
+                _ => Err(#err_expr),
             }
         }
     }

@@ -1,6 +1,10 @@
 use superstruct::superstruct;
 
-#[superstruct(variants(Base, Ext), variant_attributes(derive(Debug, PartialEq)))]
+#[superstruct(
+    variants(Base, Ext),
+    variant_attributes(derive(Debug, PartialEq)),
+    cast_error(ty = "BlockError", expr = "BlockError::WrongVariant")
+)]
 #[derive(Debug, PartialEq)]
 pub struct Block {
     #[superstruct(getter(copy))]
@@ -8,6 +12,10 @@ pub struct Block {
     data: Vec<u8>,
     #[superstruct(only(Ext))]
     description: &'static str,
+}
+
+pub enum BlockError {
+    WrongVariant,
 }
 
 #[test]
