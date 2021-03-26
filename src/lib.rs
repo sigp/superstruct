@@ -18,6 +18,9 @@ struct StructOpts {
     /// List of attributes to apply to the variant structs.
     #[darling(default)]
     variant_attributes: Option<NestedMetaList>,
+    /// List of attributes to apply to the generated Ref type.
+    #[darling(default)]
+    ref_attributes: Option<NestedMetaList>,
     /// Error type and expression to use for casting methods.
     #[darling(default)]
     cast_error: CastErrOpts,
@@ -168,14 +171,24 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let ref_ty_lifetime = Lifetime::new("'__superstruct", Span::call_site());
 
     // Muahaha, this is dank.
+    // Inject the generated lifetime into the top-level type's generics.
     let mut ref_ty_decl_generics = decl_generics.clone();
     ref_ty_decl_generics.params.insert(
         0,
         GenericParam::Lifetime(LifetimeDef::new(ref_ty_lifetime.clone())),
     );
     let (ref_impl_generics, ref_ty_generics, _) = &ref_ty_decl_generics.split_for_impl();
-    // TODO: reconsider including top-level attributes on reference type
+
+    // Prepare the attributes for the ref type.
+    let ref_attributes = opts
+        .ref_attributes
+        .as_ref()
+        .map_or(&[][..], |attrs| &attrs.metas);
+
     let ref_ty = quote! {
+        #(
+            #[#ref_attributes]
+        )*
         #visibility enum #ref_ty_name #ref_ty_decl_generics #where_clause {
             #(
                 #variant_names(&#ref_ty_lifetime #struct_names #ty_generics),
@@ -273,6 +286,12 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             #(
                 #ref_getters
             )*
+        }
+
+        // Reference types are just wrappers around references, so they can be copied!
+        impl #ref_impl_generics Copy for #ref_ty_name #ref_ty_generics #where_clause { }
+        impl #ref_impl_generics Clone for #ref_ty_name #ref_ty_generics #where_clause {
+            fn clone(&self) -> Self { *self }
         }
     };
     output_items.push(ref_impl_block.into());
