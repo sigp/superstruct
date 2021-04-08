@@ -30,7 +30,7 @@ fn wow() {
         description: "oooeee look at this",
     };
 
-    let block1 = Block::Base(base);
+    let mut block1 = Block::Base(base);
     let block2 = Block::Ext(lmao);
 
     println!("{:?}", block1);
@@ -39,4 +39,7 @@ fn wow() {
 
     let block_ref = block1.to_ref();
     println!("{:?}", block_ref.slot());
+
+    let mut block_mut_ref = block1.to_mut();
+    println!("{:?}", block_mut_ref.slot_mut());
 }
