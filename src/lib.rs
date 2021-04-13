@@ -21,6 +21,9 @@ struct StructOpts {
     /// List of attributes to apply to the generated Ref type.
     #[darling(default)]
     ref_attributes: Option<NestedMetaList>,
+    /// List of attributes to apply to the generated MutRef type.
+    #[darling(default)]
+    ref_mut_attributes: Option<NestedMetaList>,
     /// Error type and expression to use for casting methods.
     #[darling(default)]
     cast_error: CastErrOpts,
@@ -197,6 +200,37 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     };
     output_items.push(ref_ty.into());
 
+    // Construct a top-level mutable reference type.
+    // TODO: check that variants aren't called `RefMut`
+    let ref_mut_ty_name = format_ident!("{}RefMut", type_name);
+    let ref_mut_ty_lifetime = Lifetime::new("'__superstruct", Span::call_site());
+    // Muahaha, this is dank.
+    // Inject the generated lifetime into the top-level type's generics.
+    let mut ref_mut_ty_decl_generics = decl_generics.clone();
+    ref_mut_ty_decl_generics.params.insert(
+        0,
+        GenericParam::Lifetime(LifetimeDef::new(ref_mut_ty_lifetime.clone())),
+    );
+    let (ref_mut_impl_generics, ref_mut_ty_generics, _) = &ref_mut_ty_decl_generics.split_for_impl();
+
+    // Prepare the attributes for the ref type.
+    let ref_mut_attributes = opts
+        .ref_mut_attributes
+        .as_ref()
+        .map_or(&[][..], |attrs| &attrs.metas);
+
+    let ref_mut_ty = quote! {
+        #(
+            #[#ref_mut_attributes]
+        )*
+        #visibility enum #ref_mut_ty_name #ref_mut_ty_decl_generics #where_clause {
+            #(
+                #variant_names(&#ref_mut_ty_lifetime mut #struct_names #ty_generics),
+            )*
+        }
+    };
+    output_items.push(ref_mut_ty.into());
+
     // Construct the main impl block.
     let getters = common_fields.iter().map(|(field, getter_opts)| {
         let field_name = field.ident.as_ref().expect("named fields only");
@@ -220,6 +254,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 &variant_names,
                 field_name,
                 &field.ty,
+                None,
                 getter_opts,
             )
         });
@@ -252,6 +287,14 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     #(
                         #type_name::#variant_names(ref inner)
                             => #ref_ty_name::#variant_names(inner),
+                    )*
+                }
+            }
+            pub fn to_mut<#ref_mut_ty_lifetime>(&#ref_mut_ty_lifetime mut self) -> #ref_mut_ty_name #ref_mut_ty_generics {
+                match self {
+                    #(
+                        #type_name::#variant_names(ref mut inner)
+                            => #ref_mut_ty_name::#variant_names(inner),
                     )*
                 }
             }
@@ -295,6 +338,30 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         }
     };
     output_items.push(ref_impl_block.into());
+
+    // Construct the impl block for the *MutRef type.
+    let ref_mut_getters = common_fields.iter()
+        .filter(|(_, getter_opts)| !getter_opts.no_mut)
+        .map(|(field, getter_opts)| {
+        let field_name = field.ident.as_ref().expect("named fields only");
+        make_mut_field_getter(
+            &ref_mut_ty_name,
+            &variant_names,
+            field_name,
+            &field.ty,
+            Some(&ref_mut_ty_lifetime),
+            getter_opts,
+        )
+    });
+
+    let ref_mut_impl_block = quote! {
+        impl #ref_mut_impl_generics #ref_mut_ty_name #ref_mut_ty_generics #where_clause {
+            #(
+                #ref_mut_getters
+            )*
+        }
+    };
+    output_items.push(ref_mut_impl_block.into());
 
     TokenStream::from_iter(output_items)
 }
@@ -342,12 +409,23 @@ fn make_mut_field_getter(
     variant_names: &[Ident],
     field_name: &Ident,
     field_type: &Type,
+    lifetime: Option<&Lifetime>,
     getter_opts: &GetterOpts,
 ) -> proc_macro2::TokenStream {
     let fn_name = format_ident!("{}_mut", getter_opts.rename.as_ref().unwrap_or(field_name));
+    let return_type= if let Some(lifetime) = lifetime {
+        quote! { &#lifetime mut #field_type}
+    } else {
+        quote! { &mut #field_type}
+    };
+    let param= if let Some(lifetime) = lifetime {
+        quote! { &#lifetime mut self}
+    } else {
+        quote! { &mut self}
+    };
     let return_expr = quote! { &mut inner.#field_name };
     quote! {
-        pub fn #fn_name(&mut self) -> &mut #field_type {
+        pub fn #fn_name(#param) -> #return_type {
             match self {
                 #(
                     #type_name::#variant_names(ref mut inner) => {
