@@ -2,12 +2,12 @@ use darling::FromMeta;
 use itertools::Itertools;
 use proc_macro::TokenStream;
 use proc_macro2::Span;
-use quote::{format_ident, quote};
+use quote::{format_ident, quote, ToTokens};
 use std::collections::HashMap;
 use std::iter::{self, FromIterator};
 use syn::{
-    parse_macro_input, Attribute, AttributeArgs, Expr, GenericParam, Ident, ItemStruct, Lifetime,
-    LifetimeDef, NestedMeta, Type, TypeGenerics,
+    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
+    Lifetime, LifetimeDef, NestedMeta, Type, TypeGenerics,
 };
 
 /// Top-level configuration via the `superstruct` attribute.
@@ -26,7 +26,10 @@ struct StructOpts {
     ref_mut_attributes: Option<NestedMetaList>,
     /// Error type and expression to use for casting methods.
     #[darling(default)]
-    cast_error: CastErrOpts,
+    cast_error: ErrorOpts,
+    /// Error type and expression to use for partial getter methods.
+    #[darling(default)]
+    partial_getter_error: ErrorOpts,
 }
 
 /// Field-level configuration.
@@ -36,6 +39,8 @@ struct FieldOpts {
     only: Option<HashMap<Ident, ()>>,
     #[darling(default)]
     getter: Option<GetterOpts>,
+    #[darling(default)]
+    partial_getter: Option<GetterOpts>,
 }
 
 /// Getter configuration for a specific field
@@ -50,11 +55,51 @@ struct GetterOpts {
 }
 
 #[derive(Debug, Default, FromMeta)]
-struct CastErrOpts {
+struct ErrorOpts {
     #[darling(default)]
     ty: Option<String>,
     #[darling(default)]
     expr: Option<String>,
+}
+
+impl ErrorOpts {
+    fn parse(&self) -> Option<(Type, Expr)> {
+        let err_ty_str = self.ty.as_ref()?;
+        let err_ty: Type = syn::parse_str(err_ty_str).expect("error type not valid");
+        let err_expr_str = self
+            .expr
+            .as_ref()
+            .expect("must provide an error expr with error ty");
+        let err_expr: Expr = syn::parse_str(err_expr_str).expect("error expr not valid");
+        Some((err_ty, err_expr))
+    }
+
+    fn build_result_type(
+        &self,
+        ret_ty: impl ToTokens,
+    ) -> (proc_macro2::TokenStream, proc_macro2::TokenStream) {
+        if let Some((err_ty, err_expr)) = self.parse() {
+            (quote! { Result<#ret_ty, #err_ty> }, quote! { #err_expr })
+        } else {
+            (quote! { Result<#ret_ty, ()> }, quote! { () })
+        }
+    }
+}
+
+/// All data about a field, including its type & config from attributes.
+#[derive(Debug)]
+struct FieldData {
+    name: Ident,
+    field: Field,
+    only: Option<Vec<Ident>>,
+    getter_opts: GetterOpts,
+    partial_getter_opts: GetterOpts,
+}
+
+impl FieldData {
+    fn is_common(&self) -> bool {
+        self.only.is_none()
+    }
 }
 
 #[derive(Debug)]
@@ -91,13 +136,14 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let variant_names = opts.variants.keys().cloned().collect_vec();
     let struct_names = variant_names.iter().map(mk_struct_name).collect_vec();
 
-    // Vec of common fields, and getter options for them.
-    let mut common_fields = vec![];
+    // Vec of field data.
+    let mut fields = vec![];
     // Map from variant to variant fields.
     let mut variant_fields =
         HashMap::<_, _>::from_iter(variant_names.iter().zip(iter::repeat(vec![])));
 
     for field in item.fields.iter() {
+        let name = field.ident.clone().expect("named fields only");
         let field_opts = field
             .attrs
             .iter()
@@ -125,12 +171,25 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 .push(output_field.clone());
         }
 
-        // Add to `common_fields`, including getter info.
-        if field_opts.only.is_none() {
-            common_fields.push((output_field.clone(), field_opts.getter.unwrap_or_default()));
-        } else if field_opts.getter.is_some() {
+        // Check field opts
+        if field_opts.only.is_some() && field_opts.getter.is_some() {
             panic!("can't configure `only` and `getter` on the same field");
+        } else if field_opts.only.is_none() && field_opts.partial_getter.is_some() {
+            panic!("can't set `partial_getter` options on common field");
         }
+
+        let only = field_opts.only.map(|only| only.keys().cloned().collect());
+        let getter_opts = field_opts.getter.unwrap_or_default();
+        let partial_getter_opts = field_opts.partial_getter.unwrap_or_default();
+
+        // Add to list of all fields
+        fields.push(FieldData {
+            name,
+            field: output_field,
+            only,
+            getter_opts,
+            partial_getter_opts,
+        });
     }
 
     // Generate structs for all of the variants.
@@ -211,7 +270,8 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         0,
         GenericParam::Lifetime(LifetimeDef::new(ref_mut_ty_lifetime.clone())),
     );
-    let (ref_mut_impl_generics, ref_mut_ty_generics, _) = &ref_mut_ty_decl_generics.split_for_impl();
+    let (ref_mut_impl_generics, ref_mut_ty_generics, _) =
+        &ref_mut_ty_decl_generics.split_for_impl();
 
     // Prepare the attributes for the ref type.
     let ref_mut_attributes = opts
@@ -232,31 +292,44 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     output_items.push(ref_mut_ty.into());
 
     // Construct the main impl block.
-    let getters = common_fields.iter().map(|(field, getter_opts)| {
-        let field_name = field.ident.as_ref().expect("named fields only");
+    let getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
         make_field_getter(
             type_name,
             &variant_names,
-            field_name,
-            &field.ty,
+            &field_data.name,
+            &field_data.field.ty,
             None,
-            getter_opts,
+            &field_data.getter_opts,
         )
     });
 
-    let mut_getters = common_fields
+    let mut_getters = fields
         .iter()
-        .filter(|(_, getter_opts)| !getter_opts.no_mut)
-        .map(|(field, getter_opts)| {
-            let field_name = field.ident.as_ref().expect("named fields only");
+        .filter(|f| f.is_common() && !f.getter_opts.no_mut)
+        .map(|field_data| {
             make_mut_field_getter(
                 type_name,
                 &variant_names,
-                field_name,
-                &field.ty,
+                &field_data.name,
+                &field_data.field.ty,
                 None,
-                getter_opts,
+                &field_data.getter_opts,
             )
+        });
+
+    let partial_getters = fields
+        .iter()
+        .filter(|f| !f.is_common())
+        .cartesian_product(&[false, true])
+        .flat_map(|(field_data, mutability)| {
+            let field_variants = field_data.only.as_ref()?;
+            Some(make_partial_getter(
+                type_name,
+                &field_data,
+                &field_variants,
+                &opts.partial_getter_error,
+                *mutability,
+            ))
         });
 
     let cast_methods = variant_names
@@ -307,20 +380,22 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             #(
                 #mut_getters
             )*
+            #(
+                #partial_getters
+            )*
         }
     };
     output_items.push(impl_block.into());
 
     // Construct the impl block for the *Ref type.
-    let ref_getters = common_fields.iter().map(|(field, getter_opts)| {
-        let field_name = field.ident.as_ref().expect("named fields only");
+    let ref_getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
         make_field_getter(
             &ref_ty_name,
             &variant_names,
-            field_name,
-            &field.ty,
+            &field_data.name,
+            &field_data.field.ty,
             Some(&ref_ty_lifetime),
-            getter_opts,
+            &field_data.getter_opts,
         )
     });
 
@@ -340,19 +415,19 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     output_items.push(ref_impl_block.into());
 
     // Construct the impl block for the *MutRef type.
-    let ref_mut_getters = common_fields.iter()
-        .filter(|(_, getter_opts)| !getter_opts.no_mut)
-        .map(|(field, getter_opts)| {
-        let field_name = field.ident.as_ref().expect("named fields only");
-        make_mut_field_getter(
-            &ref_mut_ty_name,
-            &variant_names,
-            field_name,
-            &field.ty,
-            Some(&ref_mut_ty_lifetime),
-            getter_opts,
-        )
-    });
+    let ref_mut_getters = fields
+        .iter()
+        .filter(|f| f.is_common() && !f.getter_opts.no_mut)
+        .map(|field_data| {
+            make_mut_field_getter(
+                &ref_mut_ty_name,
+                &variant_names,
+                &field_data.name,
+                &field_data.field.ty,
+                Some(&ref_mut_ty_lifetime),
+                &field_data.getter_opts,
+            )
+        });
 
     let ref_mut_impl_block = quote! {
         impl #ref_mut_impl_generics #ref_mut_ty_name #ref_mut_ty_generics #where_clause {
@@ -413,12 +488,12 @@ fn make_mut_field_getter(
     getter_opts: &GetterOpts,
 ) -> proc_macro2::TokenStream {
     let fn_name = format_ident!("{}_mut", getter_opts.rename.as_ref().unwrap_or(field_name));
-    let return_type= if let Some(lifetime) = lifetime {
+    let return_type = if let Some(lifetime) = lifetime {
         quote! { &#lifetime mut #field_type}
     } else {
         quote! { &mut #field_type}
     };
-    let param= if let Some(lifetime) = lifetime {
+    let param = if let Some(lifetime) = lifetime {
         quote! { &#lifetime mut self}
     } else {
         quote! { &mut self}
@@ -437,12 +512,67 @@ fn make_mut_field_getter(
     }
 }
 
+fn make_self_arg(mutable: bool) -> proc_macro2::TokenStream {
+    if mutable {
+        quote! { &mut self }
+    } else {
+        quote! { &self }
+    }
+}
+
+fn make_type_ref(ty: &Type, mutable: bool) -> proc_macro2::TokenStream {
+    if mutable {
+        quote! { &mut #ty }
+    } else {
+        quote! { &#ty }
+    }
+}
+
+/// Generate a partial getter method for a field.
+fn make_partial_getter(
+    type_name: &Ident,
+    field_data: &FieldData,
+    field_variants: &[Ident],
+    error_opts: &ErrorOpts,
+    mutable: bool,
+) -> proc_macro2::TokenStream {
+    let field_name = &field_data.name;
+    let renamed_field = field_data
+        .partial_getter_opts
+        .rename
+        .as_ref()
+        .unwrap_or(field_name);
+    let fn_name = if mutable {
+        format_ident!("{}_mut", renamed_field)
+    } else {
+        renamed_field.clone()
+    };
+    let self_arg = make_self_arg(mutable);
+    let ret_ty = make_type_ref(&field_data.field.ty, mutable);
+    let ret_expr = if mutable {
+        quote! { &mut inner.#field_name }
+    } else {
+        quote! { &inner.#field_name }
+    };
+    let (res_ret_ty, err_expr) = error_opts.build_result_type(&ret_ty);
+    quote! {
+        pub fn #fn_name(#self_arg) -> #res_ret_ty {
+            match self {
+                #(
+                    #type_name::#field_variants(inner) => Ok(#ret_expr),
+                )*
+                _ => Err(#err_expr),
+            }
+        }
+    }
+}
+
 /// Generate a `as_<variant_name>{_mut}` method.
 fn make_as_variant_method(
     type_name: &Ident,
     variant_name: &Ident,
     type_generics: &TypeGenerics,
-    cast_err_opts: &CastErrOpts,
+    cast_err_opts: &ErrorOpts,
     mutable: bool,
 ) -> proc_macro2::TokenStream {
     let variant_ty = format_ident!("{}{}", type_name, variant_name);
@@ -461,17 +591,7 @@ fn make_as_variant_method(
             quote! { ref inner },
         )
     };
-    let (ret_res_ty, err_expr) = if let Some(ref err_ty_str) = cast_err_opts.ty {
-        let err_ty: Type = syn::parse_str(err_ty_str).expect("cast_error type not valid");
-        let err_expr_str = cast_err_opts
-            .expr
-            .as_ref()
-            .expect("must provide a cast_error(expr(..)) with ty");
-        let err_expr: Expr = syn::parse_str(err_expr_str).expect("cast_error expr not valid");
-        (quote! { Result<#ret_ty, #err_ty> }, quote! { #err_expr })
-    } else {
-        (quote! { Result<#ret_ty, ()> }, quote! { () })
-    };
+    let (ret_res_ty, err_expr) = cast_err_opts.build_result_type(&ret_ty);
     let fn_name = format_ident!("as_{}{}", variant_name.to_string().to_lowercase(), suffix);
     quote! {
         pub fn #fn_name(#arg) -> #ret_res_ty {
