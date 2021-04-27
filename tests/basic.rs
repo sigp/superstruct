@@ -19,7 +19,7 @@ pub enum BlockError {
 }
 
 #[test]
-fn wow() {
+fn basic() {
     let base = BlockBase {
         slot: 10,
         data: vec![],

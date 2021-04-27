@@ -1,0 +1,32 @@
+name: test-suite
+
+on:
+  push:
+    branches:
+      - main
+      - 'pr/*'
+  pull_request:
+env:
+  # Deny warnings in CI
+  RUSTFLAGS: "-D warnings"
+jobs:
+  cargo-fmt:
+    name: cargo-fmt
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Get latest version of stable Rust
+      run: rustup update stable
+    - name: Check formatting with cargo fmt
+      run: cargo fmt --all -- --check
+  test:
+    name: cargo-fmt
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Get latest version of stable Rust
+      run: rustup update stable
+    - name: Check formatting with cargo fmt
+      run: cargo fmt --all -- --check
+    - name: Run tests
+      run: cargo test --release
