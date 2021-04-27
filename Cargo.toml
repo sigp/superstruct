@@ -3,6 +3,9 @@ name = "superstruct"
 version = "0.1.0"
 authors = ["Michael Sproul <michael@sigmaprime.io>"]
 edition = "2018"
+description = "Proc-macro for quasi-subtyping"
+license = "Apache-2.0"
+repository = "https://github.com/sigp/superstruct"
 
 [lib]
 name = "superstruct"
