@@ -1,3 +1,4 @@
+use attributes::{IdentList, NestedMetaList};
 use darling::FromMeta;
 use itertools::Itertools;
 use proc_macro::TokenStream;
@@ -7,14 +8,16 @@ use std::collections::HashMap;
 use std::iter::{self, FromIterator};
 use syn::{
     parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
-    Lifetime, LifetimeDef, NestedMeta, Type, TypeGenerics,
+    Lifetime, LifetimeDef, Type, TypeGenerics,
 };
+
+mod attributes;
 
 /// Top-level configuration via the `superstruct` attribute.
 #[derive(Debug, FromMeta)]
 struct StructOpts {
     /// List of variant names of the superstruct being derived.
-    variants: HashMap<Ident, ()>,
+    variants: IdentList,
     /// List of attributes to apply to the variant structs.
     #[darling(default)]
     variant_attributes: Option<NestedMetaList>,
@@ -102,19 +105,6 @@ impl FieldData {
     }
 }
 
-#[derive(Debug)]
-struct NestedMetaList {
-    metas: Vec<NestedMeta>,
-}
-
-impl FromMeta for NestedMetaList {
-    fn from_list(items: &[NestedMeta]) -> Result<Self, darling::Error> {
-        Ok(Self {
-            metas: items.iter().cloned().collect(),
-        })
-    }
-}
-
 #[proc_macro_attribute]
 pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let attr_args = parse_macro_input!(args as AttributeArgs);
@@ -133,7 +123,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let mk_struct_name = |variant_name: &Ident| format_ident!("{}{}", type_name, variant_name);
 
-    let variant_names = opts.variants.keys().cloned().collect_vec();
+    let variant_names = &opts.variants.idents;
     let struct_names = variant_names.iter().map(mk_struct_name).collect_vec();
 
     // Vec of field data.
@@ -520,9 +510,12 @@ fn make_self_arg(mutable: bool) -> proc_macro2::TokenStream {
     }
 }
 
-fn make_type_ref(ty: &Type, mutable: bool) -> proc_macro2::TokenStream {
+fn make_type_ref(ty: &Type, mutable: bool, copy: bool) -> proc_macro2::TokenStream {
+    // XXX: bit hacky, ignore `copy` if `mutable` is set
     if mutable {
         quote! { &mut #ty }
+    } else if copy {
+        quote! { #ty }
     } else {
         quote! { &#ty }
     }
@@ -547,10 +540,13 @@ fn make_partial_getter(
     } else {
         renamed_field.clone()
     };
+    let copy = field_data.partial_getter_opts.copy;
     let self_arg = make_self_arg(mutable);
-    let ret_ty = make_type_ref(&field_data.field.ty, mutable);
+    let ret_ty = make_type_ref(&field_data.field.ty, mutable, copy);
     let ret_expr = if mutable {
         quote! { &mut inner.#field_name }
+    } else if copy {
+        quote! { inner.#field_name }
     } else {
         quote! { &inner.#field_name }
     };
