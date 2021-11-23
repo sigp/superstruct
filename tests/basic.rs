@@ -73,8 +73,8 @@ fn serde_deserialise_order() {
         variants(B, A),
         variant_attributes(derive(Debug, Deserialize, PartialEq))
     )]
-    #[serde(untagged)]
     #[derive(Debug, Deserialize, PartialEq)]
+    #[serde(untagged)]
     struct Message {
         common: String,
         #[superstruct(only(B))]
@@ -90,4 +90,33 @@ fn serde_deserialise_order() {
     });
 
     assert_eq!(message, expected);
+}
+
+#[test]
+fn cfg_attribute() {
+    // Use `all()` as true.
+    #[superstruct(variants(A, B))]
+    struct Message {
+        #[cfg(not(all()))]
+        pub value: String,
+        #[cfg(all())]
+        pub value: u64,
+
+        #[superstruct(only(B))]
+        #[cfg(not(all()))]
+        pub partial: String,
+        // Repeating the `only` is somewhat annoying, but OK for now.
+        #[superstruct(only(B))]
+        #[cfg(all())]
+        pub partial: u64,
+    }
+
+    let a = Message::A(MessageA { value: 10 });
+    assert_eq!(*a.value(), 10);
+
+    let b = Message::B(MessageB {
+        value: 10,
+        partial: 5,
+    });
+    assert_eq!(*b.partial().unwrap(), 5);
 }
