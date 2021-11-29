@@ -146,7 +146,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
         // Drop the field-level superstruct attributes
         let mut output_field = field.clone();
-        output_field.attrs = filter_attributes(&output_field.attrs);
+        output_field.attrs = discard_superstruct_attrs(&output_field.attrs);
 
         // Add the field to the `variant_fields` map for all applicable variants.
         let field_variants = field_opts.only.as_ref().map_or_else(
@@ -204,7 +204,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     }
 
     // Construct the top-level enum.
-    let top_level_attrs = filter_attributes(&item.attrs);
+    let top_level_attrs = discard_superstruct_attrs(&item.attrs);
     let enum_item = quote! {
         #(
             #top_level_attrs
@@ -282,30 +282,15 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     output_items.push(ref_mut_ty.into());
 
     // Construct the main impl block.
-    let getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
-        make_field_getter(
-            type_name,
-            &variant_names,
-            &field_data.name,
-            &field_data.field.ty,
-            None,
-            &field_data.getter_opts,
-        )
-    });
+    let getters = fields
+        .iter()
+        .filter(|f| f.is_common())
+        .map(|field_data| make_field_getter(type_name, &variant_names, &field_data, None));
 
     let mut_getters = fields
         .iter()
         .filter(|f| f.is_common() && !f.getter_opts.no_mut)
-        .map(|field_data| {
-            make_mut_field_getter(
-                type_name,
-                &variant_names,
-                &field_data.name,
-                &field_data.field.ty,
-                None,
-                &field_data.getter_opts,
-            )
-        });
+        .map(|field_data| make_mut_field_getter(type_name, &variant_names, &field_data, None));
 
     let partial_getters = fields
         .iter()
@@ -382,10 +367,8 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         make_field_getter(
             &ref_ty_name,
             &variant_names,
-            &field_data.name,
-            &field_data.field.ty,
+            &field_data,
             Some(&ref_ty_lifetime),
-            &field_data.getter_opts,
         )
     });
 
@@ -412,10 +395,8 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             make_mut_field_getter(
                 &ref_mut_ty_name,
                 &variant_names,
-                &field_data.name,
-                &field_data.field.ty,
+                &field_data,
                 Some(&ref_mut_ty_lifetime),
-                &field_data.getter_opts,
             )
         });
 
@@ -435,11 +416,13 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 fn make_field_getter(
     type_name: &Ident,
     variant_names: &[Ident],
-    field_name: &Ident,
-    field_type: &Type,
+    field_data: &FieldData,
     lifetime: Option<&Lifetime>,
-    getter_opts: &GetterOpts,
 ) -> proc_macro2::TokenStream {
+    let field_name = &field_data.name;
+    let field_type = &field_data.field.ty;
+    let getter_opts = &field_data.getter_opts;
+
     let fn_name = getter_opts.rename.as_ref().unwrap_or(field_name);
     let return_type = if getter_opts.copy {
         quote! { #field_type }
@@ -455,7 +438,14 @@ fn make_field_getter(
     } else {
         quote! { &inner.#field_name }
     };
+
+    // Pass-through `cfg` attributes as they affect the existence of this field.
+    let cfg_attrs = get_cfg_attrs(&field_data.field.attrs);
+
     quote! {
+        #(
+            #cfg_attrs
+        )*
         pub fn #fn_name(&self) -> #return_type {
             match self {
                 #(
@@ -472,11 +462,13 @@ fn make_field_getter(
 fn make_mut_field_getter(
     type_name: &Ident,
     variant_names: &[Ident],
-    field_name: &Ident,
-    field_type: &Type,
+    field_data: &FieldData,
     lifetime: Option<&Lifetime>,
-    getter_opts: &GetterOpts,
 ) -> proc_macro2::TokenStream {
+    let field_name = &field_data.name;
+    let field_type = &field_data.field.ty;
+    let getter_opts = &field_data.getter_opts;
+
     let fn_name = format_ident!("{}_mut", getter_opts.rename.as_ref().unwrap_or(field_name));
     let return_type = if let Some(lifetime) = lifetime {
         quote! { &#lifetime mut #field_type}
@@ -489,7 +481,14 @@ fn make_mut_field_getter(
         quote! { &mut self}
     };
     let return_expr = quote! { &mut inner.#field_name };
+
+    // Pass-through `cfg` attributes as they affect the existence of this field.
+    let cfg_attrs = get_cfg_attrs(&field_data.field.attrs);
+
     quote! {
+        #(
+            #cfg_attrs
+        )*
         pub fn #fn_name(#param) -> #return_type {
             match self {
                 #(
@@ -551,7 +550,14 @@ fn make_partial_getter(
         quote! { &inner.#field_name }
     };
     let (res_ret_ty, err_expr) = error_opts.build_result_type(&ret_ty);
+
+    // Pass-through `cfg` attributes as they affect the existence of this field.
+    let cfg_attrs = get_cfg_attrs(&field_data.field.attrs);
+
     quote! {
+        #(
+            #cfg_attrs
+        )*
         pub fn #fn_name(#self_arg) -> #res_ret_ty {
             match self {
                 #(
@@ -600,7 +606,7 @@ fn make_as_variant_method(
 }
 
 /// Keep all non-superstruct-related attributes from an array.
-fn filter_attributes(attrs: &[Attribute]) -> Vec<Attribute> {
+fn discard_superstruct_attrs(attrs: &[Attribute]) -> Vec<Attribute> {
     attrs
         .iter()
         .filter(|attr| !is_superstruct_attr(attr))
@@ -608,9 +614,23 @@ fn filter_attributes(attrs: &[Attribute]) -> Vec<Attribute> {
         .collect()
 }
 
+/// Keep only `cfg` attributes from an array.
+fn get_cfg_attrs(attrs: &[Attribute]) -> Vec<Attribute> {
+    attrs
+        .iter()
+        .filter(|attr| is_attr_with_ident(attr, "cfg"))
+        .cloned()
+        .collect()
+}
+
 /// Predicate for determining whether an attribute is a `superstruct` attribute.
 fn is_superstruct_attr(attr: &Attribute) -> bool {
+    is_attr_with_ident(attr, "superstruct")
+}
+
+/// Predicate for determining whether an attribute has the given `ident` as its path.
+fn is_attr_with_ident(attr: &Attribute, ident: &str) -> bool {
     attr.path
         .get_ident()
-        .map_or(false, |ident| ident.to_string() == "superstruct")
+        .map_or(false, |attr_ident| attr_ident.to_string() == ident)
 }
