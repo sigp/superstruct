@@ -33,6 +33,9 @@ struct StructOpts {
     /// Error type and expression to use for partial getter methods.
     #[darling(default)]
     partial_getter_error: ErrorOpts,
+    /// Turn off the generation of the top-level enum that binds the variants together.
+    #[darling(default)]
+    no_enum: bool,
 }
 
 /// Field-level configuration.
@@ -201,6 +204,11 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             }
         };
         output_items.push(variant_code.into());
+    }
+
+    // If the `no_enum` attribute is set, stop after generating variant structs.
+    if opts.no_enum {
+        return TokenStream::from_iter(output_items);
     }
 
     // Construct the top-level enum.

@@ -43,4 +43,5 @@ fn nesting() {
 
     assert_eq!(a.inner_a().unwrap().both, b.inner_b().unwrap().both);
     assert_eq!(a.inner().both(), b.inner().both());
+    assert_eq!(a.inner_a().unwrap().only_a, "world");
 }
