@@ -120,3 +120,20 @@ fn cfg_attribute() {
     });
     assert_eq!(*b.partial().unwrap(), 5);
 }
+
+#[test]
+fn no_enum() {
+    #[superstruct(variants(A, B), no_enum)]
+    struct Message {
+        #[superstruct(only(A))]
+        pub x: u64,
+        #[superstruct(only(B))]
+        pub y: u64,
+    }
+
+    type Message = MessageA;
+
+    let a: Message = Message { x: 0 };
+    let b: MessageB = MessageB { y: 0 };
+    assert_eq!(a.x, b.y);
+}
