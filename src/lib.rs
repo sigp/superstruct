@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::iter::{self, FromIterator};
 use syn::{
     parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
-    Lifetime, LifetimeDef, Type, TypeGenerics,
+    Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
 };
 
 mod attributes;
@@ -237,6 +237,22 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         0,
         GenericParam::Lifetime(LifetimeDef::new(ref_ty_lifetime.clone())),
     );
+
+    // If no lifetime bound exists for a generic param, inject one.
+    for param in ref_ty_decl_generics.params.iter_mut() {
+        if let GenericParam::Type(type_param) = param {
+            let result = type_param
+                .bounds
+                .iter()
+                .find(|bound| matches!(bound, TypeParamBound::Lifetime(_)));
+            if result.is_none() {
+                type_param
+                    .bounds
+                    .insert(0, TypeParamBound::Lifetime(ref_ty_lifetime.clone()))
+            }
+        }
+    }
+
     let (ref_impl_generics, ref_ty_generics, _) = &ref_ty_decl_generics.split_for_impl();
 
     // Prepare the attributes for the ref type.
