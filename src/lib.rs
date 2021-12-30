@@ -24,7 +24,7 @@ struct StructOpts {
     /// List of attributes to apply to the generated Ref type.
     #[darling(default)]
     ref_attributes: Option<NestedMetaList>,
-    /// List of attributes to apply to the generated MutRef type.
+    /// List of attributes to apply to the generated RefMut type.
     #[darling(default)]
     ref_mut_attributes: Option<NestedMetaList>,
     /// Error type and expression to use for casting methods.
@@ -328,6 +328,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 &field_variants,
                 &opts.partial_getter_error,
                 *mutability,
+                None,
             ))
         });
 
@@ -396,10 +397,29 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         )
     });
 
+    let ref_partial_getters = fields
+        .iter()
+        .filter(|f| !f.is_common())
+        .flat_map(|field_data| {
+            let field_variants = field_data.only.as_ref()?;
+            Some(make_partial_getter(
+                &ref_ty_name,
+                &field_data,
+                &field_variants,
+                &opts.partial_getter_error,
+                false,
+                Some(&ref_ty_lifetime),
+            ))
+        });
+
     let ref_impl_block = quote! {
         impl #ref_impl_generics #ref_ty_name #ref_ty_generics #where_clause {
             #(
                 #ref_getters
+            )*
+
+            #(
+                #ref_partial_getters
             )*
         }
 
@@ -411,7 +431,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     };
     output_items.push(ref_impl_block.into());
 
-    // Construct the impl block for the *MutRef type.
+    // Construct the impl block for the *RefMut type.
     let ref_mut_getters = fields
         .iter()
         .filter(|f| f.is_common() && !f.getter_opts.no_mut)
@@ -424,10 +444,29 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             )
         });
 
+    let ref_mut_partial_getters = fields
+        .iter()
+        .filter(|f| !f.is_common() && !f.partial_getter_opts.no_mut)
+        .flat_map(|field_data| {
+            let field_variants = field_data.only.as_ref()?;
+            Some(make_partial_getter(
+                &ref_mut_ty_name,
+                &field_data,
+                &field_variants,
+                &opts.partial_getter_error,
+                true,
+                Some(&ref_mut_ty_lifetime),
+            ))
+        });
+
     let ref_mut_impl_block = quote! {
         impl #ref_mut_impl_generics #ref_mut_ty_name #ref_mut_ty_generics #where_clause {
             #(
                 #ref_mut_getters
+            )*
+
+            #(
+                #ref_mut_partial_getters
             )*
         }
     };
@@ -451,11 +490,7 @@ fn make_field_getter(
     let return_type = if getter_opts.copy {
         quote! { #field_type }
     } else {
-        if let Some(lifetime) = lifetime {
-            quote! { &#lifetime #field_type}
-        } else {
-            quote! { &#field_type}
-        }
+        quote! { &#lifetime #field_type}
     };
     let return_expr = if getter_opts.copy {
         quote! { inner.#field_name }
@@ -494,16 +529,8 @@ fn make_mut_field_getter(
     let getter_opts = &field_data.getter_opts;
 
     let fn_name = format_ident!("{}_mut", getter_opts.rename.as_ref().unwrap_or(field_name));
-    let return_type = if let Some(lifetime) = lifetime {
-        quote! { &#lifetime mut #field_type}
-    } else {
-        quote! { &mut #field_type}
-    };
-    let param = if let Some(lifetime) = lifetime {
-        quote! { &#lifetime mut self}
-    } else {
-        quote! { &mut self}
-    };
+    let return_type = quote! { &#lifetime mut #field_type };
+    let param = make_self_arg(true, lifetime);
     let return_expr = quote! { &mut inner.#field_name };
 
     // Pass-through `cfg` attributes as they affect the existence of this field.
@@ -525,22 +552,29 @@ fn make_mut_field_getter(
     }
 }
 
-fn make_self_arg(mutable: bool) -> proc_macro2::TokenStream {
+fn make_self_arg(mutable: bool, lifetime: Option<&Lifetime>) -> proc_macro2::TokenStream {
     if mutable {
-        quote! { &mut self }
+        quote! { &#lifetime mut self }
     } else {
+        // Ignore the lifetime for immutable references. This allows `&Ref<'a>` to be de-referenced
+        // to an inner pointer with lifetime `'a`.
         quote! { &self }
     }
 }
 
-fn make_type_ref(ty: &Type, mutable: bool, copy: bool) -> proc_macro2::TokenStream {
+fn make_type_ref(
+    ty: &Type,
+    mutable: bool,
+    copy: bool,
+    lifetime: Option<&Lifetime>,
+) -> proc_macro2::TokenStream {
     // XXX: bit hacky, ignore `copy` if `mutable` is set
     if mutable {
-        quote! { &mut #ty }
+        quote! { &#lifetime mut #ty }
     } else if copy {
         quote! { #ty }
     } else {
-        quote! { &#ty }
+        quote! { &#lifetime #ty }
     }
 }
 
@@ -551,6 +585,7 @@ fn make_partial_getter(
     field_variants: &[Ident],
     error_opts: &ErrorOpts,
     mutable: bool,
+    lifetime: Option<&Lifetime>,
 ) -> proc_macro2::TokenStream {
     let field_name = &field_data.name;
     let renamed_field = field_data
@@ -564,8 +599,8 @@ fn make_partial_getter(
         renamed_field.clone()
     };
     let copy = field_data.partial_getter_opts.copy;
-    let self_arg = make_self_arg(mutable);
-    let ret_ty = make_type_ref(&field_data.field.ty, mutable, copy);
+    let self_arg = make_self_arg(mutable, lifetime);
+    let ret_ty = make_type_ref(&field_data.field.ty, mutable, copy, lifetime);
     let ret_expr = if mutable {
         quote! { &mut inner.#field_name }
     } else if copy {
