@@ -6,7 +6,7 @@ description = "Versioned data types with minimal boilerplate"
 license = "Apache-2.0"
 repository = "https://github.com/sigp/superstruct"
 documentation = "https://sigp.github.io/superstruct/"
-keywords = ["schema", "subtype", "backwards compatibility", "procedural macro"]
+keywords = ["schema", "subtype", "compatibility", "macro"]
 categories = ["rust-patterns"]
 
 [lib]
