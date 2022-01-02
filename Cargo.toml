@@ -1,10 +1,13 @@
 [package]
 name = "superstruct"
-version = "0.4.0"
+version = "0.4.1"
 edition = "2021"
-description = "Proc-macro for versioned data types"
+description = "Versioned data types with minimal boilerplate"
 license = "Apache-2.0"
 repository = "https://github.com/sigp/superstruct"
+documentation = "https://sigp.github.io/superstruct/"
+keywords = ["schema", "subtype", "backwards compatibility", "procedural macro"]
+categories = ["rust-patterns"]
 
 [lib]
 name = "superstruct"
