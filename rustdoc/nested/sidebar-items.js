@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Inner",""],["InnerRef",""],["InnerRefMut",""],["Outer",""],["OuterRef",""],["OuterRefMut",""]],"struct":[["InnerA",""],["InnerB",""],["OuterA",""],["OuterB",""]]});

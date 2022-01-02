@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Introduction - SuperStruct Guide</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="setup.html"><strong aria-hidden="true">2.</strong> Setup</a></li><li class="chapter-item expanded "><a href="codegen.html"><strong aria-hidden="true">3.</strong> Code generation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="codegen/variant-structs.html"><strong aria-hidden="true">3.1.</strong> Variant structs</a></li><li class="chapter-item expanded "><a href="codegen/enum.html"><strong aria-hidden="true">3.2.</strong> Top-level enum</a></li><li class="chapter-item expanded "><a href="codegen/ref-and-refmut.html"><strong aria-hidden="true">3.3.</strong> Ref and RefMut</a></li></ol></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="config/struct.html"><strong aria-hidden="true">4.1.</strong> Struct attributes</a></li><li class="chapter-item expanded "><a href="config/field.html"><strong aria-hidden="true">4.2.</strong> Field attributes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SuperStruct Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>SuperStruct is a Rust library for working with versioned data. It allows you to define and operate
+on <em>variants</em> of a <code>struct</code> which share some fields in common.</p>
+<p>As an example, imagine you're working on a program that accepts a <code>Request</code> struct from the user.
+In the first version of the program you only allow users to specify a <code>start: u16</code> field:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Request {
+    start: u16,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>After a while you realise that it would be nice if users could also specify an <code>end: u16</code> in their
+requests, so you would like to change the definition of <code>Request</code> to:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Request {
+    start: u16,
+    end: u16,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now imagine that your program needs to work with old versions of <code>Request</code> as well as new, i.e.
+it needs to be backwards-compatible. This is reasonably common when databases are involved and
+you need to write schema migrations, or when working with network protocols.</p>
+<p>SuperStruct allows you to define <em>both</em> versions of the <code>Request</code> with a single definition, and
+also generates an enum to unify them:</p>
+<pre><code class="language-rust no_run noplayground">use superstruct::superstruct;
+
+#[superstruct(variants(V1, V2))]
+pub struct Request {
+    pub start: u16,
+    #[superstruct(only(V2))]
+    pub end: u16,
+}
+
+#[cfg_attr(test, test)]
+fn main() {
+    let r1 = Request::V1(RequestV1 { start: 0 });
+    let r2 = Request::V2(RequestV2 { start: 0, end: 10 });
+
+    assert_eq!(r1.start(), r2.start());
+    assert_eq!(r1.end(), Err(()));
+    assert_eq!(r2.end(), Ok(&amp;10));
+}
+</code></pre>
+<p>The <code>superstruct</code> definition generates:</p>
+<ul>
+<li>Two structs <code>RequestV1</code> and <code>RequestV2</code> where the <code>end</code> field is only present in <code>RequestV2</code>.</li>
+<li>An enum <code>Request</code> with variants <code>V1</code> and <code>V2</code> wrapping <code>RequestV1</code> and <code>RequestV2</code> respectively.</li>
+<li>A getter function on <code>Request</code> for the shared <code>start</code> field, e.g. <code>r1.start()</code>.</li>
+<li>A <em>partial</em> getter function returning <code>Result&lt;&amp;u16, ()&gt;</code> for <code>end</code>, e.g. <code>r2.end()</code>.</li>
+<li>Lots of other useful goodies that are covered in the <a href="./codegen.html">Codegen</a> section of the book.</li>
+</ul>
+<h2 id="when-should-you-use-superstruct"><a class="header" href="#when-should-you-use-superstruct">When <em>should</em> you use SuperStruct?</a></h2>
+<ul>
+<li>If you want to avoid duplication when defining multiple related structs.</li>
+<li>If you are considering manually writing getters to extract common fields from an enum.</li>
+<li>If you are considering writing traits to unify types with fields in common.</li>
+</ul>
+<h2 id="when-should-you-not-use-superstruct"><a class="header" href="#when-should-you-not-use-superstruct">When should you <em>not</em> use SuperStruct?</a></h2>
+<ul>
+<li>If you can get away with just using an <code>Option</code> field. In our example, <code>Request</code> could define
+<code>end: Option&lt;u16&gt;</code>.</li>
+<li>If you can achieve backwards compatible (de)serialization through clever use of <code>serde</code> macros.</li>
+</ul>
+<h2 id="what-next"><a class="header" href="#what-next">What next?</a></h2>
+<ul>
+<li>Check out the <a href="./codegen.html">Code Generation</a> docs.</li>
+<li>Check out the <a href="./config.html">Configuration</a> docs for information on how to
+control <code>superstruct</code>'s behaviour, including renaming getters, working with
+<code>Copy</code> types, etc.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="next" href="setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="next" href="setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

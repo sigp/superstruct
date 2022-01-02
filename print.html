@@ -1,0 +1,519 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>SuperStruct Guide</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="setup.html"><strong aria-hidden="true">2.</strong> Setup</a></li><li class="chapter-item expanded "><a href="codegen.html"><strong aria-hidden="true">3.</strong> Code generation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="codegen/variant-structs.html"><strong aria-hidden="true">3.1.</strong> Variant structs</a></li><li class="chapter-item expanded "><a href="codegen/enum.html"><strong aria-hidden="true">3.2.</strong> Top-level enum</a></li><li class="chapter-item expanded "><a href="codegen/ref-and-refmut.html"><strong aria-hidden="true">3.3.</strong> Ref and RefMut</a></li></ol></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="config/struct.html"><strong aria-hidden="true">4.1.</strong> Struct attributes</a></li><li class="chapter-item expanded "><a href="config/field.html"><strong aria-hidden="true">4.2.</strong> Field attributes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SuperStruct Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>SuperStruct is a Rust library for working with versioned data. It allows you to define and operate
+on <em>variants</em> of a <code>struct</code> which share some fields in common.</p>
+<p>As an example, imagine you're working on a program that accepts a <code>Request</code> struct from the user.
+In the first version of the program you only allow users to specify a <code>start: u16</code> field:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Request {
+    start: u16,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>After a while you realise that it would be nice if users could also specify an <code>end: u16</code> in their
+requests, so you would like to change the definition of <code>Request</code> to:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Request {
+    start: u16,
+    end: u16,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Now imagine that your program needs to work with old versions of <code>Request</code> as well as new, i.e.
+it needs to be backwards-compatible. This is reasonably common when databases are involved and
+you need to write schema migrations, or when working with network protocols.</p>
+<p>SuperStruct allows you to define <em>both</em> versions of the <code>Request</code> with a single definition, and
+also generates an enum to unify them:</p>
+<pre><code class="language-rust no_run noplayground">use superstruct::superstruct;
+
+#[superstruct(variants(V1, V2))]
+pub struct Request {
+    pub start: u16,
+    #[superstruct(only(V2))]
+    pub end: u16,
+}
+
+#[cfg_attr(test, test)]
+fn main() {
+    let r1 = Request::V1(RequestV1 { start: 0 });
+    let r2 = Request::V2(RequestV2 { start: 0, end: 10 });
+
+    assert_eq!(r1.start(), r2.start());
+    assert_eq!(r1.end(), Err(()));
+    assert_eq!(r2.end(), Ok(&amp;10));
+}
+</code></pre>
+<p>The <code>superstruct</code> definition generates:</p>
+<ul>
+<li>Two structs <code>RequestV1</code> and <code>RequestV2</code> where the <code>end</code> field is only present in <code>RequestV2</code>.</li>
+<li>An enum <code>Request</code> with variants <code>V1</code> and <code>V2</code> wrapping <code>RequestV1</code> and <code>RequestV2</code> respectively.</li>
+<li>A getter function on <code>Request</code> for the shared <code>start</code> field, e.g. <code>r1.start()</code>.</li>
+<li>A <em>partial</em> getter function returning <code>Result&lt;&amp;u16, ()&gt;</code> for <code>end</code>, e.g. <code>r2.end()</code>.</li>
+<li>Lots of other useful goodies that are covered in the <a href="./codegen.html">Codegen</a> section of the book.</li>
+</ul>
+<h2 id="when-should-you-use-superstruct"><a class="header" href="#when-should-you-use-superstruct">When <em>should</em> you use SuperStruct?</a></h2>
+<ul>
+<li>If you want to avoid duplication when defining multiple related structs.</li>
+<li>If you are considering manually writing getters to extract common fields from an enum.</li>
+<li>If you are considering writing traits to unify types with fields in common.</li>
+</ul>
+<h2 id="when-should-you-not-use-superstruct"><a class="header" href="#when-should-you-not-use-superstruct">When should you <em>not</em> use SuperStruct?</a></h2>
+<ul>
+<li>If you can get away with just using an <code>Option</code> field. In our example, <code>Request</code> could define
+<code>end: Option&lt;u16&gt;</code>.</li>
+<li>If you can achieve backwards compatible (de)serialization through clever use of <code>serde</code> macros.</li>
+</ul>
+<h2 id="what-next"><a class="header" href="#what-next">What next?</a></h2>
+<ul>
+<li>Check out the <a href="./codegen.html">Code Generation</a> docs.</li>
+<li>Check out the <a href="./config.html">Configuration</a> docs for information on how to
+control <code>superstruct</code>'s behaviour, including renaming getters, working with
+<code>Copy</code> types, etc.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="setup"><a class="header" href="#setup">Setup</a></h1>
+<p>To use SuperStruct in your project add <code>superstruct</code> as a dependency in your <code>Cargo.toml</code>:</p>
+<pre><code class="language-toml">superstruct = &quot;0.4.0&quot;
+</code></pre>
+<p>For the latest published version please consult <a href="https://crates.io/crates/superstruct"><code>crates.io</code></a>.</p>
+<hr />
+<p>To use SuperStruct, import the <code>superstruct</code> procedural macro with <code>use superstruct::superstruct</code>,
+like so:</p>
+<pre><code class="language-rust no_run noplayground">use superstruct::superstruct;
+
+#[superstruct(variants(V1, V2))]
+pub struct Request {
+    pub start: u16,
+    #[superstruct(only(V2))]
+    pub end: u16,
+}
+
+#[cfg_attr(test, test)]
+fn main() {
+    let r1 = Request::V1(RequestV1 { start: 0 });
+    let r2 = Request::V2(RequestV2 { start: 0, end: 10 });
+
+    assert_eq!(r1.start(), r2.start());
+    assert_eq!(r1.end(), Err(()));
+    assert_eq!(r2.end(), Ok(&amp;10));
+}
+</code></pre>
+<p>For more information on this example see the <a href="./intro.html">Introduction</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="code-generation"><a class="header" href="#code-generation">Code generation</a></h1>
+<p>SuperStruct generates several types, methods and trait implementations.</p>
+<p>You should visit each of the sub-pages in order to understand how the generated code fits together:</p>
+<ol>
+<li><a href="./codegen/variant-structs.html">Variant structs</a>.</li>
+<li><a href="./codegen/enum.html">Top-level enum</a>.</li>
+<li><a href="./codegen/ref-and-refmut.html"><code>Ref</code> and <code>RefMut</code></a>.</li>
+</ol>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>For a full, up-to-date example of the code generated, please see the <a href="./rustdoc/request">RustDoc output for
+the <code>Request</code> example</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="variant-structs"><a class="header" href="#variant-structs">Variant structs</a></h1>
+<p>The most basic items generated by SuperStruct are the variant structs. For each
+variant listed in the top-level <code>superstruct(variants(..)</code> list, a struct with
+the name <code>{BaseName}{VariantName}</code> will be created. For example:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[superstruct(variants(Foo, Bar))]
+struct MyStruct {
+    name: String,
+    #[superstruct(only(Foo))]
+    location: u16,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Here the <code>BaseName</code> is <code>MyStruct</code> and there are two variants called <code>Foo</code> and <code>Bar</code>.</p>
+<p>The generated variant structs are:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct MyStructFoo {
+    name: String,
+    location: u16,
+}
+
+struct MyStructBar {
+    name: String,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Note how the <code>only</code> attribute controls the presence of fields in each variant.
+For more information see <a href="codegen/../config/struct.html">Struct attributes</a>.</p>
+<p>The variant structs are unified as part of the <a href="codegen/./enum.html">top-level enum</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="top-level-enum"><a class="header" href="#top-level-enum">Top-level enum</a></h1>
+<p>SuperStruct generates an enum that combines all of the generated variant structs.</p>
+<p>Consider the the <code>MyStruct</code> example from the previous page:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[superstruct(variants(Foo, Bar))]
+struct MyStruct {
+    name: String,
+    #[superstruct(only(Foo))]
+    location: u16,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The generated enum is:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum MyStruct {
+    Foo(MyStructFoo),
+    Bar(MyStructBar),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The enum has one variant per variant in <code>superstruct(variants(..))</code>, and each
+variant contains its generated variant struct. It is named <code>{BaseName}</code>.</p>
+<p>Generation of the top-level enum can be disabled using the <code>no_enum</code> attribute. For more information
+see the <a href="codegen/../config/struct.html">Struct attributes</a>.</p>
+<h2 id="getters-and-setters"><a class="header" href="#getters-and-setters">Getters and setters</a></h2>
+<p>The top-level enum has getters and setters for each of the variant fields. They are named:</p>
+<ul>
+<li><code>{field_name}()</code> for getters.</li>
+<li><code>{field_name}_mut()</code> for setters.</li>
+</ul>
+<p>If a field is common to all variants, then the getters and setters are <em>total</em> and return <code>&amp;T</code>
+and <code>&amp;mut T</code> respectively, where <code>T</code> is the type of the field.</p>
+<p>If a field is part of some variants but not others, then the getters and
+setters are <em>partial</em> and return <code>Result&lt;&amp;T, E&gt;</code> and <code>Result&lt;&amp;mut T, E&gt;</code>
+respectively.</p>
+<p>Many aspects of the getters and setters can be configured, including their
+names, whether they <code>Copy</code> and which error type <code>E</code> is used.
+See <a href="codegen/../config/field.html">Field attributes</a>.</p>
+<h2 id="casting-methods"><a class="header" href="#casting-methods">Casting methods</a></h2>
+<p>The top-level enum has methods to <em>cast</em> it to each of the variants:</p>
+<ul>
+<li><code>as_{variantname}</code> returning <code>Result&lt;&amp;{VariantStruct}, E&gt;</code>.</li>
+<li><code>as_{variantname}_mut</code> returning <code>Result&lt;&amp;mut {VariantStruct}, E&gt;</code>.</li>
+</ul>
+<p>The error type <code>E</code> may be controlled by the <a href="codegen/../config/struct.html#cast-error"><code>cast_error</code> attribute</a>.</p>
+<h2 id="reference-methods"><a class="header" href="#reference-methods">Reference methods</a></h2>
+<p>The top-level enum has methods for converting it into the <code>Ref</code> and <code>RefMut</code> types, which
+are described <a href="codegen/./ref-and-refmut.html">here</a>.</p>
+<ul>
+<li><code>to_ref</code> returning <code>{BaseName}Ref</code>.</li>
+<li><code>to_mut</code> returning <code>{BaseName}RefMut</code>.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ref-and-refmut"><a class="header" href="#ref-and-refmut"><code>Ref</code> and <code>RefMut</code></a></h1>
+<p>SuperStruct generates two reference-like structs which are designed to simplify working with nested
+<code>superstruct</code> types.</p>
+<p>The immutable reference type is named <code>{BaseName}Ref</code> and has all of the immutable getter methods
+from the top-level enum.</p>
+<p>The mutable reference type is named <code>{BaseName}RefMut</code> and has all of the mutable getter methods
+from the top-level enum.</p>
+<p>Consider the <code>MyStruct</code> example again:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[superstruct(variants(Foo, Bar))]
+struct MyStruct {
+    name: String,
+    #[superstruct(only(Foo))]
+    location: u16,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The generated <code>Ref</code> types look like this:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum MyStructRef&lt;'a&gt; {
+    Foo(&amp;'a MyStructFoo),
+    Bar(&amp;'a MyStructBar),
+}
+
+enum MyStructRefMut&lt;'a&gt; {
+    Foo(&amp;'a mut MyStructFoo),
+    Bar(&amp;'a mut MyStructFoo),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The reason these types can be useful (particularly with nesting) is that they do not require a full
+reference to a <code>MyStruct</code> in order to construct: a reference to a single variant struct will suffice.</p>
+<h2 id="trait-implementations"><a class="header" href="#trait-implementations">Trait Implementations</a></h2>
+<p>Each <code>Ref</code> type is <code>Copy</code>, just like an ordinary <code>&amp;T</code>.</p>
+<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
+<p>Please see <a href="codegen/../rustdoc/src/nested/nested.rs.html"><code>examples/nested.rs</code></a> and its
+generated <a href="codegen/../rustdoc/nested/">documentation</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<p>SuperStruct is a procedural macro, and is configured by <code>superstruct</code> attributes on the
+type being defined.</p>
+<ul>
+<li><a href="./config/struct.html">Struct attributes</a> are applied to the top-level type and configure
+properties relevant to that, as well as defaults for error types.</li>
+<li><a href="./config/field.html">Field attributes</a> are applied to each struct field and determine
+the fields of variants, as well as the characteristics of getters and setters.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="struct-attributes"><a class="header" href="#struct-attributes">Struct attributes</a></h1>
+<p>The following attributes may be used in a <code>superstruct</code> macro invocation on a
+<code>struct</code> item. All attributes are optional unless stated otherwise.</p>
+<h2 id="variants"><a class="header" href="#variants">Variants</a></h2>
+<pre><code>#[superstruct(variants(A, B, ...))]
+</code></pre>
+<p>Define the list of variants that this type has.
+See <a href="config/../codegen/variant-structs.html">variant structs</a>.</p>
+<p>The <code>variants</code> attribute is <em>not optional</em>.</p>
+<p><strong>Format</strong>: 1+ comma-separated identifiers.</p>
+<h2 id="cast-error"><a class="header" href="#cast-error">Cast error</a></h2>
+<pre><code>#[superstruct(cast_error(ty = &quot;..&quot;, expr = &quot;..&quot;))]
+</code></pre>
+<p>Define the error type to be returned from <a href="config/../codegen/enum.html#casting-methods">casting methods</a>.</p>
+<p>The expression must be of the given error type, and capable of being evaluated without any
+context (it is <em>not</em> a closure).</p>
+<p><strong>Format</strong>: quoted type for <code>ty</code>, quoted expression for <code>expr</code></p>
+<h2 id="partial-getter-error"><a class="header" href="#partial-getter-error">Partial getter error</a></h2>
+<pre><code>#[superstruct(cast_error(ty = &quot;..&quot;, expr = &quot;..&quot;))]
+</code></pre>
+<p>Define the error type to be returned from <a href="config/../codegen/enum.html#getters-and-setters">partial getter
+methods</a>.</p>
+<p>The expression must be of the given error type, and capable of being evaluated without any
+context (it is <em>not</em> a closure).</p>
+<p><strong>Format</strong>: quoted type for <code>ty</code>, quoted expression for <code>expr</code></p>
+<h2 id="variant-attributes"><a class="header" href="#variant-attributes">Variant attributes</a></h2>
+<pre><code>#[superstruct(variant_attributes(...))]
+</code></pre>
+<p>Provide a list of attributes to be applied verbatim to each variant struct definition.</p>
+<p>This can be used to derive traits, perform conditional compilation, etc.</p>
+<p><strong>Format</strong>: any.</p>
+<h2 id="ref-attributes"><a class="header" href="#ref-attributes"><code>Ref</code> attributes</a></h2>
+<pre><code>#[superstruct(ref_attributes(...))]
+</code></pre>
+<p>Provide a list of attributes to be applied verbatim to the generated <code>Ref</code> type.</p>
+<p><strong>Format</strong>: any.</p>
+<h2 id="refmut-attributes"><a class="header" href="#refmut-attributes"><code>RefMut</code> attributes</a></h2>
+<pre><code>#[superstruct(ref_mut_attributes(...))]
+</code></pre>
+<p>Provide a list of attributes to be applied verbatim to the generated <code>RefMut</code> type.</p>
+<p><strong>Format</strong>: any.</p>
+<h2 id="no-enum"><a class="header" href="#no-enum">No enum</a></h2>
+<pre><code>#[superstruct(no_enum)]
+</code></pre>
+<p>Disable generation of the top-level enum, and all code except the
+<a href="config/../codegen/variant-structs.html">variant structs</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="field-attributes"><a class="header" href="#field-attributes">Field attributes</a></h1>
+<p>Field attributes may be applied to fields within a <code>struct</code> that has a <code>superstruct</code> attribute
+to it at the top-level.</p>
+<p>All attributes are optional.</p>
+<h2 id="only"><a class="header" href="#only">Only</a></h2>
+<pre><code>#[superstruct(only(A, B, ...))]
+</code></pre>
+<p>Define the list of variants that this field is a member of.</p>
+<p>The <code>only</code> attribute is currently the only way that different variants are
+created.</p>
+<p>The selected variants should be a subset of the variants defined in the top-level
+<a href="config/./struct.html#variants"><code>variants</code></a> attribute.</p>
+<p><strong>Format</strong>: 1+ comma-separated identifiers.</p>
+<h2 id="getter"><a class="header" href="#getter">Getter</a></h2>
+<pre><code>#[superstruct(getter(copy, ..))]
+#[superstruct(getter(no_mut, ..))]
+#[superstruct(getter(rename = &quot;..&quot;, ..))]
+</code></pre>
+<p>Customise the implementation of the <a href="config/../codegen/enum.html#getters-and-setters">getter functions</a> for
+this field.</p>
+<p>This attribute can only be applied to <strong>common</strong> fields (i.e. ones with no <code>only</code> attribute).</p>
+<p>All of the sub-attributes <code>copy</code>, <code>no_mut</code> and <code>rename</code> are optional and any subset of them
+may be applied in a single attribute, e.g. <code>#[superstruct(getter(copy, no_mut))]</code> is valid.</p>
+<ul>
+<li><code>copy</code>: return <code>T</code> rather than <code>&amp;T</code> where <code>T</code> is the type of the field. <code>T</code> must be <code>Copy</code>
+or the generated code will fail to typecheck.</li>
+<li><code>no_mut</code>: do not generate a mutating getter with <code>_mut</code> suffix.</li>
+<li><code>rename = &quot;name&quot;</code>: rename the immutable getter to <code>name()</code> and the mutable getter to <code>name_mut()</code>
+(if enabled).</li>
+</ul>
+<h2 id="partial-getter"><a class="header" href="#partial-getter">Partial getter</a></h2>
+<pre><code>#[superstruct(partial_getter(copy, ..))]
+#[superstruct(partial_getter(no_mut, ..))]
+#[superstruct(partial_getter(rename = &quot;..&quot;, ..))]
+</code></pre>
+<p>Customise the implementation of the <a href="config/../codegen/enum.html#getters-and-setters">partial getter
+functions</a> for this field.</p>
+<p>This attribute can only be applied to <strong><em>non</em>-common</strong> fields (i.e. ones <em>with</em> an <code>only</code> attribute).</p>
+<p>All of the sub-attributes <code>copy</code>, <code>no_mut</code> and <code>rename</code> are optional and any subset of them
+may be applied in a single attribute, e.g. <code>#[superstruct(partial_getter(copy, no_mut))]</code> is valid.</p>
+<ul>
+<li><code>copy</code>: return <code>Result&lt;T, E&gt;</code> rather than <code>Result&lt;&amp;T, E&gt;</code> where <code>T</code> is the type of the field. <code>T</code>
+must be <code>Copy</code> or the generated code will fail to typecheck.</li>
+<li><code>no_mut</code>: do not generate a mutating getter with <code>_mut</code> suffix.</li>
+<li><code>rename = &quot;name&quot;</code>: rename the immutable partial getter to <code>name()</code> and the mutable partial getter
+to <code>name_mut()</code> (if enabled).</li>
+</ul>
+<p>The error type for partial getters can currently only be configured on a per-struct basis
+via the <a href="config/./struct.html#partial-getter-error"><code>partial_getter_error</code></a> attribute, although this may
+change in a future release.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>

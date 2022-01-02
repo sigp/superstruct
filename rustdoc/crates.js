@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["darling","darling_core","darling_macro","either","fnv","ident_case","itertools","nested","proc_macro2","quote","request","strsim","syn","unicode_xid"];
