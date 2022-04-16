@@ -19,6 +19,7 @@ itertools = "0.10.1"
 proc-macro2 = "1.0.32"
 quote = "1.0.10"
 syn = "1.0.82"
+smallvec = "1.8.0"
 
 [dev-dependencies]
 serde = { version = "1.0.130", features = ["derive"] }

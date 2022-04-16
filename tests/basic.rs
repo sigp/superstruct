@@ -95,7 +95,7 @@ fn serde_deserialise_order() {
 #[test]
 fn cfg_attribute() {
     // Use `all()` as true.
-    #[superstruct(variants(A, B))]
+    #[superstruct(variants(A, B), no_map_macros)]
     struct Message {
         #[cfg(not(all()))]
         pub value: String,
