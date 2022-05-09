@@ -76,3 +76,58 @@ fn map_macro_generic() {
         Blob::Base(BlobBase { slot: 10u8 }).into(),
     );
 }
+
+#[test]
+fn map_into() {
+    #[superstruct(
+        variants(A, B),
+        variant_attributes(derive(Debug, PartialEq, Clone)),
+        map_into(Thing2),
+        map_ref_into(Thing2Ref),
+        map_ref_mut_into(Thing2RefMut)
+    )]
+    #[derive(Debug, PartialEq, Clone)]
+    pub struct Thing1 {
+        #[superstruct(only(A), partial_getter(rename = "thing2a"))]
+        thing2: Thing2A,
+        #[superstruct(only(B), partial_getter(rename = "thing2b"))]
+        thing2: Thing2B,
+    }
+
+    #[superstruct(variants(A, B), variant_attributes(derive(Debug, PartialEq, Clone)))]
+    #[derive(Debug, PartialEq, Clone)]
+    pub struct Thing2 {
+        x: u64,
+    }
+
+    fn thing1_to_thing2(thing1: Thing1) -> Thing2 {
+        map_thing1_into_thing2!(thing1, |inner, cons| { cons(inner.thing2) })
+    }
+
+    fn thing1_ref_to_thing2_ref<'a>(thing1: Thing1Ref<'a>) -> Thing2Ref<'a> {
+        map_thing1_ref_into_thing2_ref!(&'a _, thing1, |inner, cons| { cons(&inner.thing2) })
+    }
+
+    fn thing1_ref_mut_to_thing2_ref_mut<'a>(thing1: Thing1RefMut<'a>) -> Thing2RefMut<'a> {
+        map_thing1_ref_mut_into_thing2_ref_mut!(&'a _, thing1, |inner, cons| {
+            cons(&mut inner.thing2)
+        })
+    }
+
+    let thing2a = Thing2A { x: 10 };
+    let mut thing2 = Thing2::A(thing2a.clone());
+    let mut thing1 = Thing1::A(Thing1A { thing2: thing2a });
+    assert_eq!(thing1_to_thing2(thing1.clone()).x(), thing2.x());
+    assert_eq!(
+        thing1_ref_to_thing2_ref(thing1.to_ref()).x(),
+        thing2.to_ref().x()
+    );
+    assert_eq!(
+        thing1_ref_mut_to_thing2_ref_mut(thing1.to_mut()).x_mut(),
+        thing2.to_mut().x_mut()
+    );
+
+    // Mutatating through the Thing2RefMut should change the value.
+    *thing1_ref_mut_to_thing2_ref_mut(thing1.to_mut()).x_mut() = 11;
+    assert_eq!(*thing1_ref_to_thing2_ref(thing1.to_ref()).x(), 11);
+}
