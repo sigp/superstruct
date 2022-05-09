@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Inner",""],["InnerRef",""],["InnerRefMut",""],["Outer",""],["OuterRef",""],["OuterRefMut",""]],"struct":[["InnerA",""],["InnerB",""],["OuterA",""],["OuterB",""]]});
+initSidebarItems({"enum":[["Inner",""],["InnerRef",""],["InnerRefMut",""],["Outer",""],["OuterRef",""],["OuterRefMut",""]],"macro":[["map_inner",""],["map_inner_ref",""],["map_inner_ref_mut",""],["map_outer",""],["map_outer_ref",""],["map_outer_ref_mut",""]],"struct":[["InnerA",""],["InnerB",""],["OuterA",""],["OuterB",""]]});

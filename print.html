@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="setup.html"><strong aria-hidden="true">2.</strong> Setup</a></li><li class="chapter-item expanded "><a href="codegen.html"><strong aria-hidden="true">3.</strong> Code generation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="codegen/variant-structs.html"><strong aria-hidden="true">3.1.</strong> Variant structs</a></li><li class="chapter-item expanded "><a href="codegen/enum.html"><strong aria-hidden="true">3.2.</strong> Top-level enum</a></li><li class="chapter-item expanded "><a href="codegen/ref-and-refmut.html"><strong aria-hidden="true">3.3.</strong> Ref and RefMut</a></li></ol></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="config/struct.html"><strong aria-hidden="true">4.1.</strong> Struct attributes</a></li><li class="chapter-item expanded "><a href="config/field.html"><strong aria-hidden="true">4.2.</strong> Field attributes</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="setup.html"><strong aria-hidden="true">2.</strong> Setup</a></li><li class="chapter-item expanded "><a href="codegen.html"><strong aria-hidden="true">3.</strong> Code generation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="codegen/variant-structs.html"><strong aria-hidden="true">3.1.</strong> Variant structs</a></li><li class="chapter-item expanded "><a href="codegen/enum.html"><strong aria-hidden="true">3.2.</strong> Top-level enum</a></li><li class="chapter-item expanded "><a href="codegen/ref-and-refmut.html"><strong aria-hidden="true">3.3.</strong> Ref and RefMut</a></li><li class="chapter-item expanded "><a href="codegen/map-macros.html"><strong aria-hidden="true">3.4.</strong> Mapping macros</a></li></ol></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="config/struct.html"><strong aria-hidden="true">4.1.</strong> Struct attributes</a></li><li class="chapter-item expanded "><a href="config/field.html"><strong aria-hidden="true">4.2.</strong> Field attributes</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -245,6 +245,7 @@ fn main() {
 <li><a href="./codegen/variant-structs.html">Variant structs</a>.</li>
 <li><a href="./codegen/enum.html">Top-level enum</a>.</li>
 <li><a href="./codegen/ref-and-refmut.html"><code>Ref</code> and <code>RefMut</code></a>.</li>
+<li><a href="./codegen/map-macros.html">Mapping macros</a>.</li>
 </ol>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
 <p>For a full, up-to-date example of the code generated, please see the <a href="./rustdoc/request">RustDoc output for
@@ -379,6 +380,156 @@ reference to a <code>MyStruct</code> in order to construct: a reference to a sin
 <h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
 <p>Please see <a href="codegen/../rustdoc/src/nested/nested.rs.html"><code>examples/nested.rs</code></a> and its
 generated <a href="codegen/../rustdoc/nested/">documentation</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="mapping-macros"><a class="header" href="#mapping-macros">Mapping macros</a></h1>
+<p>To facilitate code that is generic over all variants of a <code>superstruct</code>, we generate several
+<em>mapping macros</em> with names like <code>map_foo!</code> and <code>map_foo_into_bar!</code>.</p>
+<h2 id="mapping-into-self"><a class="header" href="#mapping-into-self">Mapping into <code>Self</code></a></h2>
+<p>For every top-level enum we generate a mapping macro that matches on values of
+<code>Self</code> and is equipped with a variant constructor for <code>Self</code>.</p>
+<p>Consider the following type:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[superstruct(variants(First, Second)]
+struct Foo {
+    x: u8,
+    #[only(Second)]
+    y: u8
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The mapping macro for <code>Foo</code> will be:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! map_foo {
+    ($value:expr, $f:expr) =&gt; {
+        match $value {
+            Foo::First(inner) =&gt; f(inner, Foo::First),
+            Foo::Second(inner) =&gt; f(inner, Foo::Second),
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>i.e. <code>map_foo!</code> is a macro taking two arguments:</p>
+<ul>
+<li><code>value</code>: an expression which must be of type <code>Foo</code>.</li>
+<li><code>f</code>: a function expression, which takes two arguments <code>|inner, constructor|</code> where:
+<ul>
+<li><code>inner</code> is an instance of a variant struct, e.g. <code>FooFirst</code>. Note that
+its type changes between branches!</li>
+<li><code>constructor</code> is a function from the selected variant struct type to <code>Foo</code>. Its type
+also changes between branches, and would be e.g. <code>fn(FooFirst) -&gt; Foo</code> in the case
+of the <code>First</code> branch.</li>
+</ul>
+</li>
+</ul>
+<p>Example usage looks like this:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Foo {
+    fn increase_x(self) -&gt; Self {
+        map_foo!(self, |inner, constructor| {
+            inner.x += 1;
+            constructor(inner)
+        })
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Although the type of <code>inner</code> could be <code>FooFirst</code> or <code>FooSecond</code>, both have an <code>x</code> field, so it is
+legal to increment it. The <code>constructor</code> is then used to re-construct an instance of <code>Foo</code> by
+injecting the updated <code>inner</code> value. If an invalid closure is provided then the type errors may
+be quite opaque. On the other hand, if your code type-checks while using <code>map!</code> then you can rest
+assured that it is valid (<code>superstruct</code> doesn't use any <code>unsafe</code> blocks or do any spicy casting).</p>
+<blockquote>
+<p>Tip: You don't need to use the constructor argument if you are implementing a straight-forward
+projection on <code>Self</code>. Although in some cases you may need to provide a type
+hint to the compiler, like <code>let _ = constructor(inner)</code>.</p>
+</blockquote>
+<h2 id="mapping-from-ref-and-refmut"><a class="header" href="#mapping-from-ref-and-refmut">Mapping from <code>Ref</code> and <code>RefMut</code></a></h2>
+<p>Mapping macros for <code>Ref</code> and <code>RefMut</code> are also generated. They take an extra lifetime argument
+(supplied as a reference to <code>_</code>) as their first argument, which must correspond to the lifetime
+on the <code>Ref</code>/<code>RefMut</code> type.</p>
+<p>Example usage for <code>Foo</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Foo {
+    fn get_x&lt;'a&gt;(&amp;'a self) -&gt; &amp;'a u64 {
+        map_foo_ref!(&amp;'a _, self, |inner, _| {
+            &amp;inner.x
+        })
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="mapping-into-other-types"><a class="header" href="#mapping-into-other-types">Mapping into other types</a></h2>
+<p>Mappings can also be generated between two <code>superstruct</code>s with identically named variants.</p>
+<p>These mapping macros are available for the top-level enum, <code>Ref</code> and <code>RefMut</code>, and take the same
+number of arguments. The only difference is that the constructor will be the constructor for the
+type being mapped <em>into</em>.</p>
+<p>The name of the mapping macro is <code>map_X_into_Y!</code> where <code>X</code> is the snake-cased
+<code>Self</code> type and <code>Y</code> is the snake-cased target type.</p>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[superstruct(
+    variants(A, B),
+    variant_attributes(derive(Debug, PartialEq, Clone)),
+    map_into(Thing2),
+    map_ref_into(Thing2Ref),
+    map_ref_mut_into(Thing2RefMut)
+)]
+#[derive(Debug, PartialEq, Clone)]
+pub struct Thing1 {
+    #[superstruct(only(A), partial_getter(rename = &quot;thing2a&quot;))]
+    thing2: Thing2A,
+    #[superstruct(only(B), partial_getter(rename = &quot;thing2b&quot;))]
+    thing2: Thing2B,
+}
+
+#[superstruct(variants(A, B), variant_attributes(derive(Debug, PartialEq, Clone)))]
+#[derive(Debug, PartialEq, Clone)]
+pub struct Thing2 {
+    x: u64,
+}
+
+fn thing1_to_thing2(thing1: Thing1) -&gt; Thing2 {
+    map_thing1_into_thing2!(thing1, |inner, cons| { cons(inner.thing2) })
+}
+
+fn thing1_ref_to_thing2_ref&lt;'a&gt;(thing1: Thing1Ref&lt;'a&gt;) -&gt; Thing2Ref&lt;'a&gt; {
+    map_thing1_ref_into_thing2_ref!(&amp;'a _, thing1, |inner, cons| { cons(&amp;inner.thing2) })
+}
+
+fn thing1_ref_mut_to_thing2_ref_mut&lt;'a&gt;(thing1: Thing1RefMut&lt;'a&gt;) -&gt; Thing2RefMut&lt;'a&gt; {
+    map_thing1_ref_mut_into_thing2_ref_mut!(&amp;'a _, thing1, |inner, cons| {
+        cons(&amp;mut inner.thing2)
+    })
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="naming"><a class="header" href="#naming">Naming</a></h2>
+<p>Type names are converted from <code>CamelCase</code> to <code>snake_case</code> on a best-effort basis. E.g.</p>
+<ul>
+<li><code>SignedBeaconBlock</code> -&gt; <code>map_signed_beacon_block!</code></li>
+<li><code>NetworkDht</code> -&gt; <code>map_network_dht!</code></li>
+</ul>
+<p>The current algorithm is quite simplistic and may produce strange names if it encounters
+repeated capital letters. Please open an issue on GitHub if you have suggestions on how to
+improve this!</p>
+<h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
+<ul>
+<li>Presently only pure mapping functions are supported. The type-hinting hacks make it hard to
+support proper closures.</li>
+<li>Sometimes type-hints are required, e.g. <code>let _ = constructor(inner)</code>.</li>
+<li>Macros are scoped per-module, so you need to be more mindful of name collisions than when
+defining regular types.</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>SuperStruct is a procedural macro, and is configured by <code>superstruct</code> attributes on the
 type being defined.</p>
@@ -434,6 +585,15 @@ context (it is <em>not</em> a closure).</p>
 </code></pre>
 <p>Disable generation of the top-level enum, and all code except the
 <a href="config/../codegen/variant-structs.html">variant structs</a>.</p>
+<h2 id="map-into"><a class="header" href="#map-into">Map Into</a></h2>
+<pre><code>#[map_into(ty1, ty2, ..)]
+#[map_ref_into(ty1, ty2, ..)]
+#[map_ref_mut_into(ty1, ty2, ..)]
+</code></pre>
+<p>Generate mapping macros from the top-level enum, the <code>Ref</code> type or the <code>RefMut</code> type as appropriate.</p>
+<p>Please see the documentation on <a href="config/./codegen/map-macros.html#mapping-into-other-types">Mapping into other types</a>
+for an explanation of how these macros operate.</p>
+<p><strong>Format</strong>: one or more <code>superstruct</code> type names</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="field-attributes"><a class="header" href="#field-attributes">Field attributes</a></h1>
 <p>Field attributes may be applied to fields within a <code>struct</code> that has a <code>superstruct</code> attribute
 to it at the top-level.</p>
