@@ -7,6 +7,7 @@ You should visit each of the sub-pages in order to understand how the generated 
 1. [Variant structs](./codegen/variant-structs.md).
 2. [Top-level enum](./codegen/enum.md).
 3. [`Ref` and `RefMut`](./codegen/ref-and-refmut.md).
+4. [Mapping macros](./codegen/map-macros.md).
 
 ## Example
 

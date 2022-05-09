@@ -19,7 +19,7 @@ fn partial_getter() {
 
 #[test]
 fn copy_partial_getter() {
-    #[superstruct(variants(A, B))]
+    #[superstruct(variants(A, B), no_map_macros)]
     struct Message {
         #[superstruct(getter(copy))]
         pub x: u64,

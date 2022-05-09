@@ -1,8 +1,9 @@
 use attributes::{IdentList, NestedMetaList};
 use darling::FromMeta;
 use itertools::Itertools;
+use macros::generate_all_map_macros;
 use proc_macro::TokenStream;
-use proc_macro2::Span;
+use proc_macro2::{Span, TokenStream as TokenStream2};
 use quote::{format_ident, quote, ToTokens};
 use std::collections::HashMap;
 use std::iter::{self, FromIterator};
@@ -12,6 +13,9 @@ use syn::{
 };
 
 mod attributes;
+mod macros;
+mod naming;
+mod utils;
 
 /// Top-level configuration via the `superstruct` attribute.
 #[derive(Debug, FromMeta)]
@@ -36,6 +40,18 @@ struct StructOpts {
     /// Turn off the generation of the top-level enum that binds the variants together.
     #[darling(default)]
     no_enum: bool,
+    /// Turn off the generation of the map macros.
+    #[darling(default)]
+    no_map_macros: bool,
+    /// List of other superstruct types to generate (owned) mappings into.
+    #[darling(default)]
+    map_into: Option<IdentList>,
+    /// List of other superstruct types to generate mappings into from Ref.
+    #[darling(default)]
+    map_ref_into: Option<IdentList>,
+    /// List of other superstruct types to generate mappings into from RefMut.
+    #[darling(default)]
+    map_ref_mut_into: Option<IdentList>,
 }
 
 /// Field-level configuration.
@@ -471,6 +487,34 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         }
     };
     output_items.push(ref_mut_impl_block.into());
+
+    // Generate the mapping macros if enabled.
+    if !opts.no_map_macros && !opts.no_enum {
+        let num_generics = decl_generics.params.len();
+        generate_all_map_macros(
+            &type_name,
+            &ref_ty_name,
+            &ref_mut_ty_name,
+            num_generics,
+            &struct_names,
+            variant_names,
+            &opts,
+            &mut output_items,
+        );
+    } else {
+        assert!(
+            opts.map_into.is_none(),
+            "`map_into` is set but map macros are disabled"
+        );
+        assert!(
+            opts.map_ref_into.is_none(),
+            "`map_ref_into` is set but map macros are disabled"
+        );
+        assert!(
+            opts.map_ref_mut_into.is_none(),
+            "`map_ref_mut_into` is set but map macros are disabled"
+        );
+    }
 
     TokenStream::from_iter(output_items)
 }

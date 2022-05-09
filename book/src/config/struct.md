@@ -83,3 +83,18 @@ Provide a list of attributes to be applied verbatim to the generated `RefMut` ty
 
 Disable generation of the top-level enum, and all code except the
 [variant structs](../codegen/variant-structs.md).
+
+## Map Into
+
+```
+#[map_into(ty1, ty2, ..)]
+#[map_ref_into(ty1, ty2, ..)]
+#[map_ref_mut_into(ty1, ty2, ..)]
+```
+
+Generate mapping macros from the top-level enum, the `Ref` type or the `RefMut` type as appropriate.
+
+Please see the documentation on [Mapping into other types](./codegen/map-macros.md#mapping-into-other-types)
+for an explanation of how these macros operate.
+
+**Format**: one or more `superstruct` type names
