@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["darling","darling_core","darling_macro","either","fnv","ident_case","itertools","itoa","nested","proc_macro2","quote","request","ryu","serde","serde_derive","serde_json","smallvec","strsim","superstruct","syn","unicode_xid"];
+window.ALL_CRATES = ["darling","darling_core","darling_macro","either","fnv","ident_case","itertools","itoa","nested","proc_macro2","quote","request","ryu","serde","serde_derive","serde_json","smallvec","strsim","superstruct","syn","unicode_ident"];

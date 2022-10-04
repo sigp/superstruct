@@ -142,8 +142,7 @@ from the top-level enum.</p>
 <p>The mutable reference type is named <code>{BaseName}RefMut</code> and has all of the mutable getter methods
 from the top-level enum.</p>
 <p>Consider the <code>MyStruct</code> example again:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(Foo, Bar))]
 struct MyStruct {
@@ -154,8 +153,7 @@ struct MyStruct {
 <span class="boring">}
 </span></code></pre></pre>
 <p>The generated <code>Ref</code> types look like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum MyStructRef&lt;'a&gt; {
     Foo(&amp;'a MyStructFoo),

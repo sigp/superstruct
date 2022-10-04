@@ -1,1 +1,1 @@
-initSidebarItems({"attr":[["superstruct",""]]});
+window.SIDEBAR_ITEMS = {"attr":[["superstruct",""]]};

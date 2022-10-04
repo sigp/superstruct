@@ -141,8 +141,7 @@
 <p>For every top-level enum we generate a mapping macro that matches on values of
 <code>Self</code> and is equipped with a variant constructor for <code>Self</code>.</p>
 <p>Consider the following type:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(First, Second)]
 struct Foo {
@@ -153,8 +152,7 @@ struct Foo {
 <span class="boring">}
 </span></code></pre></pre>
 <p>The mapping macro for <code>Foo</code> will be:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>macro_rules! map_foo {
     ($value:expr, $f:expr) =&gt; {
@@ -180,8 +178,7 @@ of the <code>First</code> branch.</li>
 </li>
 </ul>
 <p>Example usage looks like this:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Foo {
     fn increase_x(self) -&gt; Self {
@@ -208,8 +205,7 @@ hint to the compiler, like <code>let _ = constructor(inner)</code>.</p>
 (supplied as a reference to <code>_</code>) as their first argument, which must correspond to the lifetime
 on the <code>Ref</code>/<code>RefMut</code> type.</p>
 <p>Example usage for <code>Foo</code>:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Foo {
     fn get_x&lt;'a&gt;(&amp;'a self) -&gt; &amp;'a u64 {
@@ -228,8 +224,7 @@ type being mapped <em>into</em>.</p>
 <p>The name of the mapping macro is <code>map_X_into_Y!</code> where <code>X</code> is the snake-cased
 <code>Self</code> type and <code>Y</code> is the snake-cased target type.</p>
 <p>Example:</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(
     variants(A, B),

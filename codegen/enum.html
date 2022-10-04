@@ -137,8 +137,7 @@
                         <h1 id="top-level-enum"><a class="header" href="#top-level-enum">Top-level enum</a></h1>
 <p>SuperStruct generates an enum that combines all of the generated variant structs.</p>
 <p>Consider the the <code>MyStruct</code> example from the previous page:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(Foo, Bar))]
 struct MyStruct {
@@ -149,8 +148,7 @@ struct MyStruct {
 <span class="boring">}
 </span></code></pre></pre>
 <p>The generated enum is:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground">
-<span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum MyStruct {
     Foo(MyStructFoo),
