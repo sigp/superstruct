@@ -63,3 +63,8 @@ are described [here](./ref-and-refmut.md).
 * `to_ref` returning `{BaseName}Ref`.
 * `to_mut` returning `{BaseName}RefMut`.
 
+## `From` implementations
+
+The top-level enum has `From` implementations for converting (owned) variant structs, i.e.
+
+* `impl From<{VariantStruct}> for {BaseName}` for all variants
