@@ -39,7 +39,17 @@ reference to a `MyStruct` in order to construct: a reference to a single variant
 
 ## Trait Implementations
 
+### `Copy`
+
 Each `Ref` type is `Copy`, just like an ordinary `&T`.
+
+### `From`
+
+The `Ref` type has `From` implementations that allow converting from references to variants
+or references to the top-level enum type, i.e.
+
+- `impl From<&'a {VariantStruct}> for {BaseName}Ref<'a>` for all variants.
+- `impl From<&'a {BaseName}> for {BaseName}Ref<'a>` (same as `to_ref()`).
 
 ## Example
 
