@@ -333,6 +333,11 @@ are described <a href="codegen/./ref-and-refmut.html">here</a>.</p>
 <li><code>to_ref</code> returning <code>{BaseName}Ref</code>.</li>
 <li><code>to_mut</code> returning <code>{BaseName}RefMut</code>.</li>
 </ul>
+<h2 id="from-implementations"><a class="header" href="#from-implementations"><code>From</code> implementations</a></h2>
+<p>The top-level enum has <code>From</code> implementations for converting (owned) variant structs, i.e.</p>
+<ul>
+<li><code>impl From&lt;{VariantStruct}&gt; for {BaseName}</code> for all variants</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ref-and-refmut"><a class="header" href="#ref-and-refmut"><code>Ref</code> and <code>RefMut</code></a></h1>
 <p>SuperStruct generates two reference-like structs which are designed to simplify working with nested
 <code>superstruct</code> types.</p>
@@ -368,7 +373,15 @@ enum MyStructRefMut&lt;'a&gt; {
 <p>The reason these types can be useful (particularly with nesting) is that they do not require a full
 reference to a <code>MyStruct</code> in order to construct: a reference to a single variant struct will suffice.</p>
 <h2 id="trait-implementations"><a class="header" href="#trait-implementations">Trait Implementations</a></h2>
+<h3 id="copy"><a class="header" href="#copy"><code>Copy</code></a></h3>
 <p>Each <code>Ref</code> type is <code>Copy</code>, just like an ordinary <code>&amp;T</code>.</p>
+<h3 id="from"><a class="header" href="#from"><code>From</code></a></h3>
+<p>The <code>Ref</code> type has <code>From</code> implementations that allow converting from references to variants
+or references to the top-level enum type, i.e.</p>
+<ul>
+<li><code>impl From&lt;&amp;'a {VariantStruct}&gt; for {BaseName}Ref&lt;'a&gt;</code> for all variants.</li>
+<li><code>impl From&lt;&amp;'a {BaseName}&gt; for {BaseName}Ref&lt;'a&gt;</code> (same as <code>to_ref()</code>).</li>
+</ul>
 <h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
 <p>Please see <a href="codegen/../rustdoc/src/nested/nested.rs.html"><code>examples/nested.rs</code></a> and its
 generated <a href="codegen/../rustdoc/nested/">documentation</a>.</p>

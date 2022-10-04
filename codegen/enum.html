@@ -188,6 +188,11 @@ are described <a href="./ref-and-refmut.html">here</a>.</p>
 <li><code>to_ref</code> returning <code>{BaseName}Ref</code>.</li>
 <li><code>to_mut</code> returning <code>{BaseName}RefMut</code>.</li>
 </ul>
+<h2 id="from-implementations"><a class="header" href="#from-implementations"><code>From</code> implementations</a></h2>
+<p>The top-level enum has <code>From</code> implementations for converting (owned) variant structs, i.e.</p>
+<ul>
+<li><code>impl From&lt;{VariantStruct}&gt; for {BaseName}</code> for all variants</li>
+</ul>
 
                     </main>
 
