@@ -752,9 +752,39 @@
 <span id="752">752</span>
 <span id="753">753</span>
 <span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">attributes</span>::{<span class="ident">IdentList</span>, <span class="ident">NestedMetaList</span>};
 <span class="kw">use</span> <span class="ident">darling::FromMeta</span>;
-<span class="kw">use</span> <span class="ident">from::generate_from_trait_impl</span>;
+<span class="kw">use</span> <span class="ident">from</span>::{
+    <span class="ident">generate_from_enum_trait_impl_for_ref</span>, <span class="ident">generate_from_variant_trait_impl</span>,
+    <span class="ident">generate_from_variant_trait_impl_for_ref</span>,
+};
 <span class="kw">use</span> <span class="ident">itertools::Itertools</span>;
 <span class="kw">use</span> <span class="ident">macros::generate_all_map_macros</span>;
 <span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
@@ -1274,7 +1304,7 @@
 
     <span class="comment">// Generate trait implementations.</span>
     <span class="kw">for</span> (<span class="ident">variant_name</span>, <span class="ident">struct_name</span>) <span class="kw">in</span> <span class="ident">variant_names</span>.<span class="ident">iter</span>().<span class="ident">zip_eq</span>(<span class="kw-2">&amp;</span><span class="ident">struct_names</span>) {
-        <span class="kw">let</span> <span class="ident">from_impl</span> <span class="op">=</span> <span class="ident">generate_from_trait_impl</span>(
+        <span class="kw">let</span> <span class="ident">from_impl</span> <span class="op">=</span> <span class="ident">generate_from_variant_trait_impl</span>(
             <span class="ident">type_name</span>,
             <span class="ident">impl_generics</span>,
             <span class="ident">ty_generics</span>,
@@ -1283,7 +1313,31 @@
             <span class="ident">struct_name</span>,
         );
         <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">from_impl</span>.<span class="ident">into</span>());
+
+        <span class="kw">let</span> <span class="ident">from_impl_for_ref</span> <span class="op">=</span> <span class="ident">generate_from_variant_trait_impl_for_ref</span>(
+            <span class="kw-2">&amp;</span><span class="ident">ref_ty_name</span>,
+            <span class="kw-2">&amp;</span><span class="ident">ref_ty_lifetime</span>,
+            <span class="ident">ref_impl_generics</span>,
+            <span class="ident">ref_ty_generics</span>,
+            <span class="ident">ty_generics</span>,
+            <span class="ident">where_clause</span>,
+            <span class="ident">variant_name</span>,
+            <span class="ident">struct_name</span>,
+        );
+        <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">from_impl_for_ref</span>.<span class="ident">into</span>());
     }
+
+    <span class="comment">// Convert reference to top-level type to `Ref`.</span>
+    <span class="kw">let</span> <span class="ident">ref_from_top_level_impl</span> <span class="op">=</span> <span class="ident">generate_from_enum_trait_impl_for_ref</span>(
+        <span class="ident">type_name</span>,
+        <span class="ident">ty_generics</span>,
+        <span class="kw-2">&amp;</span><span class="ident">ref_ty_name</span>,
+        <span class="kw-2">&amp;</span><span class="ident">ref_ty_lifetime</span>,
+        <span class="ident">ref_impl_generics</span>,
+        <span class="ident">ref_ty_generics</span>,
+        <span class="ident">where_clause</span>,
+    );
+    <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">ref_from_top_level_impl</span>.<span class="ident">into</span>());
 
     <span class="ident">TokenStream::from_iter</span>(<span class="ident">output_items</span>)
 }
