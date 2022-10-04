@@ -1,6 +1,9 @@
 use attributes::{IdentList, NestedMetaList};
 use darling::FromMeta;
-use from::generate_from_trait_impl;
+use from::{
+    generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
+    generate_from_variant_trait_impl_for_ref,
+};
 use itertools::Itertools;
 use macros::generate_all_map_macros;
 use proc_macro::TokenStream;
@@ -520,7 +523,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
     // Generate trait implementations.
     for (variant_name, struct_name) in variant_names.iter().zip_eq(&struct_names) {
-        let from_impl = generate_from_trait_impl(
+        let from_impl = generate_from_variant_trait_impl(
             type_name,
             impl_generics,
             ty_generics,
@@ -529,7 +532,31 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             struct_name,
         );
         output_items.push(from_impl.into());
+
+        let from_impl_for_ref = generate_from_variant_trait_impl_for_ref(
+            &ref_ty_name,
+            &ref_ty_lifetime,
+            ref_impl_generics,
+            ref_ty_generics,
+            ty_generics,
+            where_clause,
+            variant_name,
+            struct_name,
+        );
+        output_items.push(from_impl_for_ref.into());
     }
+
+    // Convert reference to top-level type to `Ref`.
+    let ref_from_top_level_impl = generate_from_enum_trait_impl_for_ref(
+        type_name,
+        ty_generics,
+        &ref_ty_name,
+        &ref_ty_lifetime,
+        ref_impl_generics,
+        ref_ty_generics,
+        where_clause,
+    );
+    output_items.push(ref_from_top_level_impl.into());
 
     TokenStream::from_iter(output_items)
 }
