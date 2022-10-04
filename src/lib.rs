@@ -1,5 +1,6 @@
 use attributes::{IdentList, NestedMetaList};
 use darling::FromMeta;
+use from::generate_from_trait_impl;
 use itertools::Itertools;
 use macros::generate_all_map_macros;
 use proc_macro::TokenStream;
@@ -13,6 +14,7 @@ use syn::{
 };
 
 mod attributes;
+mod from;
 mod macros;
 mod naming;
 mod utils;
@@ -514,6 +516,19 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             opts.map_ref_mut_into.is_none(),
             "`map_ref_mut_into` is set but map macros are disabled"
         );
+    }
+
+    // Generate trait implementations.
+    for (variant_name, struct_name) in variant_names.iter().zip_eq(&struct_names) {
+        let from_impl = generate_from_trait_impl(
+            type_name,
+            impl_generics,
+            ty_generics,
+            where_clause,
+            variant_name,
+            struct_name,
+        );
+        output_items.push(from_impl.into());
     }
 
     TokenStream::from_iter(output_items)
