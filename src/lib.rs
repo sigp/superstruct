@@ -30,6 +30,9 @@ struct StructOpts {
     /// List of attributes to apply to the variant structs.
     #[darling(default)]
     variant_attributes: Option<NestedMetaList>,
+    /// List of attributes to apply to a selection of named variant structs.
+    #[darling(default)]
+    specific_variant_attributes: Option<HashMap<Ident, NestedMetaList>>,
     /// List of attributes to apply to the generated Ref type.
     #[darling(default)]
     ref_attributes: Option<NestedMetaList>,
@@ -207,16 +210,26 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     }
 
     // Generate structs for all of the variants.
-    let struct_attributes = opts
+    let universal_struct_attributes = opts
         .variant_attributes
         .as_ref()
         .map_or(&[][..], |attrs| &attrs.metas);
 
     for (variant_name, struct_name) in variant_names.iter().zip(struct_names.iter()) {
         let fields = &variant_fields[variant_name];
+
+        let specific_struct_attributes = opts
+            .specific_variant_attributes
+            .as_ref()
+            .and_then(|sv| sv.get(&variant_name))
+            .map_or(&[][..], |attrs| &attrs.metas);
+
         let variant_code = quote! {
             #(
-                #[#struct_attributes]
+                #[#universal_struct_attributes]
+            )*
+            #(
+                #[#specific_struct_attributes]
             )*
             #visibility struct #struct_name #decl_generics #where_clause {
                 #(

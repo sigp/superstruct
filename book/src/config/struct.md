@@ -55,6 +55,18 @@ This can be used to derive traits, perform conditional compilation, etc.
 
 **Format**: any.
 
+## Specific variant attributes
+
+```
+#[superstruct(specific_variant_attributes(A(...), B(...), ...))]
+```
+
+Similar to `variant_attributes`, but applies the attributes _only_ to the named variants. This
+is useful if e.g. one variant needs to derive a trait which the others cannot, or if another
+procedural macro is being invoked on the variant struct which requires different parameters.
+
+**Format**: zero or more variant names, with variant attributes nested in parens
+
 ## `Ref` attributes
 
 ```
