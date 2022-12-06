@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../superstruct/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../superstruct/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../superstruct/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../superstruct/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../superstruct/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../superstruct/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -779,786 +779,812 @@
 <span id="779">779</span>
 <span id="780">780</span>
 <span id="781">781</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">attributes</span>::{<span class="ident">IdentList</span>, <span class="ident">NestedMetaList</span>};
-<span class="kw">use</span> <span class="ident">darling::FromMeta</span>;
-<span class="kw">use</span> <span class="ident">from</span>::{
-    <span class="ident">generate_from_enum_trait_impl_for_ref</span>, <span class="ident">generate_from_variant_trait_impl</span>,
-    <span class="ident">generate_from_variant_trait_impl_for_ref</span>,
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+</pre><pre class="rust"><code><span class="kw">use </span>attributes::{IdentList, NestedMetaList};
+<span class="kw">use </span>darling::FromMeta;
+<span class="kw">use </span>from::{
+    generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
+    generate_from_variant_trait_impl_for_ref,
 };
-<span class="kw">use</span> <span class="ident">itertools::Itertools</span>;
-<span class="kw">use</span> <span class="ident">macros::generate_all_map_macros</span>;
-<span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">proc_macro2</span>::{<span class="ident">Span</span>, <span class="ident">TokenStream</span> <span class="kw">as</span> <span class="ident">TokenStream2</span>};
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">format_ident</span>, <span class="ident">quote</span>, <span class="ident">ToTokens</span>};
-<span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
-<span class="kw">use</span> <span class="ident">std::iter</span>::{<span class="self">self</span>, <span class="ident">FromIterator</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="ident">parse_macro_input</span>, <span class="ident">Attribute</span>, <span class="ident">AttributeArgs</span>, <span class="ident">Expr</span>, <span class="ident">Field</span>, <span class="ident">GenericParam</span>, <span class="ident">Ident</span>, <span class="ident">ItemStruct</span>,
-    <span class="ident">Lifetime</span>, <span class="ident">LifetimeDef</span>, <span class="ident">Type</span>, <span class="ident">TypeGenerics</span>, <span class="ident">TypeParamBound</span>,
+<span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>macros::generate_all_map_macros;
+<span class="kw">use </span>proc_macro::TokenStream;
+<span class="kw">use </span>proc_macro2::{Span, TokenStream <span class="kw">as </span>TokenStream2};
+<span class="kw">use </span>quote::{format_ident, quote, ToTokens};
+<span class="kw">use </span>std::collections::HashMap;
+<span class="kw">use </span>std::iter::{<span class="self">self</span>, FromIterator};
+<span class="kw">use </span>syn::{
+    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
+    Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
 };
 
-<span class="kw">mod</span> <span class="ident">attributes</span>;
-<span class="kw">mod</span> <span class="ident">from</span>;
-<span class="kw">mod</span> <span class="ident">macros</span>;
-<span class="kw">mod</span> <span class="ident">naming</span>;
-<span class="kw">mod</span> <span class="ident">utils</span>;
+<span class="kw">mod </span>attributes;
+<span class="kw">mod </span>from;
+<span class="kw">mod </span>macros;
+<span class="kw">mod </span>naming;
+<span class="kw">mod </span>utils;
 
-<span class="doccomment">/// Top-level configuration via the `superstruct` attribute.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">FromMeta</span>)]</span>
-<span class="kw">struct</span> <span class="ident">StructOpts</span> {
-    <span class="doccomment">/// List of variant names of the superstruct being derived.</span>
-    <span class="ident">variants</span>: <span class="ident">IdentList</span>,
-    <span class="doccomment">/// List of attributes to apply to the variant structs.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">variant_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NestedMetaList</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// List of attributes to apply to the generated Ref type.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">ref_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NestedMetaList</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// List of attributes to apply to the generated RefMut type.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">ref_mut_attributes</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">NestedMetaList</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Error type and expression to use for casting methods.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">cast_error</span>: <span class="ident">ErrorOpts</span>,
-    <span class="doccomment">/// Error type and expression to use for partial getter methods.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">partial_getter_error</span>: <span class="ident">ErrorOpts</span>,
-    <span class="doccomment">/// Turn off the generation of the top-level enum that binds the variants together.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">no_enum</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// Turn off the generation of the map macros.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">no_map_macros</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// List of other superstruct types to generate (owned) mappings into.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">map_into</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">IdentList</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// List of other superstruct types to generate mappings into from Ref.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">map_ref_into</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">IdentList</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// List of other superstruct types to generate mappings into from RefMut.</span>
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">map_ref_mut_into</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">IdentList</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Top-level configuration via the `superstruct` attribute.
+</span><span class="attribute">#[derive(Debug, FromMeta)]
+</span><span class="kw">struct </span>StructOpts {
+    <span class="doccomment">/// List of variant names of the superstruct being derived.
+    </span>variants: IdentList,
+    <span class="doccomment">/// List of attributes to apply to the variant structs.
+    </span><span class="attribute">#[darling(default)]
+    </span>variant_attributes: <span class="prelude-ty">Option</span>&lt;NestedMetaList&gt;,
+    <span class="doccomment">/// List of attributes to apply to a selection of named variant structs.
+    </span><span class="attribute">#[darling(default)]
+    </span>specific_variant_attributes: <span class="prelude-ty">Option</span>&lt;HashMap&lt;Ident, NestedMetaList&gt;&gt;,
+    <span class="doccomment">/// List of attributes to apply to the generated Ref type.
+    </span><span class="attribute">#[darling(default)]
+    </span>ref_attributes: <span class="prelude-ty">Option</span>&lt;NestedMetaList&gt;,
+    <span class="doccomment">/// List of attributes to apply to the generated RefMut type.
+    </span><span class="attribute">#[darling(default)]
+    </span>ref_mut_attributes: <span class="prelude-ty">Option</span>&lt;NestedMetaList&gt;,
+    <span class="doccomment">/// Error type and expression to use for casting methods.
+    </span><span class="attribute">#[darling(default)]
+    </span>cast_error: ErrorOpts,
+    <span class="doccomment">/// Error type and expression to use for partial getter methods.
+    </span><span class="attribute">#[darling(default)]
+    </span>partial_getter_error: ErrorOpts,
+    <span class="doccomment">/// Turn off the generation of the top-level enum that binds the variants together.
+    </span><span class="attribute">#[darling(default)]
+    </span>no_enum: bool,
+    <span class="doccomment">/// Turn off the generation of the map macros.
+    </span><span class="attribute">#[darling(default)]
+    </span>no_map_macros: bool,
+    <span class="doccomment">/// List of other superstruct types to generate (owned) mappings into.
+    </span><span class="attribute">#[darling(default)]
+    </span>map_into: <span class="prelude-ty">Option</span>&lt;IdentList&gt;,
+    <span class="doccomment">/// List of other superstruct types to generate mappings into from Ref.
+    </span><span class="attribute">#[darling(default)]
+    </span>map_ref_into: <span class="prelude-ty">Option</span>&lt;IdentList&gt;,
+    <span class="doccomment">/// List of other superstruct types to generate mappings into from RefMut.
+    </span><span class="attribute">#[darling(default)]
+    </span>map_ref_mut_into: <span class="prelude-ty">Option</span>&lt;IdentList&gt;,
 }
 
-<span class="doccomment">/// Field-level configuration.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">FromMeta</span>)]</span>
-<span class="kw">struct</span> <span class="ident">FieldOpts</span> {
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">only</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">Ident</span>, ()<span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">getter</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GetterOpts</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">partial_getter</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">GetterOpts</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Field-level configuration.
+</span><span class="attribute">#[derive(Debug, Default, FromMeta)]
+</span><span class="kw">struct </span>FieldOpts {
+    <span class="attribute">#[darling(default)]
+    </span>only: <span class="prelude-ty">Option</span>&lt;HashMap&lt;Ident, ()&gt;&gt;,
+    <span class="attribute">#[darling(default)]
+    </span>getter: <span class="prelude-ty">Option</span>&lt;GetterOpts&gt;,
+    <span class="attribute">#[darling(default)]
+    </span>partial_getter: <span class="prelude-ty">Option</span>&lt;GetterOpts&gt;,
 }
 
-<span class="doccomment">/// Getter configuration for a specific field</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">FromMeta</span>)]</span>
-<span class="kw">struct</span> <span class="ident">GetterOpts</span> {
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">copy</span>: <span class="ident">bool</span>,
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">no_mut</span>: <span class="ident">bool</span>,
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">rename</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Getter configuration for a specific field
+</span><span class="attribute">#[derive(Debug, Default, FromMeta)]
+</span><span class="kw">struct </span>GetterOpts {
+    <span class="attribute">#[darling(default)]
+    </span>copy: bool,
+    <span class="attribute">#[darling(default)]
+    </span>no_mut: bool,
+    <span class="attribute">#[darling(default)]
+    </span>rename: <span class="prelude-ty">Option</span>&lt;Ident&gt;,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">FromMeta</span>)]</span>
-<span class="kw">struct</span> <span class="ident">ErrorOpts</span> {
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">ty</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">darling</span>(<span class="ident">default</span>)]</span>
-    <span class="ident">expr</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Debug, Default, FromMeta)]
+</span><span class="kw">struct </span>ErrorOpts {
+    <span class="attribute">#[darling(default)]
+    </span>ty: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="attribute">#[darling(default)]
+    </span>expr: <span class="prelude-ty">Option</span>&lt;String&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">ErrorOpts</span> {
-    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">Type</span>, <span class="ident">Expr</span>)<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">err_ty_str</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ty</span>.<span class="ident">as_ref</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">err_ty</span>: <span class="ident">Type</span> <span class="op">=</span> <span class="ident">syn::parse_str</span>(<span class="ident">err_ty_str</span>).<span class="ident">expect</span>(<span class="string">&quot;error type not valid&quot;</span>);
-        <span class="kw">let</span> <span class="ident">err_expr_str</span> <span class="op">=</span> <span class="self">self</span>
-            .<span class="ident">expr</span>
-            .<span class="ident">as_ref</span>()
-            .<span class="ident">expect</span>(<span class="string">&quot;must provide an error expr with error ty&quot;</span>);
-        <span class="kw">let</span> <span class="ident">err_expr</span>: <span class="ident">Expr</span> <span class="op">=</span> <span class="ident">syn::parse_str</span>(<span class="ident">err_expr_str</span>).<span class="ident">expect</span>(<span class="string">&quot;error expr not valid&quot;</span>);
-        <span class="prelude-val">Some</span>((<span class="ident">err_ty</span>, <span class="ident">err_expr</span>))
+<span class="kw">impl </span>ErrorOpts {
+    <span class="kw">fn </span>parse(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;(Type, Expr)&gt; {
+        <span class="kw">let </span>err_ty_str = <span class="self">self</span>.ty.as_ref()<span class="question-mark">?</span>;
+        <span class="kw">let </span>err_ty: Type = syn::parse_str(err_ty_str).expect(<span class="string">&quot;error type not valid&quot;</span>);
+        <span class="kw">let </span>err_expr_str = <span class="self">self
+            </span>.expr
+            .as_ref()
+            .expect(<span class="string">&quot;must provide an error expr with error ty&quot;</span>);
+        <span class="kw">let </span>err_expr: Expr = syn::parse_str(err_expr_str).expect(<span class="string">&quot;error expr not valid&quot;</span>);
+        <span class="prelude-val">Some</span>((err_ty, err_expr))
     }
 
-    <span class="kw">fn</span> <span class="ident">build_result_type</span>(
+    <span class="kw">fn </span>build_result_type(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">ret_ty</span>: <span class="kw">impl</span> <span class="ident">ToTokens</span>,
-    ) -&gt; (<span class="ident">proc_macro2::TokenStream</span>, <span class="ident">proc_macro2::TokenStream</span>) {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">err_ty</span>, <span class="ident">err_expr</span>)) <span class="op">=</span> <span class="self">self</span>.<span class="ident">parse</span>() {
-            (<span class="macro">quote!</span> { <span class="prelude-ty">Result</span><span class="op">&lt;</span>#<span class="ident">ret_ty</span>, #<span class="ident">err_ty</span><span class="op">&gt;</span> }, <span class="macro">quote!</span> { #<span class="ident">err_expr</span> })
-        } <span class="kw">else</span> {
-            (<span class="macro">quote!</span> { <span class="prelude-ty">Result</span><span class="op">&lt;</span>#<span class="ident">ret_ty</span>, ()<span class="op">&gt;</span> }, <span class="macro">quote!</span> { () })
+        ret_ty: <span class="kw">impl </span>ToTokens,
+    ) -&gt; (proc_macro2::TokenStream, proc_macro2::TokenStream) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>((err_ty, err_expr)) = <span class="self">self</span>.parse() {
+            (<span class="macro">quote! </span>{ <span class="prelude-ty">Result</span>&lt;#ret_ty, #err_ty&gt; }, <span class="macro">quote! </span>{ #err_expr })
+        } <span class="kw">else </span>{
+            (<span class="macro">quote! </span>{ <span class="prelude-ty">Result</span>&lt;#ret_ty, ()&gt; }, <span class="macro">quote! </span>{ () })
         }
     }
 }
 
-<span class="doccomment">/// All data about a field, including its type &amp; config from attributes.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">FieldData</span> {
-    <span class="ident">name</span>: <span class="ident">Ident</span>,
-    <span class="ident">field</span>: <span class="ident">Field</span>,
-    <span class="ident">only</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Ident</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">getter_opts</span>: <span class="ident">GetterOpts</span>,
-    <span class="ident">partial_getter_opts</span>: <span class="ident">GetterOpts</span>,
+<span class="doccomment">/// All data about a field, including its type &amp; config from attributes.
+</span><span class="attribute">#[derive(Debug)]
+</span><span class="kw">struct </span>FieldData {
+    name: Ident,
+    field: Field,
+    only: <span class="prelude-ty">Option</span>&lt;Vec&lt;Ident&gt;&gt;,
+    getter_opts: GetterOpts,
+    partial_getter_opts: GetterOpts,
 }
 
-<span class="kw">impl</span> <span class="ident">FieldData</span> {
-    <span class="kw">fn</span> <span class="ident">is_common</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">only</span>.<span class="ident">is_none</span>()
+<span class="kw">impl </span>FieldData {
+    <span class="kw">fn </span>is_common(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.only.is_none()
     }
 }
 
-<span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">superstruct</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="kw">let</span> <span class="ident">attr_args</span> <span class="op">=</span> <span class="macro">parse_macro_input!</span>(<span class="ident">args</span> <span class="kw">as</span> <span class="ident">AttributeArgs</span>);
-    <span class="kw">let</span> <span class="ident">item</span> <span class="op">=</span> <span class="macro">parse_macro_input!</span>(<span class="ident">input</span> <span class="kw">as</span> <span class="ident">ItemStruct</span>);
+<span class="attribute">#[proc_macro_attribute]
+</span><span class="kw">pub fn </span>superstruct(args: TokenStream, input: TokenStream) -&gt; TokenStream {
+    <span class="kw">let </span>attr_args = <span class="macro">parse_macro_input!</span>(args <span class="kw">as </span>AttributeArgs);
+    <span class="kw">let </span>item = <span class="macro">parse_macro_input!</span>(input <span class="kw">as </span>ItemStruct);
 
-    <span class="kw">let</span> <span class="ident">type_name</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">ident</span>;
-    <span class="kw">let</span> <span class="ident">visibility</span> <span class="op">=</span> <span class="ident">item</span>.<span class="ident">vis</span>;
-    <span class="comment">// Extract the generics to use for the top-level type and all variant structs.</span>
-    <span class="kw">let</span> <span class="ident">decl_generics</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">generics</span>;
-    <span class="comment">// Generics used for the impl block.</span>
-    <span class="kw">let</span> (<span class="ident">impl_generics</span>, <span class="ident">ty_generics</span>, <span class="ident">where_clause</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">generics</span>.<span class="ident">split_for_impl</span>();
+    <span class="kw">let </span>type_name = <span class="kw-2">&amp;</span>item.ident;
+    <span class="kw">let </span>visibility = item.vis;
+    <span class="comment">// Extract the generics to use for the top-level type and all variant structs.
+    </span><span class="kw">let </span>decl_generics = <span class="kw-2">&amp;</span>item.generics;
+    <span class="comment">// Generics used for the impl block.
+    </span><span class="kw">let </span>(impl_generics, ty_generics, where_clause) = <span class="kw-2">&amp;</span>item.generics.split_for_impl();
 
-    <span class="kw">let</span> <span class="ident">opts</span> <span class="op">=</span> <span class="ident">StructOpts::from_list</span>(<span class="kw-2">&amp;</span><span class="ident">attr_args</span>).<span class="ident">unwrap</span>();
+    <span class="kw">let </span>opts = StructOpts::from_list(<span class="kw-2">&amp;</span>attr_args).unwrap();
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output_items</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[];
+    <span class="kw">let </span><span class="kw-2">mut </span>output_items: Vec&lt;TokenStream&gt; = <span class="macro">vec!</span>[];
 
-    <span class="kw">let</span> <span class="ident">mk_struct_name</span> <span class="op">=</span> <span class="op">|</span><span class="ident">variant_name</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span><span class="op">|</span> <span class="macro">format_ident!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">type_name</span>, <span class="ident">variant_name</span>);
+    <span class="kw">let </span>mk_struct_name = |variant_name: <span class="kw-2">&amp;</span>Ident| <span class="macro">format_ident!</span>(<span class="string">&quot;{}{}&quot;</span>, type_name, variant_name);
 
-    <span class="kw">let</span> <span class="ident">variant_names</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">opts</span>.<span class="ident">variants</span>.<span class="ident">idents</span>;
-    <span class="kw">let</span> <span class="ident">struct_names</span> <span class="op">=</span> <span class="ident">variant_names</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">mk_struct_name</span>).<span class="ident">collect_vec</span>();
+    <span class="kw">let </span>variant_names = <span class="kw-2">&amp;</span>opts.variants.idents;
+    <span class="kw">let </span>struct_names = variant_names.iter().map(mk_struct_name).collect_vec();
 
-    <span class="comment">// Vec of field data.</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fields</span> <span class="op">=</span> <span class="macro">vec!</span>[];
-    <span class="comment">// Map from variant to variant fields.</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">variant_fields</span> <span class="op">=</span>
-        <span class="ident">HashMap</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="ident">::from_iter</span>(<span class="ident">variant_names</span>.<span class="ident">iter</span>().<span class="ident">zip</span>(<span class="ident">iter::repeat</span>(<span class="macro">vec!</span>[])));
+    <span class="comment">// Vec of field data.
+    </span><span class="kw">let </span><span class="kw-2">mut </span>fields = <span class="macro">vec!</span>[];
+    <span class="comment">// Map from variant to variant fields.
+    </span><span class="kw">let </span><span class="kw-2">mut </span>variant_fields =
+        HashMap::&lt;<span class="kw">_</span>, <span class="kw">_</span>&gt;::from_iter(variant_names.iter().zip(iter::repeat(<span class="macro">vec!</span>[])));
 
-    <span class="kw">for</span> <span class="ident">field</span> <span class="kw">in</span> <span class="ident">item</span>.<span class="ident">fields</span>.<span class="ident">iter</span>() {
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">field</span>.<span class="ident">ident</span>.<span class="ident">clone</span>().<span class="ident">expect</span>(<span class="string">&quot;named fields only&quot;</span>);
-        <span class="kw">let</span> <span class="ident">field_opts</span> <span class="op">=</span> <span class="ident">field</span>
-            .<span class="ident">attrs</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> <span class="ident">is_superstruct_attr</span>(<span class="ident">attr</span>))
-            .<span class="ident">find_map</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> {
-                <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">attr</span>.<span class="ident">parse_meta</span>().<span class="ident">unwrap</span>();
-                <span class="prelude-val">Some</span>(<span class="ident">FieldOpts::from_meta</span>(<span class="kw-2">&amp;</span><span class="ident">meta</span>).<span class="ident">unwrap</span>())
+    <span class="kw">for </span>field <span class="kw">in </span>item.fields.iter() {
+        <span class="kw">let </span>name = field.ident.clone().expect(<span class="string">&quot;named fields only&quot;</span>);
+        <span class="kw">let </span>field_opts = field
+            .attrs
+            .iter()
+            .filter(|attr| is_superstruct_attr(attr))
+            .find_map(|attr| {
+                <span class="kw">let </span>meta = attr.parse_meta().unwrap();
+                <span class="prelude-val">Some</span>(FieldOpts::from_meta(<span class="kw-2">&amp;</span>meta).unwrap())
             })
-            .<span class="ident">unwrap_or_default</span>();
+            .unwrap_or_default();
 
-        <span class="comment">// Drop the field-level superstruct attributes</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output_field</span> <span class="op">=</span> <span class="ident">field</span>.<span class="ident">clone</span>();
-        <span class="ident">output_field</span>.<span class="ident">attrs</span> <span class="op">=</span> <span class="ident">discard_superstruct_attrs</span>(<span class="kw-2">&amp;</span><span class="ident">output_field</span>.<span class="ident">attrs</span>);
+        <span class="comment">// Drop the field-level superstruct attributes
+        </span><span class="kw">let </span><span class="kw-2">mut </span>output_field = field.clone();
+        output_field.attrs = discard_superstruct_attrs(<span class="kw-2">&amp;</span>output_field.attrs);
 
-        <span class="comment">// Add the field to the `variant_fields` map for all applicable variants.</span>
-        <span class="kw">let</span> <span class="ident">field_variants</span> <span class="op">=</span> <span class="ident">field_opts</span>.<span class="ident">only</span>.<span class="ident">as_ref</span>().<span class="ident">map_or_else</span>(
-            <span class="op">|</span><span class="op">|</span> <span class="ident">variant_names</span>.<span class="ident">clone</span>(),
-            <span class="op">|</span><span class="ident">only</span><span class="op">|</span> <span class="ident">only</span>.<span class="ident">keys</span>().<span class="ident">cloned</span>().<span class="ident">collect_vec</span>(),
+        <span class="comment">// Add the field to the `variant_fields` map for all applicable variants.
+        </span><span class="kw">let </span>field_variants = field_opts.only.as_ref().map_or_else(
+            || variant_names.clone(),
+            |only| only.keys().cloned().collect_vec(),
         );
 
-        <span class="kw">for</span> <span class="ident">variant_name</span> <span class="kw">in</span> <span class="ident">field_variants</span> {
-            <span class="ident">variant_fields</span>
-                .<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">variant_name</span>)
-                .<span class="ident">expect</span>(<span class="string">&quot;invalid variant name in `only`&quot;</span>)
-                .<span class="ident">push</span>(<span class="ident">output_field</span>.<span class="ident">clone</span>());
+        <span class="kw">for </span>variant_name <span class="kw">in </span>field_variants {
+            variant_fields
+                .get_mut(<span class="kw-2">&amp;</span>variant_name)
+                .expect(<span class="string">&quot;invalid variant name in `only`&quot;</span>)
+                .push(output_field.clone());
         }
 
-        <span class="comment">// Check field opts</span>
-        <span class="kw">if</span> <span class="ident">field_opts</span>.<span class="ident">only</span>.<span class="ident">is_some</span>() <span class="op">&amp;&amp;</span> <span class="ident">field_opts</span>.<span class="ident">getter</span>.<span class="ident">is_some</span>() {
+        <span class="comment">// Check field opts
+        </span><span class="kw">if </span>field_opts.only.is_some() &amp;&amp; field_opts.getter.is_some() {
             <span class="macro">panic!</span>(<span class="string">&quot;can&#39;t configure `only` and `getter` on the same field&quot;</span>);
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">field_opts</span>.<span class="ident">only</span>.<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">field_opts</span>.<span class="ident">partial_getter</span>.<span class="ident">is_some</span>() {
+        } <span class="kw">else if </span>field_opts.only.is_none() &amp;&amp; field_opts.partial_getter.is_some() {
             <span class="macro">panic!</span>(<span class="string">&quot;can&#39;t set `partial_getter` options on common field&quot;</span>);
         }
 
-        <span class="kw">let</span> <span class="ident">only</span> <span class="op">=</span> <span class="ident">field_opts</span>.<span class="ident">only</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">only</span><span class="op">|</span> <span class="ident">only</span>.<span class="ident">keys</span>().<span class="ident">cloned</span>().<span class="ident">collect</span>());
-        <span class="kw">let</span> <span class="ident">getter_opts</span> <span class="op">=</span> <span class="ident">field_opts</span>.<span class="ident">getter</span>.<span class="ident">unwrap_or_default</span>();
-        <span class="kw">let</span> <span class="ident">partial_getter_opts</span> <span class="op">=</span> <span class="ident">field_opts</span>.<span class="ident">partial_getter</span>.<span class="ident">unwrap_or_default</span>();
+        <span class="kw">let </span>only = field_opts.only.map(|only| only.keys().cloned().collect());
+        <span class="kw">let </span>getter_opts = field_opts.getter.unwrap_or_default();
+        <span class="kw">let </span>partial_getter_opts = field_opts.partial_getter.unwrap_or_default();
 
-        <span class="comment">// Add to list of all fields</span>
-        <span class="ident">fields</span>.<span class="ident">push</span>(<span class="ident">FieldData</span> {
-            <span class="ident">name</span>,
-            <span class="ident">field</span>: <span class="ident">output_field</span>,
-            <span class="ident">only</span>,
-            <span class="ident">getter_opts</span>,
-            <span class="ident">partial_getter_opts</span>,
+        <span class="comment">// Add to list of all fields
+        </span>fields.push(FieldData {
+            name,
+            field: output_field,
+            only,
+            getter_opts,
+            partial_getter_opts,
         });
     }
 
-    <span class="comment">// Generate structs for all of the variants.</span>
-    <span class="kw">let</span> <span class="ident">struct_attributes</span> <span class="op">=</span> <span class="ident">opts</span>
-        .<span class="ident">variant_attributes</span>
-        .<span class="ident">as_ref</span>()
-        .<span class="ident">map_or</span>(<span class="kw-2">&amp;</span>[][..], <span class="op">|</span><span class="ident">attrs</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">attrs</span>.<span class="ident">metas</span>);
+    <span class="comment">// Generate structs for all of the variants.
+    </span><span class="kw">let </span>universal_struct_attributes = opts
+        .variant_attributes
+        .as_ref()
+        .map_or(<span class="kw-2">&amp;</span>[][..], |attrs| <span class="kw-2">&amp;</span>attrs.metas);
 
-    <span class="kw">for</span> (<span class="ident">variant_name</span>, <span class="ident">struct_name</span>) <span class="kw">in</span> <span class="ident">variant_names</span>.<span class="ident">iter</span>().<span class="ident">zip</span>(<span class="ident">struct_names</span>.<span class="ident">iter</span>()) {
-        <span class="kw">let</span> <span class="ident">fields</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">variant_fields</span>[<span class="ident">variant_name</span>];
-        <span class="kw">let</span> <span class="ident">variant_code</span> <span class="op">=</span> <span class="macro">quote!</span> {
+    <span class="kw">for </span>(variant_name, struct_name) <span class="kw">in </span>variant_names.iter().zip(struct_names.iter()) {
+        <span class="kw">let </span>fields = <span class="kw-2">&amp;</span>variant_fields[variant_name];
+
+        <span class="kw">let </span>specific_struct_attributes = opts
+            .specific_variant_attributes
+            .as_ref()
+            .and_then(|sv| sv.get(<span class="kw-2">&amp;</span>variant_name))
+            .map_or(<span class="kw-2">&amp;</span>[][..], |attrs| <span class="kw-2">&amp;</span>attrs.metas);
+
+        <span class="kw">let </span>variant_code = <span class="macro">quote! </span>{
             #(
-                <span class="attribute">#[#<span class="ident">struct_attributes</span>]</span>
-            )<span class="op">*</span>
-            #<span class="ident">visibility</span> <span class="kw">struct</span> #<span class="ident">struct_name</span> #<span class="ident">decl_generics</span> #<span class="ident">where_clause</span> {
+                <span class="attribute">#[#universal_struct_attributes]
+            </span>)*
+            #(
+                <span class="attribute">#[#specific_struct_attributes]
+            </span>)*
+            #visibility <span class="kw">struct </span>#struct_name #decl_generics #where_clause {
                 #(
-                    #<span class="ident">fields</span>,
-                )<span class="op">*</span>
+                    #fields,
+                )*
             }
         };
-        <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">variant_code</span>.<span class="ident">into</span>());
+        output_items.push(variant_code.into());
     }
 
-    <span class="comment">// If the `no_enum` attribute is set, stop after generating variant structs.</span>
-    <span class="kw">if</span> <span class="ident">opts</span>.<span class="ident">no_enum</span> {
-        <span class="kw">return</span> <span class="ident">TokenStream::from_iter</span>(<span class="ident">output_items</span>);
+    <span class="comment">// If the `no_enum` attribute is set, stop after generating variant structs.
+    </span><span class="kw">if </span>opts.no_enum {
+        <span class="kw">return </span>TokenStream::from_iter(output_items);
     }
 
-    <span class="comment">// Construct the top-level enum.</span>
-    <span class="kw">let</span> <span class="ident">top_level_attrs</span> <span class="op">=</span> <span class="ident">discard_superstruct_attrs</span>(<span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="ident">attrs</span>);
-    <span class="kw">let</span> <span class="ident">enum_item</span> <span class="op">=</span> <span class="macro">quote!</span> {
+    <span class="comment">// Construct the top-level enum.
+    </span><span class="kw">let </span>top_level_attrs = discard_superstruct_attrs(<span class="kw-2">&amp;</span>item.attrs);
+    <span class="kw">let </span>enum_item = <span class="macro">quote! </span>{
         #(
-            #<span class="ident">top_level_attrs</span>
-        )<span class="op">*</span>
-        #<span class="ident">visibility</span> <span class="kw">enum</span> #<span class="ident">type_name</span> #<span class="ident">decl_generics</span> #<span class="ident">where_clause</span> {
+            #top_level_attrs
+        )*
+        #visibility <span class="kw">enum </span>#type_name #decl_generics #where_clause {
             #(
-                #<span class="ident">variant_names</span>(#<span class="ident">struct_names</span> #<span class="ident">ty_generics</span>),
-            )<span class="op">*</span>
+                #variant_names(#struct_names #ty_generics),
+            )*
         }
     };
-    <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">enum_item</span>.<span class="ident">into</span>());
+    output_items.push(enum_item.into());
 
-    <span class="comment">// Construct a top-level reference type.</span>
-    <span class="comment">// TODO: check that variants aren&#39;t called `Ref`</span>
-    <span class="kw">let</span> <span class="ident">ref_ty_name</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;{}Ref&quot;</span>, <span class="ident">type_name</span>);
-    <span class="kw">let</span> <span class="ident">ref_ty_lifetime</span> <span class="op">=</span> <span class="ident">Lifetime::new</span>(<span class="string">&quot;&#39;__superstruct&quot;</span>, <span class="ident">Span::call_site</span>());
+    <span class="comment">// Construct a top-level reference type.
+    // TODO: check that variants aren&#39;t called `Ref`
+    </span><span class="kw">let </span>ref_ty_name = <span class="macro">format_ident!</span>(<span class="string">&quot;{}Ref&quot;</span>, type_name);
+    <span class="kw">let </span>ref_ty_lifetime = Lifetime::new(<span class="string">&quot;&#39;__superstruct&quot;</span>, Span::call_site());
 
-    <span class="comment">// Muahaha, this is dank.</span>
-    <span class="comment">// Inject the generated lifetime into the top-level type&#39;s generics.</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ref_ty_decl_generics</span> <span class="op">=</span> <span class="ident">decl_generics</span>.<span class="ident">clone</span>();
-    <span class="ident">ref_ty_decl_generics</span>.<span class="ident">params</span>.<span class="ident">insert</span>(
+    <span class="comment">// Muahaha, this is dank.
+    // Inject the generated lifetime into the top-level type&#39;s generics.
+    </span><span class="kw">let </span><span class="kw-2">mut </span>ref_ty_decl_generics = decl_generics.clone();
+    ref_ty_decl_generics.params.insert(
         <span class="number">0</span>,
-        <span class="ident">GenericParam::Lifetime</span>(<span class="ident">LifetimeDef::new</span>(<span class="ident">ref_ty_lifetime</span>.<span class="ident">clone</span>())),
+        GenericParam::Lifetime(LifetimeDef::new(ref_ty_lifetime.clone())),
     );
 
-    <span class="comment">// If no lifetime bound exists for a generic param, inject one.</span>
-    <span class="kw">for</span> <span class="ident">param</span> <span class="kw">in</span> <span class="ident">ref_ty_decl_generics</span>.<span class="ident">params</span>.<span class="ident">iter_mut</span>() {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GenericParam::Type</span>(<span class="ident">type_param</span>) <span class="op">=</span> <span class="ident">param</span> {
-            <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">type_param</span>
-                .<span class="ident">bounds</span>
-                .<span class="ident">iter</span>()
-                .<span class="ident">find</span>(<span class="op">|</span><span class="ident">bound</span><span class="op">|</span> <span class="macro">matches!</span>(<span class="ident">bound</span>, <span class="ident">TypeParamBound::Lifetime</span>(<span class="kw">_</span>)));
-            <span class="kw">if</span> <span class="ident">result</span>.<span class="ident">is_none</span>() {
-                <span class="ident">type_param</span>
-                    .<span class="ident">bounds</span>
-                    .<span class="ident">insert</span>(<span class="number">0</span>, <span class="ident">TypeParamBound::Lifetime</span>(<span class="ident">ref_ty_lifetime</span>.<span class="ident">clone</span>()))
+    <span class="comment">// If no lifetime bound exists for a generic param, inject one.
+    </span><span class="kw">for </span>param <span class="kw">in </span>ref_ty_decl_generics.params.iter_mut() {
+        <span class="kw">if let </span>GenericParam::Type(type_param) = param {
+            <span class="kw">let </span>result = type_param
+                .bounds
+                .iter()
+                .find(|bound| <span class="macro">matches!</span>(bound, TypeParamBound::Lifetime(<span class="kw">_</span>)));
+            <span class="kw">if </span>result.is_none() {
+                type_param
+                    .bounds
+                    .insert(<span class="number">0</span>, TypeParamBound::Lifetime(ref_ty_lifetime.clone()))
             }
         }
     }
 
-    <span class="kw">let</span> (<span class="ident">ref_impl_generics</span>, <span class="ident">ref_ty_generics</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">ref_ty_decl_generics</span>.<span class="ident">split_for_impl</span>();
+    <span class="kw">let </span>(ref_impl_generics, ref_ty_generics, <span class="kw">_</span>) = <span class="kw-2">&amp;</span>ref_ty_decl_generics.split_for_impl();
 
-    <span class="comment">// Prepare the attributes for the ref type.</span>
-    <span class="kw">let</span> <span class="ident">ref_attributes</span> <span class="op">=</span> <span class="ident">opts</span>
-        .<span class="ident">ref_attributes</span>
-        .<span class="ident">as_ref</span>()
-        .<span class="ident">map_or</span>(<span class="kw-2">&amp;</span>[][..], <span class="op">|</span><span class="ident">attrs</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">attrs</span>.<span class="ident">metas</span>);
+    <span class="comment">// Prepare the attributes for the ref type.
+    </span><span class="kw">let </span>ref_attributes = opts
+        .ref_attributes
+        .as_ref()
+        .map_or(<span class="kw-2">&amp;</span>[][..], |attrs| <span class="kw-2">&amp;</span>attrs.metas);
 
-    <span class="kw">let</span> <span class="ident">ref_ty</span> <span class="op">=</span> <span class="macro">quote!</span> {
+    <span class="kw">let </span>ref_ty = <span class="macro">quote! </span>{
         #(
-            <span class="attribute">#[#<span class="ident">ref_attributes</span>]</span>
-        )<span class="op">*</span>
-        #<span class="ident">visibility</span> <span class="kw">enum</span> #<span class="ident">ref_ty_name</span> #<span class="ident">ref_ty_decl_generics</span> #<span class="ident">where_clause</span> {
+            <span class="attribute">#[#ref_attributes]
+        </span>)*
+        #visibility <span class="kw">enum </span>#ref_ty_name #ref_ty_decl_generics #where_clause {
             #(
-                #<span class="ident">variant_names</span>(<span class="kw-2">&amp;</span>#<span class="ident">ref_ty_lifetime</span> #<span class="ident">struct_names</span> #<span class="ident">ty_generics</span>),
-            )<span class="op">*</span>
+                #variant_names(<span class="kw-2">&amp;</span>#ref_ty_lifetime #struct_names #ty_generics),
+            )*
         }
     };
-    <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">ref_ty</span>.<span class="ident">into</span>());
+    output_items.push(ref_ty.into());
 
-    <span class="comment">// Construct a top-level mutable reference type.</span>
-    <span class="comment">// TODO: check that variants aren&#39;t called `RefMut`</span>
-    <span class="kw">let</span> <span class="ident">ref_mut_ty_name</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;{}RefMut&quot;</span>, <span class="ident">type_name</span>);
-    <span class="kw">let</span> <span class="ident">ref_mut_ty_lifetime</span> <span class="op">=</span> <span class="ident">Lifetime::new</span>(<span class="string">&quot;&#39;__superstruct&quot;</span>, <span class="ident">Span::call_site</span>());
-    <span class="comment">// Muahaha, this is dank.</span>
-    <span class="comment">// Inject the generated lifetime into the top-level type&#39;s generics.</span>
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ref_mut_ty_decl_generics</span> <span class="op">=</span> <span class="ident">decl_generics</span>.<span class="ident">clone</span>();
-    <span class="ident">ref_mut_ty_decl_generics</span>.<span class="ident">params</span>.<span class="ident">insert</span>(
+    <span class="comment">// Construct a top-level mutable reference type.
+    // TODO: check that variants aren&#39;t called `RefMut`
+    </span><span class="kw">let </span>ref_mut_ty_name = <span class="macro">format_ident!</span>(<span class="string">&quot;{}RefMut&quot;</span>, type_name);
+    <span class="kw">let </span>ref_mut_ty_lifetime = Lifetime::new(<span class="string">&quot;&#39;__superstruct&quot;</span>, Span::call_site());
+    <span class="comment">// Muahaha, this is dank.
+    // Inject the generated lifetime into the top-level type&#39;s generics.
+    </span><span class="kw">let </span><span class="kw-2">mut </span>ref_mut_ty_decl_generics = decl_generics.clone();
+    ref_mut_ty_decl_generics.params.insert(
         <span class="number">0</span>,
-        <span class="ident">GenericParam::Lifetime</span>(<span class="ident">LifetimeDef::new</span>(<span class="ident">ref_mut_ty_lifetime</span>.<span class="ident">clone</span>())),
+        GenericParam::Lifetime(LifetimeDef::new(ref_mut_ty_lifetime.clone())),
     );
-    <span class="kw">let</span> (<span class="ident">ref_mut_impl_generics</span>, <span class="ident">ref_mut_ty_generics</span>, <span class="kw">_</span>) <span class="op">=</span>
-        <span class="kw-2">&amp;</span><span class="ident">ref_mut_ty_decl_generics</span>.<span class="ident">split_for_impl</span>();
+    <span class="kw">let </span>(ref_mut_impl_generics, ref_mut_ty_generics, <span class="kw">_</span>) =
+        <span class="kw-2">&amp;</span>ref_mut_ty_decl_generics.split_for_impl();
 
-    <span class="comment">// Prepare the attributes for the ref type.</span>
-    <span class="kw">let</span> <span class="ident">ref_mut_attributes</span> <span class="op">=</span> <span class="ident">opts</span>
-        .<span class="ident">ref_mut_attributes</span>
-        .<span class="ident">as_ref</span>()
-        .<span class="ident">map_or</span>(<span class="kw-2">&amp;</span>[][..], <span class="op">|</span><span class="ident">attrs</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">attrs</span>.<span class="ident">metas</span>);
+    <span class="comment">// Prepare the attributes for the ref type.
+    </span><span class="kw">let </span>ref_mut_attributes = opts
+        .ref_mut_attributes
+        .as_ref()
+        .map_or(<span class="kw-2">&amp;</span>[][..], |attrs| <span class="kw-2">&amp;</span>attrs.metas);
 
-    <span class="kw">let</span> <span class="ident">ref_mut_ty</span> <span class="op">=</span> <span class="macro">quote!</span> {
+    <span class="kw">let </span>ref_mut_ty = <span class="macro">quote! </span>{
         #(
-            <span class="attribute">#[#<span class="ident">ref_mut_attributes</span>]</span>
-        )<span class="op">*</span>
-        #<span class="ident">visibility</span> <span class="kw">enum</span> #<span class="ident">ref_mut_ty_name</span> #<span class="ident">ref_mut_ty_decl_generics</span> #<span class="ident">where_clause</span> {
+            <span class="attribute">#[#ref_mut_attributes]
+        </span>)*
+        #visibility <span class="kw">enum </span>#ref_mut_ty_name #ref_mut_ty_decl_generics #where_clause {
             #(
-                #<span class="ident">variant_names</span>(<span class="kw-2">&amp;</span>#<span class="ident">ref_mut_ty_lifetime</span> <span class="kw-2">mut</span> #<span class="ident">struct_names</span> #<span class="ident">ty_generics</span>),
-            )<span class="op">*</span>
+                #variant_names(<span class="kw-2">&amp;</span>#ref_mut_ty_lifetime <span class="kw-2">mut </span>#struct_names #ty_generics),
+            )*
         }
     };
-    <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">ref_mut_ty</span>.<span class="ident">into</span>());
+    output_items.push(ref_mut_ty.into());
 
-    <span class="comment">// Construct the main impl block.</span>
-    <span class="kw">let</span> <span class="ident">getters</span> <span class="op">=</span> <span class="ident">fields</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="ident">f</span>.<span class="ident">is_common</span>())
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">field_data</span><span class="op">|</span> <span class="ident">make_field_getter</span>(<span class="ident">type_name</span>, <span class="kw-2">&amp;</span><span class="ident">variant_names</span>, <span class="kw-2">&amp;</span><span class="ident">field_data</span>, <span class="prelude-val">None</span>));
+    <span class="comment">// Construct the main impl block.
+    </span><span class="kw">let </span>getters = fields
+        .iter()
+        .filter(|f| f.is_common())
+        .map(|field_data| make_field_getter(type_name, <span class="kw-2">&amp;</span>variant_names, <span class="kw-2">&amp;</span>field_data, <span class="prelude-val">None</span>));
 
-    <span class="kw">let</span> <span class="ident">mut_getters</span> <span class="op">=</span> <span class="ident">fields</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="ident">f</span>.<span class="ident">is_common</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">getter_opts</span>.<span class="ident">no_mut</span>)
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">field_data</span><span class="op">|</span> <span class="ident">make_mut_field_getter</span>(<span class="ident">type_name</span>, <span class="kw-2">&amp;</span><span class="ident">variant_names</span>, <span class="kw-2">&amp;</span><span class="ident">field_data</span>, <span class="prelude-val">None</span>));
+    <span class="kw">let </span>mut_getters = fields
+        .iter()
+        .filter(|f| f.is_common() &amp;&amp; !f.getter_opts.no_mut)
+        .map(|field_data| make_mut_field_getter(type_name, <span class="kw-2">&amp;</span>variant_names, <span class="kw-2">&amp;</span>field_data, <span class="prelude-val">None</span>));
 
-    <span class="kw">let</span> <span class="ident">partial_getters</span> <span class="op">=</span> <span class="ident">fields</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">is_common</span>())
-        .<span class="ident">cartesian_product</span>(<span class="kw-2">&amp;</span>[<span class="bool-val">false</span>, <span class="bool-val">true</span>])
-        .<span class="ident">flat_map</span>(<span class="op">|</span>(<span class="ident">field_data</span>, <span class="ident">mutability</span>)<span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">field_variants</span> <span class="op">=</span> <span class="ident">field_data</span>.<span class="ident">only</span>.<span class="ident">as_ref</span>()<span class="question-mark">?</span>;
-            <span class="prelude-val">Some</span>(<span class="ident">make_partial_getter</span>(
-                <span class="ident">type_name</span>,
-                <span class="kw-2">&amp;</span><span class="ident">field_data</span>,
-                <span class="kw-2">&amp;</span><span class="ident">field_variants</span>,
-                <span class="kw-2">&amp;</span><span class="ident">opts</span>.<span class="ident">partial_getter_error</span>,
-                <span class="kw-2">*</span><span class="ident">mutability</span>,
+    <span class="kw">let </span>partial_getters = fields
+        .iter()
+        .filter(|f| !f.is_common())
+        .cartesian_product(<span class="kw-2">&amp;</span>[<span class="bool-val">false</span>, <span class="bool-val">true</span>])
+        .flat_map(|(field_data, mutability)| {
+            <span class="kw">let </span>field_variants = field_data.only.as_ref()<span class="question-mark">?</span>;
+            <span class="prelude-val">Some</span>(make_partial_getter(
+                type_name,
+                <span class="kw-2">&amp;</span>field_data,
+                <span class="kw-2">&amp;</span>field_variants,
+                <span class="kw-2">&amp;</span>opts.partial_getter_error,
+                <span class="kw-2">*</span>mutability,
                 <span class="prelude-val">None</span>,
             ))
         });
 
-    <span class="kw">let</span> <span class="ident">cast_methods</span> <span class="op">=</span> <span class="ident">variant_names</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">flat_map</span>(<span class="op">|</span><span class="ident">variant_name</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">caster</span> <span class="op">=</span> <span class="ident">make_as_variant_method</span>(
-                <span class="ident">type_name</span>,
-                <span class="ident">variant_name</span>,
-                <span class="ident">ty_generics</span>,
-                <span class="kw-2">&amp;</span><span class="ident">opts</span>.<span class="ident">cast_error</span>,
+    <span class="kw">let </span>cast_methods = variant_names
+        .iter()
+        .flat_map(|variant_name| {
+            <span class="kw">let </span>caster = make_as_variant_method(
+                type_name,
+                variant_name,
+                ty_generics,
+                <span class="kw-2">&amp;</span>opts.cast_error,
                 <span class="bool-val">false</span>,
             );
-            <span class="kw">let</span> <span class="ident">caster_mut</span> <span class="op">=</span> <span class="ident">make_as_variant_method</span>(
-                <span class="ident">type_name</span>,
-                <span class="ident">variant_name</span>,
-                <span class="ident">ty_generics</span>,
-                <span class="kw-2">&amp;</span><span class="ident">opts</span>.<span class="ident">cast_error</span>,
+            <span class="kw">let </span>caster_mut = make_as_variant_method(
+                type_name,
+                variant_name,
+                ty_generics,
+                <span class="kw-2">&amp;</span>opts.cast_error,
                 <span class="bool-val">true</span>,
             );
-            <span class="macro">vec!</span>[<span class="ident">caster</span>, <span class="ident">caster_mut</span>]
+            <span class="macro">vec!</span>[caster, caster_mut]
         })
-        .<span class="ident">collect_vec</span>();
+        .collect_vec();
 
-    <span class="kw">let</span> <span class="ident">impl_block</span> <span class="op">=</span> <span class="macro">quote!</span> {
-        <span class="kw">impl</span> #<span class="ident">impl_generics</span> #<span class="ident">type_name</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_ref</span><span class="op">&lt;</span>#<span class="ident">ref_ty_lifetime</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span>#<span class="ident">ref_ty_lifetime</span> <span class="self">self</span>) -&gt; #<span class="ident">ref_ty_name</span> #<span class="ident">ref_ty_generics</span> {
-                <span class="kw">match</span> <span class="self">self</span> {
+    <span class="kw">let </span>impl_block = <span class="macro">quote! </span>{
+        <span class="kw">impl </span>#impl_generics #type_name #ty_generics #where_clause {
+            <span class="kw">pub fn </span>to_ref&lt;#ref_ty_lifetime&gt;(<span class="kw-2">&amp;</span>#ref_ty_lifetime <span class="self">self</span>) -&gt; #ref_ty_name #ref_ty_generics {
+                <span class="kw">match </span><span class="self">self </span>{
                     #(
-                        #<span class="ident">type_name</span>::#<span class="ident">variant_names</span>(<span class="kw-2">ref</span> <span class="ident">inner</span>)
-                            =&gt; #<span class="ident">ref_ty_name</span>::#<span class="ident">variant_names</span>(<span class="ident">inner</span>),
-                    )<span class="op">*</span>
+                        #type_name::#variant_names(<span class="kw-2">ref </span>inner)
+                            =&gt; #ref_ty_name::#variant_names(inner),
+                    )*
                 }
             }
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_mut</span><span class="op">&lt;</span>#<span class="ident">ref_mut_ty_lifetime</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span>#<span class="ident">ref_mut_ty_lifetime</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; #<span class="ident">ref_mut_ty_name</span> #<span class="ident">ref_mut_ty_generics</span> {
-                <span class="kw">match</span> <span class="self">self</span> {
+            <span class="kw">pub fn </span>to_mut&lt;#ref_mut_ty_lifetime&gt;(<span class="kw-2">&amp;</span>#ref_mut_ty_lifetime <span class="kw-2">mut </span><span class="self">self</span>) -&gt; #ref_mut_ty_name #ref_mut_ty_generics {
+                <span class="kw">match </span><span class="self">self </span>{
                     #(
-                        #<span class="ident">type_name</span>::#<span class="ident">variant_names</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">inner</span>)
-                            =&gt; #<span class="ident">ref_mut_ty_name</span>::#<span class="ident">variant_names</span>(<span class="ident">inner</span>),
-                    )<span class="op">*</span>
+                        #type_name::#variant_names(<span class="kw-2">ref mut </span>inner)
+                            =&gt; #ref_mut_ty_name::#variant_names(inner),
+                    )*
                 }
             }
             #(
-                #<span class="ident">cast_methods</span>
-            )<span class="op">*</span>
+                #cast_methods
+            )*
             #(
-                #<span class="ident">getters</span>
-            )<span class="op">*</span>
+                #getters
+            )*
             #(
-                #<span class="ident">mut_getters</span>
-            )<span class="op">*</span>
+                #mut_getters
+            )*
             #(
-                #<span class="ident">partial_getters</span>
-            )<span class="op">*</span>
+                #partial_getters
+            )*
         }
     };
-    <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">impl_block</span>.<span class="ident">into</span>());
+    output_items.push(impl_block.into());
 
-    <span class="comment">// Construct the impl block for the *Ref type.</span>
-    <span class="kw">let</span> <span class="ident">ref_getters</span> <span class="op">=</span> <span class="ident">fields</span>.<span class="ident">iter</span>().<span class="ident">filter</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="ident">f</span>.<span class="ident">is_common</span>()).<span class="ident">map</span>(<span class="op">|</span><span class="ident">field_data</span><span class="op">|</span> {
-        <span class="ident">make_field_getter</span>(
-            <span class="kw-2">&amp;</span><span class="ident">ref_ty_name</span>,
-            <span class="kw-2">&amp;</span><span class="ident">variant_names</span>,
-            <span class="kw-2">&amp;</span><span class="ident">field_data</span>,
-            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">ref_ty_lifetime</span>),
+    <span class="comment">// Construct the impl block for the *Ref type.
+    </span><span class="kw">let </span>ref_getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
+        make_field_getter(
+            <span class="kw-2">&amp;</span>ref_ty_name,
+            <span class="kw-2">&amp;</span>variant_names,
+            <span class="kw-2">&amp;</span>field_data,
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_ty_lifetime),
         )
     });
 
-    <span class="kw">let</span> <span class="ident">ref_partial_getters</span> <span class="op">=</span> <span class="ident">fields</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">is_common</span>())
-        .<span class="ident">flat_map</span>(<span class="op">|</span><span class="ident">field_data</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">field_variants</span> <span class="op">=</span> <span class="ident">field_data</span>.<span class="ident">only</span>.<span class="ident">as_ref</span>()<span class="question-mark">?</span>;
-            <span class="prelude-val">Some</span>(<span class="ident">make_partial_getter</span>(
-                <span class="kw-2">&amp;</span><span class="ident">ref_ty_name</span>,
-                <span class="kw-2">&amp;</span><span class="ident">field_data</span>,
-                <span class="kw-2">&amp;</span><span class="ident">field_variants</span>,
-                <span class="kw-2">&amp;</span><span class="ident">opts</span>.<span class="ident">partial_getter_error</span>,
+    <span class="kw">let </span>ref_partial_getters = fields
+        .iter()
+        .filter(|f| !f.is_common())
+        .flat_map(|field_data| {
+            <span class="kw">let </span>field_variants = field_data.only.as_ref()<span class="question-mark">?</span>;
+            <span class="prelude-val">Some</span>(make_partial_getter(
+                <span class="kw-2">&amp;</span>ref_ty_name,
+                <span class="kw-2">&amp;</span>field_data,
+                <span class="kw-2">&amp;</span>field_variants,
+                <span class="kw-2">&amp;</span>opts.partial_getter_error,
                 <span class="bool-val">false</span>,
-                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">ref_ty_lifetime</span>),
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_ty_lifetime),
             ))
         });
 
-    <span class="kw">let</span> <span class="ident">ref_impl_block</span> <span class="op">=</span> <span class="macro">quote!</span> {
-        <span class="kw">impl</span> #<span class="ident">ref_impl_generics</span> #<span class="ident">ref_ty_name</span> #<span class="ident">ref_ty_generics</span> #<span class="ident">where_clause</span> {
+    <span class="kw">let </span>ref_impl_block = <span class="macro">quote! </span>{
+        <span class="kw">impl </span>#ref_impl_generics #ref_ty_name #ref_ty_generics #where_clause {
             #(
-                #<span class="ident">ref_getters</span>
-            )<span class="op">*</span>
+                #ref_getters
+            )*
 
             #(
-                #<span class="ident">ref_partial_getters</span>
-            )<span class="op">*</span>
+                #ref_partial_getters
+            )*
         }
 
-        <span class="comment">// Reference types are just wrappers around references, so they can be copied!</span>
-        <span class="kw">impl</span> #<span class="ident">ref_impl_generics</span> <span class="ident">Copy</span> <span class="kw">for</span> #<span class="ident">ref_ty_name</span> #<span class="ident">ref_ty_generics</span> #<span class="ident">where_clause</span> { }
-        <span class="kw">impl</span> #<span class="ident">ref_impl_generics</span> <span class="ident">Clone</span> <span class="kw">for</span> #<span class="ident">ref_ty_name</span> #<span class="ident">ref_ty_generics</span> #<span class="ident">where_clause</span> {
-            <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span> { <span class="kw-2">*</span><span class="self">self</span> }
+        <span class="comment">// Reference types are just wrappers around references, so they can be copied!
+        </span><span class="kw">impl </span>#ref_impl_generics Copy <span class="kw">for </span>#ref_ty_name #ref_ty_generics #where_clause { }
+        <span class="kw">impl </span>#ref_impl_generics Clone <span class="kw">for </span>#ref_ty_name #ref_ty_generics #where_clause {
+            <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{ <span class="kw-2">*</span><span class="self">self </span>}
         }
     };
-    <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">ref_impl_block</span>.<span class="ident">into</span>());
+    output_items.push(ref_impl_block.into());
 
-    <span class="comment">// Construct the impl block for the *RefMut type.</span>
-    <span class="kw">let</span> <span class="ident">ref_mut_getters</span> <span class="op">=</span> <span class="ident">fields</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="ident">f</span>.<span class="ident">is_common</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">getter_opts</span>.<span class="ident">no_mut</span>)
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">field_data</span><span class="op">|</span> {
-            <span class="ident">make_mut_field_getter</span>(
-                <span class="kw-2">&amp;</span><span class="ident">ref_mut_ty_name</span>,
-                <span class="kw-2">&amp;</span><span class="ident">variant_names</span>,
-                <span class="kw-2">&amp;</span><span class="ident">field_data</span>,
-                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">ref_mut_ty_lifetime</span>),
+    <span class="comment">// Construct the impl block for the *RefMut type.
+    </span><span class="kw">let </span>ref_mut_getters = fields
+        .iter()
+        .filter(|f| f.is_common() &amp;&amp; !f.getter_opts.no_mut)
+        .map(|field_data| {
+            make_mut_field_getter(
+                <span class="kw-2">&amp;</span>ref_mut_ty_name,
+                <span class="kw-2">&amp;</span>variant_names,
+                <span class="kw-2">&amp;</span>field_data,
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_mut_ty_lifetime),
             )
         });
 
-    <span class="kw">let</span> <span class="ident">ref_mut_partial_getters</span> <span class="op">=</span> <span class="ident">fields</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">is_common</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">f</span>.<span class="ident">partial_getter_opts</span>.<span class="ident">no_mut</span>)
-        .<span class="ident">flat_map</span>(<span class="op">|</span><span class="ident">field_data</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">field_variants</span> <span class="op">=</span> <span class="ident">field_data</span>.<span class="ident">only</span>.<span class="ident">as_ref</span>()<span class="question-mark">?</span>;
-            <span class="prelude-val">Some</span>(<span class="ident">make_partial_getter</span>(
-                <span class="kw-2">&amp;</span><span class="ident">ref_mut_ty_name</span>,
-                <span class="kw-2">&amp;</span><span class="ident">field_data</span>,
-                <span class="kw-2">&amp;</span><span class="ident">field_variants</span>,
-                <span class="kw-2">&amp;</span><span class="ident">opts</span>.<span class="ident">partial_getter_error</span>,
+    <span class="kw">let </span>ref_mut_partial_getters = fields
+        .iter()
+        .filter(|f| !f.is_common() &amp;&amp; !f.partial_getter_opts.no_mut)
+        .flat_map(|field_data| {
+            <span class="kw">let </span>field_variants = field_data.only.as_ref()<span class="question-mark">?</span>;
+            <span class="prelude-val">Some</span>(make_partial_getter(
+                <span class="kw-2">&amp;</span>ref_mut_ty_name,
+                <span class="kw-2">&amp;</span>field_data,
+                <span class="kw-2">&amp;</span>field_variants,
+                <span class="kw-2">&amp;</span>opts.partial_getter_error,
                 <span class="bool-val">true</span>,
-                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">ref_mut_ty_lifetime</span>),
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_mut_ty_lifetime),
             ))
         });
 
-    <span class="kw">let</span> <span class="ident">ref_mut_impl_block</span> <span class="op">=</span> <span class="macro">quote!</span> {
-        <span class="kw">impl</span> #<span class="ident">ref_mut_impl_generics</span> #<span class="ident">ref_mut_ty_name</span> #<span class="ident">ref_mut_ty_generics</span> #<span class="ident">where_clause</span> {
+    <span class="kw">let </span>ref_mut_impl_block = <span class="macro">quote! </span>{
+        <span class="kw">impl </span>#ref_mut_impl_generics #ref_mut_ty_name #ref_mut_ty_generics #where_clause {
             #(
-                #<span class="ident">ref_mut_getters</span>
-            )<span class="op">*</span>
+                #ref_mut_getters
+            )*
 
             #(
-                #<span class="ident">ref_mut_partial_getters</span>
-            )<span class="op">*</span>
+                #ref_mut_partial_getters
+            )*
         }
     };
-    <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">ref_mut_impl_block</span>.<span class="ident">into</span>());
+    output_items.push(ref_mut_impl_block.into());
 
-    <span class="comment">// Generate the mapping macros if enabled.</span>
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">opts</span>.<span class="ident">no_map_macros</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">opts</span>.<span class="ident">no_enum</span> {
-        <span class="kw">let</span> <span class="ident">num_generics</span> <span class="op">=</span> <span class="ident">decl_generics</span>.<span class="ident">params</span>.<span class="ident">len</span>();
-        <span class="ident">generate_all_map_macros</span>(
-            <span class="kw-2">&amp;</span><span class="ident">type_name</span>,
-            <span class="kw-2">&amp;</span><span class="ident">ref_ty_name</span>,
-            <span class="kw-2">&amp;</span><span class="ident">ref_mut_ty_name</span>,
-            <span class="ident">num_generics</span>,
-            <span class="kw-2">&amp;</span><span class="ident">struct_names</span>,
-            <span class="ident">variant_names</span>,
-            <span class="kw-2">&amp;</span><span class="ident">opts</span>,
-            <span class="kw-2">&amp;mut</span> <span class="ident">output_items</span>,
+    <span class="comment">// Generate the mapping macros if enabled.
+    </span><span class="kw">if </span>!opts.no_map_macros &amp;&amp; !opts.no_enum {
+        <span class="kw">let </span>num_generics = decl_generics.params.len();
+        generate_all_map_macros(
+            <span class="kw-2">&amp;</span>type_name,
+            <span class="kw-2">&amp;</span>ref_ty_name,
+            <span class="kw-2">&amp;</span>ref_mut_ty_name,
+            num_generics,
+            <span class="kw-2">&amp;</span>struct_names,
+            variant_names,
+            <span class="kw-2">&amp;</span>opts,
+            <span class="kw-2">&amp;mut </span>output_items,
         );
-    } <span class="kw">else</span> {
+    } <span class="kw">else </span>{
         <span class="macro">assert!</span>(
-            <span class="ident">opts</span>.<span class="ident">map_into</span>.<span class="ident">is_none</span>(),
-            <span class="string">&quot;`map_into` is set but map macros are disabled&quot;</span>
-        );
+            opts.map_into.is_none(),
+            <span class="string">&quot;`map_into` is set but map macros are disabled&quot;
+        </span>);
         <span class="macro">assert!</span>(
-            <span class="ident">opts</span>.<span class="ident">map_ref_into</span>.<span class="ident">is_none</span>(),
-            <span class="string">&quot;`map_ref_into` is set but map macros are disabled&quot;</span>
-        );
+            opts.map_ref_into.is_none(),
+            <span class="string">&quot;`map_ref_into` is set but map macros are disabled&quot;
+        </span>);
         <span class="macro">assert!</span>(
-            <span class="ident">opts</span>.<span class="ident">map_ref_mut_into</span>.<span class="ident">is_none</span>(),
-            <span class="string">&quot;`map_ref_mut_into` is set but map macros are disabled&quot;</span>
-        );
+            opts.map_ref_mut_into.is_none(),
+            <span class="string">&quot;`map_ref_mut_into` is set but map macros are disabled&quot;
+        </span>);
     }
 
-    <span class="comment">// Generate trait implementations.</span>
-    <span class="kw">for</span> (<span class="ident">variant_name</span>, <span class="ident">struct_name</span>) <span class="kw">in</span> <span class="ident">variant_names</span>.<span class="ident">iter</span>().<span class="ident">zip_eq</span>(<span class="kw-2">&amp;</span><span class="ident">struct_names</span>) {
-        <span class="kw">let</span> <span class="ident">from_impl</span> <span class="op">=</span> <span class="ident">generate_from_variant_trait_impl</span>(
-            <span class="ident">type_name</span>,
-            <span class="ident">impl_generics</span>,
-            <span class="ident">ty_generics</span>,
-            <span class="ident">where_clause</span>,
-            <span class="ident">variant_name</span>,
-            <span class="ident">struct_name</span>,
+    <span class="comment">// Generate trait implementations.
+    </span><span class="kw">for </span>(variant_name, struct_name) <span class="kw">in </span>variant_names.iter().zip_eq(<span class="kw-2">&amp;</span>struct_names) {
+        <span class="kw">let </span>from_impl = generate_from_variant_trait_impl(
+            type_name,
+            impl_generics,
+            ty_generics,
+            where_clause,
+            variant_name,
+            struct_name,
         );
-        <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">from_impl</span>.<span class="ident">into</span>());
+        output_items.push(from_impl.into());
 
-        <span class="kw">let</span> <span class="ident">from_impl_for_ref</span> <span class="op">=</span> <span class="ident">generate_from_variant_trait_impl_for_ref</span>(
-            <span class="kw-2">&amp;</span><span class="ident">ref_ty_name</span>,
-            <span class="kw-2">&amp;</span><span class="ident">ref_ty_lifetime</span>,
-            <span class="ident">ref_impl_generics</span>,
-            <span class="ident">ref_ty_generics</span>,
-            <span class="ident">ty_generics</span>,
-            <span class="ident">where_clause</span>,
-            <span class="ident">variant_name</span>,
-            <span class="ident">struct_name</span>,
+        <span class="kw">let </span>from_impl_for_ref = generate_from_variant_trait_impl_for_ref(
+            <span class="kw-2">&amp;</span>ref_ty_name,
+            <span class="kw-2">&amp;</span>ref_ty_lifetime,
+            ref_impl_generics,
+            ref_ty_generics,
+            ty_generics,
+            where_clause,
+            variant_name,
+            struct_name,
         );
-        <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">from_impl_for_ref</span>.<span class="ident">into</span>());
+        output_items.push(from_impl_for_ref.into());
     }
 
-    <span class="comment">// Convert reference to top-level type to `Ref`.</span>
-    <span class="kw">let</span> <span class="ident">ref_from_top_level_impl</span> <span class="op">=</span> <span class="ident">generate_from_enum_trait_impl_for_ref</span>(
-        <span class="ident">type_name</span>,
-        <span class="ident">ty_generics</span>,
-        <span class="kw-2">&amp;</span><span class="ident">ref_ty_name</span>,
-        <span class="kw-2">&amp;</span><span class="ident">ref_ty_lifetime</span>,
-        <span class="ident">ref_impl_generics</span>,
-        <span class="ident">ref_ty_generics</span>,
-        <span class="ident">where_clause</span>,
+    <span class="comment">// Convert reference to top-level type to `Ref`.
+    </span><span class="kw">let </span>ref_from_top_level_impl = generate_from_enum_trait_impl_for_ref(
+        type_name,
+        ty_generics,
+        <span class="kw-2">&amp;</span>ref_ty_name,
+        <span class="kw-2">&amp;</span>ref_ty_lifetime,
+        ref_impl_generics,
+        ref_ty_generics,
+        where_clause,
     );
-    <span class="ident">output_items</span>.<span class="ident">push</span>(<span class="ident">ref_from_top_level_impl</span>.<span class="ident">into</span>());
+    output_items.push(ref_from_top_level_impl.into());
 
-    <span class="ident">TokenStream::from_iter</span>(<span class="ident">output_items</span>)
+    TokenStream::from_iter(output_items)
 }
 
-<span class="doccomment">/// Generate a getter method for a field.</span>
-<span class="kw">fn</span> <span class="ident">make_field_getter</span>(
-    <span class="ident">type_name</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>,
-    <span class="ident">variant_names</span>: <span class="kw-2">&amp;</span>[<span class="ident">Ident</span>],
-    <span class="ident">field_data</span>: <span class="kw-2">&amp;</span><span class="ident">FieldData</span>,
-    <span class="ident">lifetime</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Lifetime</span><span class="op">&gt;</span>,
-) -&gt; <span class="ident">proc_macro2::TokenStream</span> {
-    <span class="kw">let</span> <span class="ident">field_name</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">name</span>;
-    <span class="kw">let</span> <span class="ident">field_type</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">field</span>.<span class="ident">ty</span>;
-    <span class="kw">let</span> <span class="ident">getter_opts</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">getter_opts</span>;
+<span class="doccomment">/// Generate a getter method for a field.
+</span><span class="kw">fn </span>make_field_getter(
+    type_name: <span class="kw-2">&amp;</span>Ident,
+    variant_names: <span class="kw-2">&amp;</span>[Ident],
+    field_data: <span class="kw-2">&amp;</span>FieldData,
+    lifetime: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Lifetime&gt;,
+) -&gt; proc_macro2::TokenStream {
+    <span class="kw">let </span>field_name = <span class="kw-2">&amp;</span>field_data.name;
+    <span class="kw">let </span>field_type = <span class="kw-2">&amp;</span>field_data.field.ty;
+    <span class="kw">let </span>getter_opts = <span class="kw-2">&amp;</span>field_data.getter_opts;
 
-    <span class="kw">let</span> <span class="ident">fn_name</span> <span class="op">=</span> <span class="ident">getter_opts</span>.<span class="ident">rename</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap_or</span>(<span class="ident">field_name</span>);
-    <span class="kw">let</span> <span class="ident">return_type</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">getter_opts</span>.<span class="ident">copy</span> {
-        <span class="macro">quote!</span> { #<span class="ident">field_type</span> }
-    } <span class="kw">else</span> {
-        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#<span class="ident">lifetime</span> #<span class="ident">field_type</span>}
+    <span class="kw">let </span>fn_name = getter_opts.rename.as_ref().unwrap_or(field_name);
+    <span class="kw">let </span>return_type = <span class="kw">if </span>getter_opts.copy {
+        <span class="macro">quote! </span>{ #field_type }
+    } <span class="kw">else </span>{
+        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime #field_type}
     };
-    <span class="kw">let</span> <span class="ident">return_expr</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">getter_opts</span>.<span class="ident">copy</span> {
-        <span class="macro">quote!</span> { <span class="ident">inner</span>.#<span class="ident">field_name</span> }
-    } <span class="kw">else</span> {
-        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span><span class="ident">inner</span>.#<span class="ident">field_name</span> }
+    <span class="kw">let </span>return_expr = <span class="kw">if </span>getter_opts.copy {
+        <span class="macro">quote! </span>{ inner.#field_name }
+    } <span class="kw">else </span>{
+        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>inner.#field_name }
     };
 
-    <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.</span>
-    <span class="kw">let</span> <span class="ident">cfg_attrs</span> <span class="op">=</span> <span class="ident">get_cfg_attrs</span>(<span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">field</span>.<span class="ident">attrs</span>);
+    <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.
+    </span><span class="kw">let </span>cfg_attrs = get_cfg_attrs(<span class="kw-2">&amp;</span>field_data.field.attrs);
 
-    <span class="macro">quote!</span> {
+    <span class="macro">quote! </span>{
         #(
-            #<span class="ident">cfg_attrs</span>
-        )<span class="op">*</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> #<span class="ident">fn_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; #<span class="ident">return_type</span> {
-            <span class="kw">match</span> <span class="self">self</span> {
+            #cfg_attrs
+        )*
+        <span class="kw">pub fn </span>#fn_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; #return_type {
+            <span class="kw">match </span><span class="self">self </span>{
                 #(
-                    #<span class="ident">type_name</span>::#<span class="ident">variant_names</span>(<span class="kw-2">ref</span> <span class="ident">inner</span>) =&gt; {
-                        #<span class="ident">return_expr</span>
+                    #type_name::#variant_names(<span class="kw-2">ref </span>inner) =&gt; {
+                        #return_expr
                     }
-                )<span class="op">*</span>
+                )*
             }
         }
     }
 }
 
-<span class="doccomment">/// Generate a mutable getter method for a field.</span>
-<span class="kw">fn</span> <span class="ident">make_mut_field_getter</span>(
-    <span class="ident">type_name</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>,
-    <span class="ident">variant_names</span>: <span class="kw-2">&amp;</span>[<span class="ident">Ident</span>],
-    <span class="ident">field_data</span>: <span class="kw-2">&amp;</span><span class="ident">FieldData</span>,
-    <span class="ident">lifetime</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Lifetime</span><span class="op">&gt;</span>,
-) -&gt; <span class="ident">proc_macro2::TokenStream</span> {
-    <span class="kw">let</span> <span class="ident">field_name</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">name</span>;
-    <span class="kw">let</span> <span class="ident">field_type</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">field</span>.<span class="ident">ty</span>;
-    <span class="kw">let</span> <span class="ident">getter_opts</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">getter_opts</span>;
+<span class="doccomment">/// Generate a mutable getter method for a field.
+</span><span class="kw">fn </span>make_mut_field_getter(
+    type_name: <span class="kw-2">&amp;</span>Ident,
+    variant_names: <span class="kw-2">&amp;</span>[Ident],
+    field_data: <span class="kw-2">&amp;</span>FieldData,
+    lifetime: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Lifetime&gt;,
+) -&gt; proc_macro2::TokenStream {
+    <span class="kw">let </span>field_name = <span class="kw-2">&amp;</span>field_data.name;
+    <span class="kw">let </span>field_type = <span class="kw-2">&amp;</span>field_data.field.ty;
+    <span class="kw">let </span>getter_opts = <span class="kw-2">&amp;</span>field_data.getter_opts;
 
-    <span class="kw">let</span> <span class="ident">fn_name</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;{}_mut&quot;</span>, <span class="ident">getter_opts</span>.<span class="ident">rename</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap_or</span>(<span class="ident">field_name</span>));
-    <span class="kw">let</span> <span class="ident">return_type</span> <span class="op">=</span> <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#<span class="ident">lifetime</span> <span class="kw-2">mut</span> #<span class="ident">field_type</span> };
-    <span class="kw">let</span> <span class="ident">param</span> <span class="op">=</span> <span class="ident">make_self_arg</span>(<span class="bool-val">true</span>, <span class="ident">lifetime</span>);
-    <span class="kw">let</span> <span class="ident">return_expr</span> <span class="op">=</span> <span class="macro">quote!</span> { <span class="kw-2">&amp;mut</span> <span class="ident">inner</span>.#<span class="ident">field_name</span> };
+    <span class="kw">let </span>fn_name = <span class="macro">format_ident!</span>(<span class="string">&quot;{}_mut&quot;</span>, getter_opts.rename.as_ref().unwrap_or(field_name));
+    <span class="kw">let </span>return_type = <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span>#field_type };
+    <span class="kw">let </span>param = make_self_arg(<span class="bool-val">true</span>, lifetime);
+    <span class="kw">let </span>return_expr = <span class="macro">quote! </span>{ <span class="kw-2">&amp;mut </span>inner.#field_name };
 
-    <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.</span>
-    <span class="kw">let</span> <span class="ident">cfg_attrs</span> <span class="op">=</span> <span class="ident">get_cfg_attrs</span>(<span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">field</span>.<span class="ident">attrs</span>);
+    <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.
+    </span><span class="kw">let </span>cfg_attrs = get_cfg_attrs(<span class="kw-2">&amp;</span>field_data.field.attrs);
 
-    <span class="macro">quote!</span> {
+    <span class="macro">quote! </span>{
         #(
-            #<span class="ident">cfg_attrs</span>
-        )<span class="op">*</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> #<span class="ident">fn_name</span>(#<span class="ident">param</span>) -&gt; #<span class="ident">return_type</span> {
-            <span class="kw">match</span> <span class="self">self</span> {
+            #cfg_attrs
+        )*
+        <span class="kw">pub fn </span>#fn_name(#param) -&gt; #return_type {
+            <span class="kw">match </span><span class="self">self </span>{
                 #(
-                    #<span class="ident">type_name</span>::#<span class="ident">variant_names</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">inner</span>) =&gt; {
-                        #<span class="ident">return_expr</span>
+                    #type_name::#variant_names(<span class="kw-2">ref mut </span>inner) =&gt; {
+                        #return_expr
                     }
-                )<span class="op">*</span>
+                )*
             }
         }
     }
 }
 
-<span class="kw">fn</span> <span class="ident">make_self_arg</span>(<span class="ident">mutable</span>: <span class="ident">bool</span>, <span class="ident">lifetime</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Lifetime</span><span class="op">&gt;</span>) -&gt; <span class="ident">proc_macro2::TokenStream</span> {
-    <span class="kw">if</span> <span class="ident">mutable</span> {
-        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#<span class="ident">lifetime</span> <span class="kw-2">mut</span> <span class="self">self</span> }
-    } <span class="kw">else</span> {
-        <span class="comment">// Ignore the lifetime for immutable references. This allows `&amp;Ref&lt;&#39;a&gt;` to be de-referenced</span>
-        <span class="comment">// to an inner pointer with lifetime `&#39;a`.</span>
-        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span><span class="self">self</span> }
+<span class="kw">fn </span>make_self_arg(mutable: bool, lifetime: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Lifetime&gt;) -&gt; proc_macro2::TokenStream {
+    <span class="kw">if </span>mutable {
+        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span><span class="self">self </span>}
+    } <span class="kw">else </span>{
+        <span class="comment">// Ignore the lifetime for immutable references. This allows `&amp;Ref&lt;&#39;a&gt;` to be de-referenced
+        // to an inner pointer with lifetime `&#39;a`.
+        </span><span class="macro">quote! </span>{ <span class="kw-2">&amp;</span><span class="self">self </span>}
     }
 }
 
-<span class="kw">fn</span> <span class="ident">make_type_ref</span>(
-    <span class="ident">ty</span>: <span class="kw-2">&amp;</span><span class="ident">Type</span>,
-    <span class="ident">mutable</span>: <span class="ident">bool</span>,
-    <span class="ident">copy</span>: <span class="ident">bool</span>,
-    <span class="ident">lifetime</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Lifetime</span><span class="op">&gt;</span>,
-) -&gt; <span class="ident">proc_macro2::TokenStream</span> {
-    <span class="comment">// XXX: bit hacky, ignore `copy` if `mutable` is set</span>
-    <span class="kw">if</span> <span class="ident">mutable</span> {
-        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#<span class="ident">lifetime</span> <span class="kw-2">mut</span> #<span class="ident">ty</span> }
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">copy</span> {
-        <span class="macro">quote!</span> { #<span class="ident">ty</span> }
-    } <span class="kw">else</span> {
-        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#<span class="ident">lifetime</span> #<span class="ident">ty</span> }
+<span class="kw">fn </span>make_type_ref(
+    ty: <span class="kw-2">&amp;</span>Type,
+    mutable: bool,
+    copy: bool,
+    lifetime: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Lifetime&gt;,
+) -&gt; proc_macro2::TokenStream {
+    <span class="comment">// XXX: bit hacky, ignore `copy` if `mutable` is set
+    </span><span class="kw">if </span>mutable {
+        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span>#ty }
+    } <span class="kw">else if </span>copy {
+        <span class="macro">quote! </span>{ #ty }
+    } <span class="kw">else </span>{
+        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime #ty }
     }
 }
 
-<span class="doccomment">/// Generate a partial getter method for a field.</span>
-<span class="kw">fn</span> <span class="ident">make_partial_getter</span>(
-    <span class="ident">type_name</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>,
-    <span class="ident">field_data</span>: <span class="kw-2">&amp;</span><span class="ident">FieldData</span>,
-    <span class="ident">field_variants</span>: <span class="kw-2">&amp;</span>[<span class="ident">Ident</span>],
-    <span class="ident">error_opts</span>: <span class="kw-2">&amp;</span><span class="ident">ErrorOpts</span>,
-    <span class="ident">mutable</span>: <span class="ident">bool</span>,
-    <span class="ident">lifetime</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Lifetime</span><span class="op">&gt;</span>,
-) -&gt; <span class="ident">proc_macro2::TokenStream</span> {
-    <span class="kw">let</span> <span class="ident">field_name</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">name</span>;
-    <span class="kw">let</span> <span class="ident">renamed_field</span> <span class="op">=</span> <span class="ident">field_data</span>
-        .<span class="ident">partial_getter_opts</span>
-        .<span class="ident">rename</span>
-        .<span class="ident">as_ref</span>()
-        .<span class="ident">unwrap_or</span>(<span class="ident">field_name</span>);
-    <span class="kw">let</span> <span class="ident">fn_name</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">mutable</span> {
-        <span class="macro">format_ident!</span>(<span class="string">&quot;{}_mut&quot;</span>, <span class="ident">renamed_field</span>)
-    } <span class="kw">else</span> {
-        <span class="ident">renamed_field</span>.<span class="ident">clone</span>()
+<span class="doccomment">/// Generate a partial getter method for a field.
+</span><span class="kw">fn </span>make_partial_getter(
+    type_name: <span class="kw-2">&amp;</span>Ident,
+    field_data: <span class="kw-2">&amp;</span>FieldData,
+    field_variants: <span class="kw-2">&amp;</span>[Ident],
+    error_opts: <span class="kw-2">&amp;</span>ErrorOpts,
+    mutable: bool,
+    lifetime: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Lifetime&gt;,
+) -&gt; proc_macro2::TokenStream {
+    <span class="kw">let </span>field_name = <span class="kw-2">&amp;</span>field_data.name;
+    <span class="kw">let </span>renamed_field = field_data
+        .partial_getter_opts
+        .rename
+        .as_ref()
+        .unwrap_or(field_name);
+    <span class="kw">let </span>fn_name = <span class="kw">if </span>mutable {
+        <span class="macro">format_ident!</span>(<span class="string">&quot;{}_mut&quot;</span>, renamed_field)
+    } <span class="kw">else </span>{
+        renamed_field.clone()
     };
-    <span class="kw">let</span> <span class="ident">copy</span> <span class="op">=</span> <span class="ident">field_data</span>.<span class="ident">partial_getter_opts</span>.<span class="ident">copy</span>;
-    <span class="kw">let</span> <span class="ident">self_arg</span> <span class="op">=</span> <span class="ident">make_self_arg</span>(<span class="ident">mutable</span>, <span class="ident">lifetime</span>);
-    <span class="kw">let</span> <span class="ident">ret_ty</span> <span class="op">=</span> <span class="ident">make_type_ref</span>(<span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">field</span>.<span class="ident">ty</span>, <span class="ident">mutable</span>, <span class="ident">copy</span>, <span class="ident">lifetime</span>);
-    <span class="kw">let</span> <span class="ident">ret_expr</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">mutable</span> {
-        <span class="macro">quote!</span> { <span class="kw-2">&amp;mut</span> <span class="ident">inner</span>.#<span class="ident">field_name</span> }
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">copy</span> {
-        <span class="macro">quote!</span> { <span class="ident">inner</span>.#<span class="ident">field_name</span> }
-    } <span class="kw">else</span> {
-        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span><span class="ident">inner</span>.#<span class="ident">field_name</span> }
+    <span class="kw">let </span>copy = field_data.partial_getter_opts.copy;
+    <span class="kw">let </span>self_arg = make_self_arg(mutable, lifetime);
+    <span class="kw">let </span>ret_ty = make_type_ref(<span class="kw-2">&amp;</span>field_data.field.ty, mutable, copy, lifetime);
+    <span class="kw">let </span>ret_expr = <span class="kw">if </span>mutable {
+        <span class="macro">quote! </span>{ <span class="kw-2">&amp;mut </span>inner.#field_name }
+    } <span class="kw">else if </span>copy {
+        <span class="macro">quote! </span>{ inner.#field_name }
+    } <span class="kw">else </span>{
+        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>inner.#field_name }
     };
-    <span class="kw">let</span> (<span class="ident">res_ret_ty</span>, <span class="ident">err_expr</span>) <span class="op">=</span> <span class="ident">error_opts</span>.<span class="ident">build_result_type</span>(<span class="kw-2">&amp;</span><span class="ident">ret_ty</span>);
+    <span class="kw">let </span>(res_ret_ty, err_expr) = error_opts.build_result_type(<span class="kw-2">&amp;</span>ret_ty);
 
-    <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.</span>
-    <span class="kw">let</span> <span class="ident">cfg_attrs</span> <span class="op">=</span> <span class="ident">get_cfg_attrs</span>(<span class="kw-2">&amp;</span><span class="ident">field_data</span>.<span class="ident">field</span>.<span class="ident">attrs</span>);
+    <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.
+    </span><span class="kw">let </span>cfg_attrs = get_cfg_attrs(<span class="kw-2">&amp;</span>field_data.field.attrs);
 
-    <span class="macro">quote!</span> {
+    <span class="macro">quote! </span>{
         #(
-            #<span class="ident">cfg_attrs</span>
-        )<span class="op">*</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> #<span class="ident">fn_name</span>(#<span class="ident">self_arg</span>) -&gt; #<span class="ident">res_ret_ty</span> {
-            <span class="kw">match</span> <span class="self">self</span> {
+            #cfg_attrs
+        )*
+        <span class="kw">pub fn </span>#fn_name(#self_arg) -&gt; #res_ret_ty {
+            <span class="kw">match </span><span class="self">self </span>{
                 #(
-                    #<span class="ident">type_name</span>::#<span class="ident">field_variants</span>(<span class="ident">inner</span>) =&gt; <span class="prelude-val">Ok</span>(#<span class="ident">ret_expr</span>),
-                )<span class="op">*</span>
-                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(#<span class="ident">err_expr</span>),
+                    #type_name::#field_variants(inner) =&gt; <span class="prelude-val">Ok</span>(#ret_expr),
+                )*
+                <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(#err_expr),
             }
         }
     }
 }
 
-<span class="doccomment">/// Generate a `as_&lt;variant_name&gt;{_mut}` method.</span>
-<span class="kw">fn</span> <span class="ident">make_as_variant_method</span>(
-    <span class="ident">type_name</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>,
-    <span class="ident">variant_name</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>,
-    <span class="ident">type_generics</span>: <span class="kw-2">&amp;</span><span class="ident">TypeGenerics</span>,
-    <span class="ident">cast_err_opts</span>: <span class="kw-2">&amp;</span><span class="ident">ErrorOpts</span>,
-    <span class="ident">mutable</span>: <span class="ident">bool</span>,
-) -&gt; <span class="ident">proc_macro2::TokenStream</span> {
-    <span class="kw">let</span> <span class="ident">variant_ty</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;{}{}&quot;</span>, <span class="ident">type_name</span>, <span class="ident">variant_name</span>);
-    <span class="kw">let</span> (<span class="ident">suffix</span>, <span class="ident">arg</span>, <span class="ident">ret_ty</span>, <span class="ident">binding</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">mutable</span> {
+<span class="doccomment">/// Generate a `as_&lt;variant_name&gt;{_mut}` method.
+</span><span class="kw">fn </span>make_as_variant_method(
+    type_name: <span class="kw-2">&amp;</span>Ident,
+    variant_name: <span class="kw-2">&amp;</span>Ident,
+    type_generics: <span class="kw-2">&amp;</span>TypeGenerics,
+    cast_err_opts: <span class="kw-2">&amp;</span>ErrorOpts,
+    mutable: bool,
+) -&gt; proc_macro2::TokenStream {
+    <span class="kw">let </span>variant_ty = <span class="macro">format_ident!</span>(<span class="string">&quot;{}{}&quot;</span>, type_name, variant_name);
+    <span class="kw">let </span>(suffix, arg, ret_ty, binding) = <span class="kw">if </span>mutable {
         (
             <span class="string">&quot;_mut&quot;</span>,
-            <span class="macro">quote!</span> { <span class="kw-2">&amp;mut</span> <span class="self">self</span> },
-            <span class="macro">quote!</span> { <span class="kw-2">&amp;mut</span> #<span class="ident">variant_ty</span> #<span class="ident">type_generics</span> },
-            <span class="macro">quote!</span> { <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">inner</span> },
+            <span class="macro">quote! </span>{ <span class="kw-2">&amp;mut </span><span class="self">self </span>},
+            <span class="macro">quote! </span>{ <span class="kw-2">&amp;mut </span>#variant_ty #type_generics },
+            <span class="macro">quote! </span>{ <span class="kw-2">ref mut </span>inner },
         )
-    } <span class="kw">else</span> {
+    } <span class="kw">else </span>{
         (
             <span class="string">&quot;&quot;</span>,
-            <span class="macro">quote!</span> { <span class="kw-2">&amp;</span><span class="self">self</span> },
-            <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#<span class="ident">variant_ty</span> #<span class="ident">type_generics</span> },
-            <span class="macro">quote!</span> { <span class="kw-2">ref</span> <span class="ident">inner</span> },
+            <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span><span class="self">self </span>},
+            <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#variant_ty #type_generics },
+            <span class="macro">quote! </span>{ <span class="kw-2">ref </span>inner },
         )
     };
-    <span class="kw">let</span> (<span class="ident">ret_res_ty</span>, <span class="ident">err_expr</span>) <span class="op">=</span> <span class="ident">cast_err_opts</span>.<span class="ident">build_result_type</span>(<span class="kw-2">&amp;</span><span class="ident">ret_ty</span>);
-    <span class="kw">let</span> <span class="ident">fn_name</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;as_{}{}&quot;</span>, <span class="ident">variant_name</span>.<span class="ident">to_string</span>().<span class="ident">to_lowercase</span>(), <span class="ident">suffix</span>);
-    <span class="macro">quote!</span> {
-        <span class="kw">pub</span> <span class="kw">fn</span> #<span class="ident">fn_name</span>(#<span class="ident">arg</span>) -&gt; #<span class="ident">ret_res_ty</span> {
-            <span class="kw">match</span> <span class="self">self</span> {
-                #<span class="ident">type_name</span>::#<span class="ident">variant_name</span>(#<span class="ident">binding</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">inner</span>),
-                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(#<span class="ident">err_expr</span>),
+    <span class="kw">let </span>(ret_res_ty, err_expr) = cast_err_opts.build_result_type(<span class="kw-2">&amp;</span>ret_ty);
+    <span class="kw">let </span>fn_name = <span class="macro">format_ident!</span>(<span class="string">&quot;as_{}{}&quot;</span>, variant_name.to_string().to_lowercase(), suffix);
+    <span class="macro">quote! </span>{
+        <span class="kw">pub fn </span>#fn_name(#arg) -&gt; #ret_res_ty {
+            <span class="kw">match </span><span class="self">self </span>{
+                #type_name::#variant_name(#binding) =&gt; <span class="prelude-val">Ok</span>(inner),
+                <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(#err_expr),
             }
         }
     }
 }
 
-<span class="doccomment">/// Keep all non-superstruct-related attributes from an array.</span>
-<span class="kw">fn</span> <span class="ident">discard_superstruct_attrs</span>(<span class="ident">attrs</span>: <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>]) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span> {
-    <span class="ident">attrs</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> <span class="op">!</span><span class="ident">is_superstruct_attr</span>(<span class="ident">attr</span>))
-        .<span class="ident">cloned</span>()
-        .<span class="ident">collect</span>()
+<span class="doccomment">/// Keep all non-superstruct-related attributes from an array.
+</span><span class="kw">fn </span>discard_superstruct_attrs(attrs: <span class="kw-2">&amp;</span>[Attribute]) -&gt; Vec&lt;Attribute&gt; {
+    attrs
+        .iter()
+        .filter(|attr| !is_superstruct_attr(attr))
+        .cloned()
+        .collect()
 }
 
-<span class="doccomment">/// Keep only `cfg` attributes from an array.</span>
-<span class="kw">fn</span> <span class="ident">get_cfg_attrs</span>(<span class="ident">attrs</span>: <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>]) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span> {
-    <span class="ident">attrs</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> <span class="ident">is_attr_with_ident</span>(<span class="ident">attr</span>, <span class="string">&quot;cfg&quot;</span>))
-        .<span class="ident">cloned</span>()
-        .<span class="ident">collect</span>()
+<span class="doccomment">/// Keep only `cfg` attributes from an array.
+</span><span class="kw">fn </span>get_cfg_attrs(attrs: <span class="kw-2">&amp;</span>[Attribute]) -&gt; Vec&lt;Attribute&gt; {
+    attrs
+        .iter()
+        .filter(|attr| is_attr_with_ident(attr, <span class="string">&quot;cfg&quot;</span>))
+        .cloned()
+        .collect()
 }
 
-<span class="doccomment">/// Predicate for determining whether an attribute is a `superstruct` attribute.</span>
-<span class="kw">fn</span> <span class="ident">is_superstruct_attr</span>(<span class="ident">attr</span>: <span class="kw-2">&amp;</span><span class="ident">Attribute</span>) -&gt; <span class="ident">bool</span> {
-    <span class="ident">is_attr_with_ident</span>(<span class="ident">attr</span>, <span class="string">&quot;superstruct&quot;</span>)
+<span class="doccomment">/// Predicate for determining whether an attribute is a `superstruct` attribute.
+</span><span class="kw">fn </span>is_superstruct_attr(attr: <span class="kw-2">&amp;</span>Attribute) -&gt; bool {
+    is_attr_with_ident(attr, <span class="string">&quot;superstruct&quot;</span>)
 }
 
-<span class="doccomment">/// Predicate for determining whether an attribute has the given `ident` as its path.</span>
-<span class="kw">fn</span> <span class="ident">is_attr_with_ident</span>(<span class="ident">attr</span>: <span class="kw-2">&amp;</span><span class="ident">Attribute</span>, <span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
-    <span class="ident">attr</span>.<span class="ident">path</span>
-        .<span class="ident">get_ident</span>()
-        .<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">attr_ident</span><span class="op">|</span> <span class="ident">attr_ident</span>.<span class="ident">to_string</span>() <span class="op">==</span> <span class="ident">ident</span>)
+<span class="doccomment">/// Predicate for determining whether an attribute has the given `ident` as its path.
+</span><span class="kw">fn </span>is_attr_with_ident(attr: <span class="kw-2">&amp;</span>Attribute, ident: <span class="kw-2">&amp;</span>str) -&gt; bool {
+    attr.path
+        .get_ident()
+        .map_or(<span class="bool-val">false</span>, |attr_ident| attr_ident.to_string() == ident)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="superstruct" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="superstruct" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

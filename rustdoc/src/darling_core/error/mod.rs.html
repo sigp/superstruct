@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/darling_core-0.13.4/src/error/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../darling_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../darling_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../darling_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/darling_core-0.13.4/src/error/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../darling_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../darling_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../darling_core/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -785,792 +785,792 @@
 <span id="785">785</span>
 <span id="786">786</span>
 <span id="787">787</span>
-</pre><pre class="rust"><code><span class="doccomment">//! The `darling::Error` type, the multiple error `Accumulator`, and their internals.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Error handling is one of the core values of `darling`; creating great errors is hard and</span>
-<span class="doccomment">//! never the reason that a proc-macro author started writing their crate. As a result, the</span>
-<span class="doccomment">//! `Error` type in `darling` tries to make adding span information, suggestions, and other</span>
-<span class="doccomment">//! help content easy when manually implementing `darling` traits, and automatic when deriving</span>
-<span class="doccomment">//! them.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! The `darling::Error` type, the multiple error `Accumulator`, and their internals.
+//!
+//! Error handling is one of the core values of `darling`; creating great errors is hard and
+//! never the reason that a proc-macro author started writing their crate. As a result, the
+//! `Error` type in `darling` tries to make adding span information, suggestions, and other
+//! help content easy when manually implementing `darling` traits, and automatic when deriving
+//! them.
 
-<span class="kw">use</span> <span class="ident">proc_macro2</span>::{<span class="ident">Span</span>, <span class="ident">TokenStream</span>};
-<span class="kw">use</span> <span class="ident">std::error::Error</span> <span class="kw">as</span> <span class="ident">StdError</span>;
-<span class="kw">use</span> <span class="ident">std::fmt</span>;
-<span class="kw">use</span> <span class="ident">std::iter</span>::{<span class="self">self</span>, <span class="ident">Iterator</span>};
-<span class="kw">use</span> <span class="ident">std::string::ToString</span>;
-<span class="kw">use</span> <span class="ident">std::vec</span>;
-<span class="kw">use</span> <span class="ident">syn::spanned::Spanned</span>;
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">Lit</span>, <span class="ident">LitStr</span>, <span class="ident">Path</span>};
+</span><span class="kw">use </span>proc_macro2::{Span, TokenStream};
+<span class="kw">use </span>std::error::Error <span class="kw">as </span>StdError;
+<span class="kw">use </span>std::fmt;
+<span class="kw">use </span>std::iter::{<span class="self">self</span>, Iterator};
+<span class="kw">use </span>std::string::ToString;
+<span class="kw">use </span>std::vec;
+<span class="kw">use </span>syn::spanned::Spanned;
+<span class="kw">use </span>syn::{Lit, LitStr, Path};
 
-<span class="kw">mod</span> <span class="ident">kind</span>;
+<span class="kw">mod </span>kind;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::util::path_to_string</span>;
+<span class="kw">use </span><span class="kw">crate</span>::util::path_to_string;
 
-<span class="kw">use</span> <span class="ident"><span class="self">self</span>::kind</span>::{<span class="ident">ErrorKind</span>, <span class="ident">ErrorUnknownField</span>};
+<span class="kw">use </span><span class="self">self</span>::kind::{ErrorKind, ErrorUnknownField};
 
-<span class="doccomment">/// An alias of `Result` specific to attribute parsing.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">::std::result::Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+<span class="doccomment">/// An alias of `Result` specific to attribute parsing.
+</span><span class="kw">pub type </span><span class="prelude-ty">Result</span>&lt;T&gt; = ::std::result::Result&lt;T, Error&gt;;
 
-<span class="doccomment">/// An error encountered during attribute parsing.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Given that most errors darling encounters represent code bugs in dependent crates,</span>
-<span class="doccomment">/// the internal structure of the error is deliberately opaque.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Usage</span>
-<span class="doccomment">/// Proc-macro expansion happens very infrequently compared to runtime tasks such as</span>
-<span class="doccomment">/// deserialization, and it happens in the context of an expensive compilation taks.</span>
-<span class="doccomment">/// For that reason, darling prefers not to fail on the first error it encounters, instead</span>
-<span class="doccomment">/// doing as much work as it can, accumulating errors into a single report.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// As a result, `darling::Error` is more of guaranteed-non-empty error collection</span>
-<span class="doccomment">/// than a single problem. These errors also have some notion of hierarchy, stemming from</span>
-<span class="doccomment">/// the hierarchical nature of darling&#39;s input.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// These characteristics make for great experiences when using darling-powered crates,</span>
-<span class="doccomment">/// provided crates using darling adhere to some best practices:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 1. Do not attempt to simplify a `darling::Error` into some other error type, such as</span>
-<span class="doccomment">///    `syn::Error`. To surface compile errors, instead use `darling::Error::write_errors`.</span>
-<span class="doccomment">///    This preserves all span information, suggestions, etc. Wrapping a `darling::Error` in</span>
-<span class="doccomment">///    a custom error enum works as-expected and does not force any loss of fidelity.</span>
-<span class="doccomment">/// 2. Do not use early return (e.g. the `?` operator) for custom validations. Instead,</span>
-<span class="doccomment">///    create an [`error::Accumulator`](Accumulator) to collect errors as they are encountered.  Then use</span>
-<span class="doccomment">///    [`Accumulator::finish`] to return your validated result; it will give `Ok` if and only if</span>
-<span class="doccomment">///    no errors were encountered.  This can create very complex custom validation functions;</span>
-<span class="doccomment">///    in those cases, split independent &quot;validation chains&quot; out into their own functions to</span>
-<span class="doccomment">///    keep the main validator manageable.</span>
-<span class="doccomment">/// 3. Use `darling::Error::custom` to create additional errors as-needed, then call `with_span`</span>
-<span class="doccomment">///    to ensure those errors appear in the right place. Use `darling::util::SpannedValue` to keep</span>
-<span class="doccomment">///    span information around on parsed fields so that custom diagnostics can point to the correct</span>
-<span class="doccomment">///    parts of the input AST.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">derive</span>(<span class="ident">Clone</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Error</span> {
-    <span class="ident">kind</span>: <span class="ident">ErrorKind</span>,
-    <span class="ident">locations</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The span to highlight in the emitted diagnostic.</span>
-    <span class="ident">span</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Span</span><span class="op">&gt;</span>,
+<span class="doccomment">/// An error encountered during attribute parsing.
+///
+/// Given that most errors darling encounters represent code bugs in dependent crates,
+/// the internal structure of the error is deliberately opaque.
+///
+/// # Usage
+/// Proc-macro expansion happens very infrequently compared to runtime tasks such as
+/// deserialization, and it happens in the context of an expensive compilation taks.
+/// For that reason, darling prefers not to fail on the first error it encounters, instead
+/// doing as much work as it can, accumulating errors into a single report.
+///
+/// As a result, `darling::Error` is more of guaranteed-non-empty error collection
+/// than a single problem. These errors also have some notion of hierarchy, stemming from
+/// the hierarchical nature of darling&#39;s input.
+///
+/// These characteristics make for great experiences when using darling-powered crates,
+/// provided crates using darling adhere to some best practices:
+///
+/// 1. Do not attempt to simplify a `darling::Error` into some other error type, such as
+///    `syn::Error`. To surface compile errors, instead use `darling::Error::write_errors`.
+///    This preserves all span information, suggestions, etc. Wrapping a `darling::Error` in
+///    a custom error enum works as-expected and does not force any loss of fidelity.
+/// 2. Do not use early return (e.g. the `?` operator) for custom validations. Instead,
+///    create an [`error::Accumulator`](Accumulator) to collect errors as they are encountered.  Then use
+///    [`Accumulator::finish`] to return your validated result; it will give `Ok` if and only if
+///    no errors were encountered.  This can create very complex custom validation functions;
+///    in those cases, split independent &quot;validation chains&quot; out into their own functions to
+///    keep the main validator manageable.
+/// 3. Use `darling::Error::custom` to create additional errors as-needed, then call `with_span`
+///    to ensure those errors appear in the right place. Use `darling::util::SpannedValue` to keep
+///    span information around on parsed fields so that custom diagnostics can point to the correct
+///    parts of the input AST.
+</span><span class="attribute">#[derive(Debug)]
+#[cfg_attr(test, derive(Clone))]
+</span><span class="kw">pub struct </span>Error {
+    kind: ErrorKind,
+    locations: Vec&lt;String&gt;,
+    <span class="doccomment">/// The span to highlight in the emitted diagnostic.
+    </span>span: <span class="prelude-ty">Option</span>&lt;Span&gt;,
 }
 
-<span class="doccomment">/// Error creation functions</span>
-<span class="kw">impl</span> <span class="ident">Error</span> {
-    <span class="kw">pub</span>(<span class="kw">in</span> <span class="ident"><span class="kw">crate</span>::error</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">kind</span>: <span class="ident">ErrorKind</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error</span> {
-            <span class="ident">kind</span>,
-            <span class="ident">locations</span>: <span class="ident">Vec::new</span>(),
-            <span class="ident">span</span>: <span class="prelude-val">None</span>,
+<span class="doccomment">/// Error creation functions
+</span><span class="kw">impl </span>Error {
+    <span class="kw">pub</span>(<span class="kw">in </span><span class="kw">crate</span>::error) <span class="kw">fn </span>new(kind: ErrorKind) -&gt; <span class="self">Self </span>{
+        Error {
+            kind,
+            locations: Vec::new(),
+            span: <span class="prelude-val">None</span>,
         }
     }
 
-    <span class="doccomment">/// Creates a new error with a custom message.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">custom</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">fmt::Display</span><span class="op">&gt;</span>(<span class="ident">msg</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::Custom</span>(<span class="ident">msg</span>.<span class="ident">to_string</span>()))
+    <span class="doccomment">/// Creates a new error with a custom message.
+    </span><span class="kw">pub fn </span>custom&lt;T: fmt::Display&gt;(msg: T) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::Custom(msg.to_string()))
     }
 
-    <span class="doccomment">/// Creates a new error for a field that appears twice in the input.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duplicate_field</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::DuplicateField</span>(<span class="ident">name</span>.<span class="ident">into</span>()))
+    <span class="doccomment">/// Creates a new error for a field that appears twice in the input.
+    </span><span class="kw">pub fn </span>duplicate_field(name: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::DuplicateField(name.into()))
     }
 
-    <span class="doccomment">/// Creates a new error for a field that appears twice in the input. Helper to avoid repeating</span>
-    <span class="doccomment">/// the syn::Path to String conversion.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duplicate_field_path</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::duplicate_field</span>(<span class="kw-2">&amp;</span><span class="ident">path_to_string</span>(<span class="ident">path</span>))
+    <span class="doccomment">/// Creates a new error for a field that appears twice in the input. Helper to avoid repeating
+    /// the syn::Path to String conversion.
+    </span><span class="kw">pub fn </span>duplicate_field_path(path: <span class="kw-2">&amp;</span>Path) -&gt; <span class="self">Self </span>{
+        Error::duplicate_field(<span class="kw-2">&amp;</span>path_to_string(path))
     }
 
-    <span class="doccomment">/// Creates a new error for a non-optional field that does not appear in the input.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">missing_field</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::MissingField</span>(<span class="ident">name</span>.<span class="ident">into</span>()))
+    <span class="doccomment">/// Creates a new error for a non-optional field that does not appear in the input.
+    </span><span class="kw">pub fn </span>missing_field(name: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::MissingField(name.into()))
     }
 
-    <span class="doccomment">/// Creates a new error for a field name that appears in the input but does not correspond</span>
-    <span class="doccomment">/// to a known field.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unknown_field</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::UnknownField</span>(<span class="ident">name</span>.<span class="ident">into</span>()))
+    <span class="doccomment">/// Creates a new error for a field name that appears in the input but does not correspond
+    /// to a known field.
+    </span><span class="kw">pub fn </span>unknown_field(name: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::UnknownField(name.into()))
     }
 
-    <span class="doccomment">/// Creates a new error for a field name that appears in the input but does not correspond</span>
-    <span class="doccomment">/// to a known field. Helper to avoid repeating the syn::Path to String conversion.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unknown_field_path</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::unknown_field</span>(<span class="kw-2">&amp;</span><span class="ident">path_to_string</span>(<span class="ident">path</span>))
+    <span class="doccomment">/// Creates a new error for a field name that appears in the input but does not correspond
+    /// to a known field. Helper to avoid repeating the syn::Path to String conversion.
+    </span><span class="kw">pub fn </span>unknown_field_path(path: <span class="kw-2">&amp;</span>Path) -&gt; <span class="self">Self </span>{
+        Error::unknown_field(<span class="kw-2">&amp;</span>path_to_string(path))
     }
 
-    <span class="doccomment">/// Creates a new error for a field name that appears in the input but does not correspond to</span>
-    <span class="doccomment">/// a known attribute. The second argument is the list of known attributes; if a similar name</span>
-    <span class="doccomment">/// is found that will be shown in the emitted error message.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unknown_field_with_alts</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>, <span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">field</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">alternates</span>: <span class="ident">I</span>) -&gt; <span class="self">Self</span>
-    <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;a</span>,
-        <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Creates a new error for a field name that appears in the input but does not correspond to
+    /// a known attribute. The second argument is the list of known attributes; if a similar name
+    /// is found that will be shown in the emitted error message.
+    </span><span class="kw">pub fn </span>unknown_field_with_alts&lt;<span class="lifetime">&#39;a</span>, T, I&gt;(field: <span class="kw-2">&amp;</span>str, alternates: I) -&gt; <span class="self">Self
+    </span><span class="kw">where
+        </span>T: AsRef&lt;str&gt; + <span class="lifetime">&#39;a</span>,
+        I: IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt;,
     {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorUnknownField::with_alts</span>(<span class="ident">field</span>, <span class="ident">alternates</span>).<span class="ident">into</span>())
+        Error::new(ErrorUnknownField::with_alts(field, alternates).into())
     }
 
-    <span class="doccomment">/// Creates a new error for a struct or variant that does not adhere to the supported shape.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unsupported_shape</span>(<span class="ident">shape</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::UnsupportedShape</span>(<span class="ident">shape</span>.<span class="ident">into</span>()))
+    <span class="doccomment">/// Creates a new error for a struct or variant that does not adhere to the supported shape.
+    </span><span class="kw">pub fn </span>unsupported_shape(shape: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::UnsupportedShape(shape.into()))
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unsupported_format</span>(<span class="ident">format</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::UnexpectedFormat</span>(<span class="ident">format</span>.<span class="ident">into</span>()))
+    <span class="kw">pub fn </span>unsupported_format(format: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::UnexpectedFormat(format.into()))
     }
 
-    <span class="doccomment">/// Creates a new error for a field which has an unexpected literal type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unexpected_type</span>(<span class="ident">ty</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::UnexpectedType</span>(<span class="ident">ty</span>.<span class="ident">into</span>()))
+    <span class="doccomment">/// Creates a new error for a field which has an unexpected literal type.
+    </span><span class="kw">pub fn </span>unexpected_type(ty: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::UnexpectedType(ty.into()))
     }
 
-    <span class="doccomment">/// Creates a new error for a field which has an unexpected literal type. This will automatically</span>
-    <span class="doccomment">/// extract the literal type name from the passed-in `Lit` and set the span to encompass only the</span>
-    <span class="doccomment">/// literal value.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Usage</span>
-    <span class="doccomment">/// This is most frequently used in overrides of the `FromMeta::from_value` method.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// # // pretend darling_core is darling so the doc example looks correct.</span>
-    <span class="doccomment">/// # extern crate darling_core as darling;</span>
-    <span class="doccomment">/// # extern crate syn;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// use darling::{FromMeta, Error, Result};</span>
-    <span class="doccomment">/// use syn::{Lit, LitStr};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// pub struct Foo(String);</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// impl FromMeta for Foo {</span>
-    <span class="doccomment">///     fn from_value(value: &amp;Lit) -&gt; Result&lt;Self&gt; {</span>
-    <span class="doccomment">///         if let Lit::Str(ref lit_str) = *value {</span>
-    <span class="doccomment">///             Ok(Foo(lit_str.value()))</span>
-    <span class="doccomment">///         } else {</span>
-    <span class="doccomment">///             Err(Error::unexpected_lit_type(value))</span>
-    <span class="doccomment">///         }</span>
-    <span class="doccomment">///     }</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # fn main() {}</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unexpected_lit_type</span>(<span class="ident">lit</span>: <span class="kw-2">&amp;</span><span class="ident">Lit</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::unexpected_type</span>(<span class="kw">match</span> <span class="kw-2">*</span><span class="ident">lit</span> {
-            <span class="ident">Lit::Str</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;string&quot;</span>,
-            <span class="ident">Lit::ByteStr</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;byte string&quot;</span>,
-            <span class="ident">Lit::Byte</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;byte&quot;</span>,
-            <span class="ident">Lit::Char</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;char&quot;</span>,
-            <span class="ident">Lit::Int</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;int&quot;</span>,
-            <span class="ident">Lit::Float</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;float&quot;</span>,
-            <span class="ident">Lit::Bool</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;bool&quot;</span>,
-            <span class="ident">Lit::Verbatim</span>(<span class="kw">_</span>) =&gt; <span class="string">&quot;verbatim&quot;</span>,
+    <span class="doccomment">/// Creates a new error for a field which has an unexpected literal type. This will automatically
+    /// extract the literal type name from the passed-in `Lit` and set the span to encompass only the
+    /// literal value.
+    ///
+    /// # Usage
+    /// This is most frequently used in overrides of the `FromMeta::from_value` method.
+    ///
+    /// ```rust
+    /// # // pretend darling_core is darling so the doc example looks correct.
+    /// # extern crate darling_core as darling;
+    /// # extern crate syn;
+    ///
+    /// use darling::{FromMeta, Error, Result};
+    /// use syn::{Lit, LitStr};
+    ///
+    /// pub struct Foo(String);
+    ///
+    /// impl FromMeta for Foo {
+    ///     fn from_value(value: &amp;Lit) -&gt; Result&lt;Self&gt; {
+    ///         if let Lit::Str(ref lit_str) = *value {
+    ///             Ok(Foo(lit_str.value()))
+    ///         } else {
+    ///             Err(Error::unexpected_lit_type(value))
+    ///         }
+    ///     }
+    /// }
+    ///
+    /// # fn main() {}
+    /// ```
+    </span><span class="kw">pub fn </span>unexpected_lit_type(lit: <span class="kw-2">&amp;</span>Lit) -&gt; <span class="self">Self </span>{
+        Error::unexpected_type(<span class="kw">match </span><span class="kw-2">*</span>lit {
+            Lit::Str(<span class="kw">_</span>) =&gt; <span class="string">&quot;string&quot;</span>,
+            Lit::ByteStr(<span class="kw">_</span>) =&gt; <span class="string">&quot;byte string&quot;</span>,
+            Lit::Byte(<span class="kw">_</span>) =&gt; <span class="string">&quot;byte&quot;</span>,
+            Lit::Char(<span class="kw">_</span>) =&gt; <span class="string">&quot;char&quot;</span>,
+            Lit::Int(<span class="kw">_</span>) =&gt; <span class="string">&quot;int&quot;</span>,
+            Lit::Float(<span class="kw">_</span>) =&gt; <span class="string">&quot;float&quot;</span>,
+            Lit::Bool(<span class="kw">_</span>) =&gt; <span class="string">&quot;bool&quot;</span>,
+            Lit::Verbatim(<span class="kw">_</span>) =&gt; <span class="string">&quot;verbatim&quot;</span>,
         })
-        .<span class="ident">with_span</span>(<span class="ident">lit</span>)
+        .with_span(lit)
     }
 
-    <span class="doccomment">/// Creates a new error for a value which doesn&#39;t match a set of expected literals.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unknown_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::UnknownValue</span>(<span class="ident">value</span>.<span class="ident">into</span>()))
+    <span class="doccomment">/// Creates a new error for a value which doesn&#39;t match a set of expected literals.
+    </span><span class="kw">pub fn </span>unknown_value(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::UnknownValue(value.into()))
     }
 
-    <span class="doccomment">/// Creates a new error for a list which did not get enough items to proceed.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">too_few_items</span>(<span class="ident">min</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::TooFewItems</span>(<span class="ident">min</span>))
+    <span class="doccomment">/// Creates a new error for a list which did not get enough items to proceed.
+    </span><span class="kw">pub fn </span>too_few_items(min: usize) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::TooFewItems(min))
     }
 
-    <span class="doccomment">/// Creates a new error when a list got more items than it supports. The `max` argument</span>
-    <span class="doccomment">/// is the largest number of items the receiver could accept.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">too_many_items</span>(<span class="ident">max</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::new</span>(<span class="ident">ErrorKind::TooManyItems</span>(<span class="ident">max</span>))
+    <span class="doccomment">/// Creates a new error when a list got more items than it supports. The `max` argument
+    /// is the largest number of items the receiver could accept.
+    </span><span class="kw">pub fn </span>too_many_items(max: usize) -&gt; <span class="self">Self </span>{
+        Error::new(ErrorKind::TooManyItems(max))
     }
 
-    <span class="doccomment">/// Bundle a set of multiple errors into a single `Error` instance.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Usually it will be more convenient to use an [`error::Accumulator`](Accumulator).</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Panics</span>
-    <span class="doccomment">/// This function will panic if `errors.is_empty() == true`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">multiple</span>(<span class="kw-2">mut</span> <span class="ident">errors</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> <span class="ident">errors</span>.<span class="ident">len</span>() {
-            <span class="number">1</span> =&gt; <span class="ident">errors</span>
-                .<span class="ident">pop</span>()
-                .<span class="ident">expect</span>(<span class="string">&quot;Error array of length 1 has a first item&quot;</span>),
-            <span class="number">0</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Can&#39;t deal with 0 errors&quot;</span>),
-            <span class="kw">_</span> =&gt; <span class="ident">Error::new</span>(<span class="ident">ErrorKind::Multiple</span>(<span class="ident">errors</span>)),
+    <span class="doccomment">/// Bundle a set of multiple errors into a single `Error` instance.
+    ///
+    /// Usually it will be more convenient to use an [`error::Accumulator`](Accumulator).
+    ///
+    /// # Panics
+    /// This function will panic if `errors.is_empty() == true`.
+    </span><span class="kw">pub fn </span>multiple(<span class="kw-2">mut </span>errors: Vec&lt;Error&gt;) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>errors.len() {
+            <span class="number">1 </span>=&gt; errors
+                .pop()
+                .expect(<span class="string">&quot;Error array of length 1 has a first item&quot;</span>),
+            <span class="number">0 </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Can&#39;t deal with 0 errors&quot;</span>),
+            <span class="kw">_ </span>=&gt; Error::new(ErrorKind::Multiple(errors)),
         }
     }
 
-    <span class="doccomment">/// Creates an error collector, for aggregating multiple errors</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// See [`Accumulator`] for details.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">accumulator</span>() -&gt; <span class="ident">Accumulator</span> {
-        <span class="ident">Default::default</span>()
+    <span class="doccomment">/// Creates an error collector, for aggregating multiple errors
+    ///
+    /// See [`Accumulator`] for details.
+    </span><span class="kw">pub fn </span>accumulator() -&gt; Accumulator {
+        Default::default()
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// Create a new error about a literal string that doesn&#39;t match a set of known</span>
-    <span class="doccomment">/// or permissible values. This function can be made public if the API proves useful</span>
-    <span class="doccomment">/// beyond impls for `syn` types.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">unknown_lit_str_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">LitStr</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::unknown_value</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>.<span class="ident">value</span>()).<span class="ident">with_span</span>(<span class="ident">value</span>)
+<span class="kw">impl </span>Error {
+    <span class="doccomment">/// Create a new error about a literal string that doesn&#39;t match a set of known
+    /// or permissible values. This function can be made public if the API proves useful
+    /// beyond impls for `syn` types.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>unknown_lit_str_value(value: <span class="kw-2">&amp;</span>LitStr) -&gt; <span class="self">Self </span>{
+        Error::unknown_value(<span class="kw-2">&amp;</span>value.value()).with_span(value)
     }
 }
 
-<span class="doccomment">/// Error instance methods</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::len_without_is_empty</span>)]</span> <span class="comment">// Error can never be empty</span>
-<span class="kw">impl</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// Check if this error is associated with a span in the token stream.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">span</span>.<span class="ident">is_some</span>()
+<span class="doccomment">/// Error instance methods
+</span><span class="attribute">#[allow(clippy::len_without_is_empty)] </span><span class="comment">// Error can never be empty
+</span><span class="kw">impl </span>Error {
+    <span class="doccomment">/// Check if this error is associated with a span in the token stream.
+    </span><span class="kw">pub fn </span>has_span(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.span.is_some()
     }
 
-    <span class="doccomment">/// Tie a span to the error if none is already present. This is used in `darling::FromMeta`</span>
-    <span class="doccomment">/// and other traits to attach errors to the most specific possible location in the input</span>
-    <span class="doccomment">/// source code.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// All `darling`-built impls, either from the crate or from the proc macro, will call this</span>
-    <span class="doccomment">/// when appropriate during parsing, so it should not be necessary to call this unless you have</span>
-    <span class="doccomment">/// overridden:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * `FromMeta::from_meta`</span>
-    <span class="doccomment">/// * `FromMeta::from_nested_meta`</span>
-    <span class="doccomment">/// * `FromMeta::from_value`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_span</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Spanned</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">has_span</span>() {
-            <span class="self">self</span>.<span class="ident">span</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">node</span>.<span class="ident">span</span>());
+    <span class="doccomment">/// Tie a span to the error if none is already present. This is used in `darling::FromMeta`
+    /// and other traits to attach errors to the most specific possible location in the input
+    /// source code.
+    ///
+    /// All `darling`-built impls, either from the crate or from the proc macro, will call this
+    /// when appropriate during parsing, so it should not be necessary to call this unless you have
+    /// overridden:
+    ///
+    /// * `FromMeta::from_meta`
+    /// * `FromMeta::from_nested_meta`
+    /// * `FromMeta::from_value`
+    </span><span class="kw">pub fn </span>with_span&lt;T: Spanned&gt;(<span class="kw-2">mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;</span>T) -&gt; <span class="self">Self </span>{
+        <span class="kw">if </span>!<span class="self">self</span>.has_span() {
+            <span class="self">self</span>.span = <span class="prelude-val">Some</span>(node.span());
         }
 
-        <span class="self">self</span>
+        <span class="self">self
+    </span>}
+
+    <span class="doccomment">/// Recursively converts a tree of errors to a flattened list.
+    </span><span class="kw">pub fn </span>flatten(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        Error::multiple(<span class="self">self</span>.into_vec())
     }
 
-    <span class="doccomment">/// Recursively converts a tree of errors to a flattened list.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flatten</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Error::multiple</span>(<span class="self">self</span>.<span class="ident">into_vec</span>())
-    }
-
-    <span class="kw">fn</span> <span class="ident">into_vec</span>(<span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ErrorKind::Multiple</span>(<span class="ident">errors</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">kind</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flat</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-            <span class="kw">for</span> <span class="ident">error</span> <span class="kw">in</span> <span class="ident">errors</span> {
-                <span class="ident">flat</span>.<span class="ident">extend</span>(<span class="ident">error</span>.<span class="ident">prepend_at</span>(<span class="self">self</span>.<span class="ident">locations</span>.<span class="ident">clone</span>()).<span class="ident">into_vec</span>());
+    <span class="kw">fn </span>into_vec(<span class="self">self</span>) -&gt; Vec&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">if let </span>ErrorKind::Multiple(errors) = <span class="self">self</span>.kind {
+            <span class="kw">let </span><span class="kw-2">mut </span>flat = Vec::new();
+            <span class="kw">for </span>error <span class="kw">in </span>errors {
+                flat.extend(error.prepend_at(<span class="self">self</span>.locations.clone()).into_vec());
             }
 
-            <span class="ident">flat</span>
-        } <span class="kw">else</span> {
+            flat
+        } <span class="kw">else </span>{
             <span class="macro">vec!</span>[<span class="self">self</span>]
         }
     }
 
-    <span class="doccomment">/// Adds a location to the error, such as a field or variant.</span>
-    <span class="doccomment">/// Locations must be added in reverse order of specificity.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">at</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">fmt::Display</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">location</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">locations</span>.<span class="ident">insert</span>(<span class="number">0</span>, <span class="ident">location</span>.<span class="ident">to_string</span>());
-        <span class="self">self</span>
+    <span class="doccomment">/// Adds a location to the error, such as a field or variant.
+    /// Locations must be added in reverse order of specificity.
+    </span><span class="kw">pub fn </span>at&lt;T: fmt::Display&gt;(<span class="kw-2">mut </span><span class="self">self</span>, location: T) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.locations.insert(<span class="number">0</span>, location.to_string());
+        <span class="self">self
+    </span>}
+
+    <span class="doccomment">/// Adds a location to the error, such as a field or variant.
+    /// Locations must be added in reverse order of specificity. This is a helper function to avoid
+    /// repeating path to string logic.
+    </span><span class="kw">pub fn </span>at_path(<span class="self">self</span>, path: <span class="kw-2">&amp;</span>Path) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.at(path_to_string(path))
     }
 
-    <span class="doccomment">/// Adds a location to the error, such as a field or variant.</span>
-    <span class="doccomment">/// Locations must be added in reverse order of specificity. This is a helper function to avoid</span>
-    <span class="doccomment">/// repeating path to string logic.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">at_path</span>(<span class="self">self</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">at</span>(<span class="ident">path_to_string</span>(<span class="ident">path</span>))
+    <span class="doccomment">/// Gets the number of individual errors in this error.
+    ///
+    /// This function never returns `0`, as it&#39;s impossible to construct
+    /// a multi-error from an empty `Vec`.
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.kind.len()
     }
 
-    <span class="doccomment">/// Gets the number of individual errors in this error.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This function never returns `0`, as it&#39;s impossible to construct</span>
-    <span class="doccomment">/// a multi-error from an empty `Vec`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="self">self</span>.<span class="ident">kind</span>.<span class="ident">len</span>()
-    }
-
-    <span class="doccomment">/// Adds a location chain to the head of the error&#39;s existing locations.</span>
-    <span class="kw">fn</span> <span class="ident">prepend_at</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">locations</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">locations</span>.<span class="ident">is_empty</span>() {
-            <span class="ident">locations</span>.<span class="ident">extend</span>(<span class="self">self</span>.<span class="ident">locations</span>);
-            <span class="self">self</span>.<span class="ident">locations</span> <span class="op">=</span> <span class="ident">locations</span>;
+    <span class="doccomment">/// Adds a location chain to the head of the error&#39;s existing locations.
+    </span><span class="kw">fn </span>prepend_at(<span class="kw-2">mut </span><span class="self">self</span>, <span class="kw-2">mut </span>locations: Vec&lt;String&gt;) -&gt; <span class="self">Self </span>{
+        <span class="kw">if </span>!locations.is_empty() {
+            locations.extend(<span class="self">self</span>.locations);
+            <span class="self">self</span>.locations = locations;
         }
 
-        <span class="self">self</span>
+        <span class="self">self
+    </span>}
+
+    <span class="doccomment">/// Gets the location slice.
+    </span><span class="attribute">#[cfg(test)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>location(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;<span class="kw-2">&amp;</span>str&gt; {
+        <span class="self">self</span>.locations.iter().map(|i| i.as_str()).collect()
     }
 
-    <span class="doccomment">/// Gets the location slice.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">location</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">locations</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">i</span>.<span class="ident">as_str</span>()).<span class="ident">collect</span>()
-    }
-
-    <span class="doccomment">/// Write this error and any children as compile errors into a `TokenStream` to</span>
-    <span class="doccomment">/// be returned by the proc-macro.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The behavior of this method will be slightly different if the `diagnostics` feature</span>
-    <span class="doccomment">/// is enabled: In that case, the diagnostics will be emitted immediately by this call,</span>
-    <span class="doccomment">/// and an empty `TokenStream` will be returned.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Return these tokens unmodified to avoid disturbing the attached span information.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Usage</span>
-    <span class="doccomment">/// ```rust,ignore</span>
-    <span class="doccomment">/// // in your proc-macro function</span>
-    <span class="doccomment">/// let opts = match MyOptions::from_derive_input(&amp;ast) {</span>
-    <span class="doccomment">///     Ok(val) =&gt; val,</span>
-    <span class="doccomment">///     Err(err) =&gt; {</span>
-    <span class="doccomment">///         return err.write_errors();</span>
-    <span class="doccomment">///     }</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_errors</span>(<span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;diagnostics&quot;</span>)]</span>
-        {
-            <span class="self">self</span>.<span class="ident">emit</span>();
+    <span class="doccomment">/// Write this error and any children as compile errors into a `TokenStream` to
+    /// be returned by the proc-macro.
+    ///
+    /// The behavior of this method will be slightly different if the `diagnostics` feature
+    /// is enabled: In that case, the diagnostics will be emitted immediately by this call,
+    /// and an empty `TokenStream` will be returned.
+    ///
+    /// Return these tokens unmodified to avoid disturbing the attached span information.
+    ///
+    /// # Usage
+    /// ```rust,ignore
+    /// // in your proc-macro function
+    /// let opts = match MyOptions::from_derive_input(&amp;ast) {
+    ///     Ok(val) =&gt; val,
+    ///     Err(err) =&gt; {
+    ///         return err.write_errors();
+    ///     }
+    /// }
+    /// ```
+    </span><span class="kw">pub fn </span>write_errors(<span class="self">self</span>) -&gt; TokenStream {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;diagnostics&quot;</span>)]
+        </span>{
+            <span class="self">self</span>.emit();
             <span class="macro">quote!</span>()
         }
 
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;diagnostics&quot;</span>))]</span>
-        {
-            <span class="self">self</span>.<span class="ident">flatten</span>()
-                .<span class="ident">into_iter</span>()
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">single_to_syn_error</span>().<span class="ident">to_compile_error</span>())
-                .<span class="ident">collect</span>()
+        <span class="attribute">#[cfg(not(feature = <span class="string">&quot;diagnostics&quot;</span>))]
+        </span>{
+            <span class="self">self</span>.flatten()
+                .into_iter()
+                .map(|e| e.single_to_syn_error().to_compile_error())
+                .collect()
         }
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;diagnostics&quot;</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">single_to_syn_error</span>(<span class="self">self</span>) -&gt; <span class="ident">::syn::Error</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">span</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">span</span>) =&gt; <span class="ident">::syn::Error::new</span>(<span class="ident">span</span>, <span class="self">self</span>.<span class="ident">kind</span>),
-            <span class="prelude-val">None</span> =&gt; <span class="ident">::syn::Error::new</span>(<span class="ident">Span::call_site</span>(), <span class="self">self</span>),
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;diagnostics&quot;</span>))]
+    </span><span class="kw">fn </span>single_to_syn_error(<span class="self">self</span>) -&gt; ::syn::Error {
+        <span class="kw">match </span><span class="self">self</span>.span {
+            <span class="prelude-val">Some</span>(span) =&gt; ::syn::Error::new(span, <span class="self">self</span>.kind),
+            <span class="prelude-val">None </span>=&gt; ::syn::Error::new(Span::call_site(), <span class="self">self</span>),
         }
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;diagnostics&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">single_to_diagnostic</span>(<span class="self">self</span>) -&gt; <span class="ident">::proc_macro::Diagnostic</span> {
-        <span class="kw">use</span> <span class="ident">proc_macro</span>::{<span class="ident">Diagnostic</span>, <span class="ident">Level</span>};
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;diagnostics&quot;</span>)]
+    </span><span class="kw">fn </span>single_to_diagnostic(<span class="self">self</span>) -&gt; ::proc_macro::Diagnostic {
+        <span class="kw">use </span>proc_macro::{Diagnostic, Level};
 
-        <span class="comment">// Delegate to dedicated error formatters when applicable.</span>
-        <span class="comment">//</span>
-        <span class="comment">// If span information is available, don&#39;t include the error property path</span>
-        <span class="comment">// since it&#39;s redundant and not consistent with native compiler diagnostics.</span>
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span> {
-            <span class="ident">ErrorKind::UnknownField</span>(<span class="ident">euf</span>) =&gt; <span class="ident">euf</span>.<span class="ident">into_diagnostic</span>(<span class="self">self</span>.<span class="ident">span</span>),
-            <span class="kw">_</span> =&gt; <span class="kw">match</span> <span class="self">self</span>.<span class="ident">span</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">span</span>) =&gt; <span class="ident">span</span>.<span class="ident">unwrap</span>().<span class="ident">error</span>(<span class="self">self</span>.<span class="ident">kind</span>.<span class="ident">to_string</span>()),
-                <span class="prelude-val">None</span> =&gt; <span class="ident">Diagnostic::new</span>(<span class="ident">Level::Error</span>, <span class="self">self</span>.<span class="ident">to_string</span>()),
+        <span class="comment">// Delegate to dedicated error formatters when applicable.
+        //
+        // If span information is available, don&#39;t include the error property path
+        // since it&#39;s redundant and not consistent with native compiler diagnostics.
+        </span><span class="kw">match </span><span class="self">self</span>.kind {
+            ErrorKind::UnknownField(euf) =&gt; euf.into_diagnostic(<span class="self">self</span>.span),
+            <span class="kw">_ </span>=&gt; <span class="kw">match </span><span class="self">self</span>.span {
+                <span class="prelude-val">Some</span>(span) =&gt; span.unwrap().error(<span class="self">self</span>.kind.to_string()),
+                <span class="prelude-val">None </span>=&gt; Diagnostic::new(Level::Error, <span class="self">self</span>.to_string()),
             },
         }
     }
 
-    <span class="doccomment">/// Transform this error and its children into a list of compiler diagnostics</span>
-    <span class="doccomment">/// and emit them. If the `Error` has associated span information, the diagnostics</span>
-    <span class="doccomment">/// will identify the correct location in source code automatically.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Stability</span>
-    <span class="doccomment">/// This is only available on `nightly` until the compiler `proc_macro_diagnostic`</span>
-    <span class="doccomment">/// feature stabilizes. Until then, it may break at any time.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;diagnostics&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">emit</span>(<span class="self">self</span>) {
-        <span class="kw">for</span> <span class="ident">error</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">flatten</span>() {
-            <span class="ident">error</span>.<span class="ident">single_to_diagnostic</span>().<span class="ident">emit</span>()
+    <span class="doccomment">/// Transform this error and its children into a list of compiler diagnostics
+    /// and emit them. If the `Error` has associated span information, the diagnostics
+    /// will identify the correct location in source code automatically.
+    ///
+    /// # Stability
+    /// This is only available on `nightly` until the compiler `proc_macro_diagnostic`
+    /// feature stabilizes. Until then, it may break at any time.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;diagnostics&quot;</span>)]
+    </span><span class="kw">pub fn </span>emit(<span class="self">self</span>) {
+        <span class="kw">for </span>error <span class="kw">in </span><span class="self">self</span>.flatten() {
+            error.single_to_diagnostic().emit()
         }
     }
 
-    <span class="doccomment">/// Transform the error into a compiler diagnostic and - if the diagnostic points to</span>
-    <span class="doccomment">/// a specific code location - add a spanned help child diagnostic that points to the</span>
-    <span class="doccomment">/// parent derived trait.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This is experimental and therefore not exposed outside the crate.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;diagnostics&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">emit_with_macro_help_span</span>(<span class="self">self</span>) {
-        <span class="kw">use</span> <span class="ident">proc_macro::Diagnostic</span>;
+    <span class="doccomment">/// Transform the error into a compiler diagnostic and - if the diagnostic points to
+    /// a specific code location - add a spanned help child diagnostic that points to the
+    /// parent derived trait.
+    ///
+    /// This is experimental and therefore not exposed outside the crate.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;diagnostics&quot;</span>)]
+    #[allow(dead_code)]
+    </span><span class="kw">fn </span>emit_with_macro_help_span(<span class="self">self</span>) {
+        <span class="kw">use </span>proc_macro::Diagnostic;
 
-        <span class="kw">for</span> <span class="ident">error</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">flatten</span>() {
-            <span class="kw">let</span> <span class="ident">needs_help</span> <span class="op">=</span> <span class="ident">error</span>.<span class="ident">has_span</span>();
-            <span class="kw">let</span> <span class="ident">diagnostic</span> <span class="op">=</span> <span class="ident">error</span>.<span class="ident">single_to_diagnostic</span>();
-            <span class="ident">Diagnostic::emit</span>(<span class="kw">if</span> <span class="ident">needs_help</span> {
-                <span class="ident">diagnostic</span>.<span class="ident">span_help</span>(
-                    <span class="ident">Span::call_site</span>().<span class="ident">unwrap</span>(),
+        <span class="kw">for </span>error <span class="kw">in </span><span class="self">self</span>.flatten() {
+            <span class="kw">let </span>needs_help = error.has_span();
+            <span class="kw">let </span>diagnostic = error.single_to_diagnostic();
+            Diagnostic::emit(<span class="kw">if </span>needs_help {
+                diagnostic.span_help(
+                    Span::call_site().unwrap(),
                     <span class="string">&quot;Encountered as part of this derive-mode-macro&quot;</span>,
                 )
-            } <span class="kw">else</span> {
-                <span class="ident">diagnostic</span>
+            } <span class="kw">else </span>{
+                diagnostic
             })
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">StdError</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
-        <span class="self">self</span>.<span class="ident">kind</span>.<span class="ident">description</span>()
+<span class="kw">impl </span>StdError <span class="kw">for </span>Error {
+    <span class="kw">fn </span>description(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
+        <span class="self">self</span>.kind.description()
     }
 
-    <span class="kw">fn</span> <span class="ident">cause</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">StdError</span><span class="op">&gt;</span> {
-        <span class="prelude-val">None</span>
-    }
+    <span class="kw">fn </span>cause(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="kw">dyn </span>StdError&gt; {
+        <span class="prelude-val">None
+    </span>}
 }
 
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">kind</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">locations</span>.<span class="ident">is_empty</span>() {
-            <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot; at {}&quot;</span>, <span class="self">self</span>.<span class="ident">locations</span>.<span class="ident">join</span>(<span class="string">&quot;/&quot;</span>))<span class="question-mark">?</span>;
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>Error {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.kind)<span class="question-mark">?</span>;
+        <span class="kw">if </span>!<span class="self">self</span>.locations.is_empty() {
+            <span class="macro">write!</span>(f, <span class="string">&quot; at {}&quot;</span>, <span class="self">self</span>.locations.join(<span class="string">&quot;/&quot;</span>))<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">syn::Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="ident">syn::Error</span>) -&gt; <span class="self">Self</span> {
-        <span class="comment">// This impl assumes there is nothing but the message and span that needs to be preserved</span>
-        <span class="comment">// from the passed-in error. If this changes at some point, a new ErrorKind should be made</span>
-        <span class="comment">// to hold the syn::Error, and this impl should preserve it unmodified while setting its own</span>
-        <span class="comment">// span to be a copy of the passed-in error.</span>
-        <span class="self">Self</span> {
-            <span class="ident">span</span>: <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">span</span>()),
-            ..<span class="ident"><span class="self">Self</span>::custom</span>(<span class="ident">e</span>)
+<span class="kw">impl </span>From&lt;syn::Error&gt; <span class="kw">for </span>Error {
+    <span class="kw">fn </span>from(e: syn::Error) -&gt; <span class="self">Self </span>{
+        <span class="comment">// This impl assumes there is nothing but the message and span that needs to be preserved
+        // from the passed-in error. If this changes at some point, a new ErrorKind should be made
+        // to hold the syn::Error, and this impl should preserve it unmodified while setting its own
+        // span to be a copy of the passed-in error.
+        </span><span class="self">Self </span>{
+            span: <span class="prelude-val">Some</span>(e.span()),
+            ..<span class="self">Self</span>::custom(e)
         }
     }
 }
 
-<span class="comment">// Don&#39;t want to publicly commit to Error supporting equality yet, but</span>
-<span class="comment">// not having it makes testing very difficult. Note that spans are not</span>
-<span class="comment">// considered for equality since that would break testing in most cases.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">kind</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">kind</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">locations</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">locations</span>
+<span class="comment">// Don&#39;t want to publicly commit to Error supporting equality yet, but
+// not having it makes testing very difficult. Note that spans are not
+// considered for equality since that would break testing in most cases.
+</span><span class="attribute">#[cfg(test)]
+</span><span class="kw">impl </span>PartialEq <span class="kw">for </span>Error {
+    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
+        <span class="self">self</span>.kind == other.kind &amp;&amp; <span class="self">self</span>.locations == other.locations
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">impl</span> <span class="ident">Eq</span> <span class="kw">for</span> <span class="ident">Error</span> {}
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">impl </span>Eq <span class="kw">for </span>Error {}
 
-<span class="kw">impl</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">IntoIter</span>;
+<span class="kw">impl </span>IntoIterator <span class="kw">for </span>Error {
+    <span class="kw">type </span>Item = Error;
+    <span class="kw">type </span>IntoIter = IntoIter;
 
-    <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) -&gt; <span class="ident">IntoIter</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ErrorKind::Multiple</span>(<span class="ident">errors</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">kind</span> {
-            <span class="ident">IntoIter</span> {
-                <span class="ident">inner</span>: <span class="ident">IntoIterEnum::Multiple</span>(<span class="ident">errors</span>.<span class="ident">into_iter</span>()),
+    <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; IntoIter {
+        <span class="kw">if let </span>ErrorKind::Multiple(errors) = <span class="self">self</span>.kind {
+            IntoIter {
+                inner: IntoIterEnum::Multiple(errors.into_iter()),
             }
-        } <span class="kw">else</span> {
-            <span class="ident">IntoIter</span> {
-                <span class="ident">inner</span>: <span class="ident">IntoIterEnum::Single</span>(<span class="ident">iter::once</span>(<span class="self">self</span>)),
-            }
-        }
-    }
-}
-
-<span class="kw">enum</span> <span class="ident">IntoIterEnum</span> {
-    <span class="ident">Single</span>(<span class="ident">iter::Once</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>),
-    <span class="ident">Multiple</span>(<span class="ident">vec::IntoIter</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>),
-}
-
-<span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">IntoIterEnum</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Error</span>;
-
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">IntoIterEnum::Single</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">content</span>) =&gt; <span class="ident">content</span>.<span class="ident">next</span>(),
-            <span class="ident">IntoIterEnum::Multiple</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">content</span>) =&gt; <span class="ident">content</span>.<span class="ident">next</span>(),
-        }
-    }
-}
-
-<span class="doccomment">/// An iterator that moves out of an `Error`.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">IntoIter</span> {
-    <span class="ident">inner</span>: <span class="ident">IntoIterEnum</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">IntoIter</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Error</span>;
-
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">next</span>()
-    }
-}
-
-<span class="doccomment">/// Accumulator for errors, for helping call [`Error::multiple`].</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See the docs for [`darling::Error`](Error) for more discussion of error handling with darling.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Panics</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `Accumulator` panics on drop unless [`finish`](Self::finish), [`finish_with`](Self::finish_with),</span>
-<span class="doccomment">/// or [`into_inner`](Self::into_inner) has been called, **even if it contains no errors**.</span>
-<span class="doccomment">/// If you want to discard an `Accumulator` that you know to be empty, use `accumulator.finish().unwrap()`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Example</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # extern crate darling_core as darling;</span>
-<span class="doccomment">/// # struct Thing;</span>
-<span class="doccomment">/// # struct Output;</span>
-<span class="doccomment">/// # impl Thing { fn validate(self) -&gt; darling::Result&lt;Output&gt; { Ok(Output) } }</span>
-<span class="doccomment">/// fn validate_things(inputs: Vec&lt;Thing&gt;) -&gt; darling::Result&lt;Vec&lt;Output&gt;&gt; {</span>
-<span class="doccomment">///     let mut errors = darling::Error::accumulator();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     let outputs = inputs</span>
-<span class="doccomment">///         .into_iter()</span>
-<span class="doccomment">///         .filter_map(|thing| errors.handle_in(|| thing.validate()))</span>
-<span class="doccomment">///         .collect::&lt;Vec&lt;_&gt;&gt;();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     errors.finish()?;</span>
-<span class="doccomment">///     Ok(outputs)</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Accumulator will panic on drop if not defused.&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Accumulator</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>);
-
-<span class="kw">impl</span> <span class="ident">Accumulator</span> {
-    <span class="doccomment">/// Runs a closure, returning the successful value as `Some`, or collecting the error</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The closure&#39;s return type is `darling::Result`, so inside it one can use `?`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle_in</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span>: <span class="ident">FnOnce</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">handle</span>(<span class="ident">f</span>())
-    }
-
-    <span class="doccomment">/// Handles a possible error.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns a successful value as `Some`, or collects the error and returns `None`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">handle</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">result</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">result</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">y</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">y</span>),
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
-                <span class="self">self</span>.<span class="ident">push</span>(<span class="ident">e</span>);
-                <span class="prelude-val">None</span>
+        } <span class="kw">else </span>{
+            IntoIter {
+                inner: IntoIterEnum::Single(iter::once(<span class="self">self</span>)),
             }
         }
     }
+}
 
-    <span class="doccomment">/// Stop accumulating errors, producing `Ok` if there are no errors or producing</span>
-    <span class="doccomment">/// an error with all those encountered by the accumulator.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">finish_with</span>(())
-    }
+<span class="kw">enum </span>IntoIterEnum {
+    Single(iter::Once&lt;Error&gt;),
+    Multiple(vec::IntoIter&lt;Error&gt;),
+}
 
-    <span class="doccomment">/// Bundles the collected errors if there were any, or returns the success value</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Call this at the end of your input processing.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If there were no errors recorded, returns `Ok(success)`.</span>
-    <span class="doccomment">/// Otherwise calls [`Error::multiple`] and returns the result as an `Err`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish_with</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">success</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">errors</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">into_inner</span>();
-        <span class="kw">if</span> <span class="ident">errors</span>.<span class="ident">is_empty</span>() {
-            <span class="prelude-val">Ok</span>(<span class="ident">success</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::multiple</span>(<span class="ident">errors</span>))
+<span class="kw">impl </span>Iterator <span class="kw">for </span>IntoIterEnum {
+    <span class="kw">type </span>Item = Error;
+
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
+            IntoIterEnum::Single(<span class="kw-2">ref mut </span>content) =&gt; content.next(),
+            IntoIterEnum::Multiple(<span class="kw-2">ref mut </span>content) =&gt; content.next(),
         }
-    }
-
-    <span class="kw">fn</span> <span class="ident">errors</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">errors</span>) =&gt; <span class="ident">errors</span>,
-            <span class="prelude-val">None</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;darling internal error: Accumulator accessed after defuse&quot;</span>),
-        }
-    }
-
-    <span class="doccomment">/// Returns the accumulated errors as a `Vec`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This function defuses the drop bomb.</span>
-    <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Accumulated errors should be handled or propagated to the caller&quot;</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">std::mem::replace</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="number">0</span>, <span class="prelude-val">None</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">errors</span>) =&gt; <span class="ident">errors</span>,
-            <span class="prelude-val">None</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;darling internal error: Accumulator accessed after defuse&quot;</span>),
-        }
-    }
-
-    <span class="doccomment">/// Add one error to the collection.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">error</span>: <span class="ident">Error</span>) {
-        <span class="self">self</span>.<span class="ident">errors</span>().<span class="ident">push</span>(<span class="ident">error</span>)
-    }
-
-    <span class="doccomment">/// Finish the current accumulation, and if there are no errors create a new `Self` so processing may continue.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This is shorthand for:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,ignore</span>
-    <span class="doccomment">/// errors.finish()?;</span>
-    <span class="doccomment">/// errors = Error::accumulator();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Drop Behavior</span>
-    <span class="doccomment">/// This function returns a new [`Accumulator`] in the success case.</span>
-    <span class="doccomment">/// This new accumulator is &quot;armed&quot; and will detonate if dropped without being finished.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Example</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// # extern crate darling_core as darling;</span>
-    <span class="doccomment">/// # struct Thing;</span>
-    <span class="doccomment">/// # struct Output;</span>
-    <span class="doccomment">/// # impl Thing { fn validate(&amp;self) -&gt; darling::Result&lt;Output&gt; { Ok(Output) } }</span>
-    <span class="doccomment">/// fn validate(lorem_inputs: &amp;[Thing], ipsum_inputs: &amp;[Thing])</span>
-    <span class="doccomment">///             -&gt; darling::Result&lt;(Vec&lt;Output&gt;, Vec&lt;Output&gt;)&gt; {</span>
-    <span class="doccomment">///     let mut errors = darling::Error::accumulator();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     let lorems = lorem_inputs.iter().filter_map(|l| {</span>
-    <span class="doccomment">///         errors.handle(l.validate())</span>
-    <span class="doccomment">///     }).collect();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     errors = errors.checkpoint()?;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     let ipsums = ipsum_inputs.iter().filter_map(|l| {</span>
-    <span class="doccomment">///         errors.handle(l.validate())</span>
-    <span class="doccomment">///     }).collect();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     errors.finish_with((lorems, ipsums))</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// # validate(&amp;[], &amp;[]).unwrap();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">checkpoint</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Accumulator</span><span class="op">&gt;</span> {
-        <span class="comment">// The doc comment says on success we &quot;return the Accumulator for future use&quot;.</span>
-        <span class="comment">// Actually, we have consumed it by feeding it to finish so we make a fresh one.</span>
-        <span class="comment">// This is OK since by definition of the success path, it was empty on entry.</span>
-        <span class="self">self</span>.<span class="ident">finish</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::default</span>())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Accumulator</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident">Accumulator</span>(<span class="prelude-val">Some</span>(<span class="macro">vec!</span>[]))
+<span class="doccomment">/// An iterator that moves out of an `Error`.
+</span><span class="kw">pub struct </span>IntoIter {
+    inner: IntoIterEnum,
+}
+
+<span class="kw">impl </span>Iterator <span class="kw">for </span>IntoIter {
+    <span class="kw">type </span>Item = Error;
+
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Error&gt; {
+        <span class="self">self</span>.inner.next()
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Extend</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Accumulator</span> {
-    <span class="kw">fn</span> <span class="ident">extend</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">I</span>)
-    <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Accumulator for errors, for helping call [`Error::multiple`].
+///
+/// See the docs for [`darling::Error`](Error) for more discussion of error handling with darling.
+///
+/// # Panics
+///
+/// `Accumulator` panics on drop unless [`finish`](Self::finish), [`finish_with`](Self::finish_with),
+/// or [`into_inner`](Self::into_inner) has been called, **even if it contains no errors**.
+/// If you want to discard an `Accumulator` that you know to be empty, use `accumulator.finish().unwrap()`.
+///
+/// # Example
+///
+/// ```
+/// # extern crate darling_core as darling;
+/// # struct Thing;
+/// # struct Output;
+/// # impl Thing { fn validate(self) -&gt; darling::Result&lt;Output&gt; { Ok(Output) } }
+/// fn validate_things(inputs: Vec&lt;Thing&gt;) -&gt; darling::Result&lt;Vec&lt;Output&gt;&gt; {
+///     let mut errors = darling::Error::accumulator();
+///
+///     let outputs = inputs
+///         .into_iter()
+///         .filter_map(|thing| errors.handle_in(|| thing.validate()))
+///         .collect::&lt;Vec&lt;_&gt;&gt;();
+///
+///     errors.finish()?;
+///     Ok(outputs)
+/// }
+/// ```
+</span><span class="attribute">#[derive(Debug)]
+#[must_use = <span class="string">&quot;Accumulator will panic on drop if not defused.&quot;</span>]
+</span><span class="kw">pub struct </span>Accumulator(<span class="prelude-ty">Option</span>&lt;Vec&lt;Error&gt;&gt;);
+
+<span class="kw">impl </span>Accumulator {
+    <span class="doccomment">/// Runs a closure, returning the successful value as `Some`, or collecting the error
+    ///
+    /// The closure&#39;s return type is `darling::Result`, so inside it one can use `?`.
+    </span><span class="kw">pub fn </span>handle_in&lt;T, F: FnOnce() -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: F) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="self">self</span>.handle(f())
+    }
+
+    <span class="doccomment">/// Handles a possible error.
+    ///
+    /// Returns a successful value as `Some`, or collects the error and returns `None`.
+    </span><span class="kw">pub fn </span>handle&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, result: <span class="prelude-ty">Result</span>&lt;T&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="kw">match </span>result {
+            <span class="prelude-val">Ok</span>(y) =&gt; <span class="prelude-val">Some</span>(y),
+            <span class="prelude-val">Err</span>(e) =&gt; {
+                <span class="self">self</span>.push(e);
+                <span class="prelude-val">None
+            </span>}
+        }
+    }
+
+    <span class="doccomment">/// Stop accumulating errors, producing `Ok` if there are no errors or producing
+    /// an error with all those encountered by the accumulator.
+    </span><span class="kw">pub fn </span>finish(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.finish_with(())
+    }
+
+    <span class="doccomment">/// Bundles the collected errors if there were any, or returns the success value
+    ///
+    /// Call this at the end of your input processing.
+    ///
+    /// If there were no errors recorded, returns `Ok(success)`.
+    /// Otherwise calls [`Error::multiple`] and returns the result as an `Err`.
+    </span><span class="kw">pub fn </span>finish_with&lt;T&gt;(<span class="self">self</span>, success: T) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt; {
+        <span class="kw">let </span>errors = <span class="self">self</span>.into_inner();
+        <span class="kw">if </span>errors.is_empty() {
+            <span class="prelude-val">Ok</span>(success)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::multiple(errors))
+        }
+    }
+
+    <span class="kw">fn </span>errors(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Vec&lt;Error&gt; {
+        <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0 </span>{
+            <span class="prelude-val">Some</span>(errors) =&gt; errors,
+            <span class="prelude-val">None </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;darling internal error: Accumulator accessed after defuse&quot;</span>),
+        }
+    }
+
+    <span class="doccomment">/// Returns the accumulated errors as a `Vec`.
+    ///
+    /// This function defuses the drop bomb.
+    </span><span class="attribute">#[must_use = <span class="string">&quot;Accumulated errors should be handled or propagated to the caller&quot;</span>]
+    </span><span class="kw">pub fn </span>into_inner(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Vec&lt;Error&gt; {
+        <span class="kw">match </span>std::mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0</span>, <span class="prelude-val">None</span>) {
+            <span class="prelude-val">Some</span>(errors) =&gt; errors,
+            <span class="prelude-val">None </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;darling internal error: Accumulator accessed after defuse&quot;</span>),
+        }
+    }
+
+    <span class="doccomment">/// Add one error to the collection.
+    </span><span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, error: Error) {
+        <span class="self">self</span>.errors().push(error)
+    }
+
+    <span class="doccomment">/// Finish the current accumulation, and if there are no errors create a new `Self` so processing may continue.
+    ///
+    /// This is shorthand for:
+    ///
+    /// ```rust,ignore
+    /// errors.finish()?;
+    /// errors = Error::accumulator();
+    /// ```
+    ///
+    /// # Drop Behavior
+    /// This function returns a new [`Accumulator`] in the success case.
+    /// This new accumulator is &quot;armed&quot; and will detonate if dropped without being finished.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # extern crate darling_core as darling;
+    /// # struct Thing;
+    /// # struct Output;
+    /// # impl Thing { fn validate(&amp;self) -&gt; darling::Result&lt;Output&gt; { Ok(Output) } }
+    /// fn validate(lorem_inputs: &amp;[Thing], ipsum_inputs: &amp;[Thing])
+    ///             -&gt; darling::Result&lt;(Vec&lt;Output&gt;, Vec&lt;Output&gt;)&gt; {
+    ///     let mut errors = darling::Error::accumulator();
+    ///
+    ///     let lorems = lorem_inputs.iter().filter_map(|l| {
+    ///         errors.handle(l.validate())
+    ///     }).collect();
+    ///
+    ///     errors = errors.checkpoint()?;
+    ///
+    ///     let ipsums = ipsum_inputs.iter().filter_map(|l| {
+    ///         errors.handle(l.validate())
+    ///     }).collect();
+    ///
+    ///     errors.finish_with((lorems, ipsums))
+    /// }
+    /// # validate(&amp;[], &amp;[]).unwrap();
+    /// ```
+    </span><span class="kw">pub fn </span>checkpoint(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Accumulator&gt; {
+        <span class="comment">// The doc comment says on success we &quot;return the Accumulator for future use&quot;.
+        // Actually, we have consumed it by feeding it to finish so we make a fresh one.
+        // This is OK since by definition of the success path, it was empty on entry.
+        </span><span class="self">self</span>.finish()<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::default())
+    }
+}
+
+<span class="kw">impl </span>Default <span class="kw">for </span>Accumulator {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        Accumulator(<span class="prelude-val">Some</span>(<span class="macro">vec!</span>[]))
+    }
+}
+
+<span class="kw">impl </span>Extend&lt;Error&gt; <span class="kw">for </span>Accumulator {
+    <span class="kw">fn </span>extend&lt;I&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: I)
+    <span class="kw">where
+        </span>I: IntoIterator&lt;Item = Error&gt;,
     {
-        <span class="self">self</span>.<span class="ident">errors</span>().<span class="ident">extend</span>(<span class="ident">iter</span>)
+        <span class="self">self</span>.errors().extend(iter)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Accumulator</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">errors</span>) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="kw">match</span> <span class="ident">errors</span>.<span class="ident">len</span>() {
-                <span class="number">0</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;darling::error::Accumulator dropped without being finished&quot;</span>),
-                <span class="ident">error_count</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;darling::error::Accumulator dropped without being finished. {} errors were lost.&quot;</span>, <span class="ident">error_count</span>)
+<span class="kw">impl </span>Drop <span class="kw">for </span>Accumulator {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(errors) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0 </span>{
+            <span class="kw">match </span>errors.len() {
+                <span class="number">0 </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;darling::error::Accumulator dropped without being finished&quot;</span>),
+                error_count =&gt; <span class="macro">panic!</span>(<span class="string">&quot;darling::error::Accumulator dropped without being finished. {} errors were lost.&quot;</span>, error_count)
             }
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Error</span>;
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use </span><span class="kw">super</span>::Error;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">flatten_noop</span>() {
-        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::duplicate_field</span>(<span class="string">&quot;hello&quot;</span>).<span class="ident">at</span>(<span class="string">&quot;world&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">err</span>.<span class="ident">clone</span>().<span class="ident">flatten</span>(), <span class="ident">err</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>flatten_noop() {
+        <span class="kw">let </span>err = Error::duplicate_field(<span class="string">&quot;hello&quot;</span>).at(<span class="string">&quot;world&quot;</span>);
+        <span class="macro">assert_eq!</span>(err.clone().flatten(), err);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">flatten_simple</span>() {
-        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::multiple</span>(<span class="macro">vec!</span>[
-            <span class="ident">Error::unknown_field</span>(<span class="string">&quot;hello&quot;</span>).<span class="ident">at</span>(<span class="string">&quot;world&quot;</span>),
-            <span class="ident">Error::missing_field</span>(<span class="string">&quot;hell_no&quot;</span>).<span class="ident">at</span>(<span class="string">&quot;world&quot;</span>),
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>flatten_simple() {
+        <span class="kw">let </span>err = Error::multiple(<span class="macro">vec!</span>[
+            Error::unknown_field(<span class="string">&quot;hello&quot;</span>).at(<span class="string">&quot;world&quot;</span>),
+            Error::missing_field(<span class="string">&quot;hell_no&quot;</span>).at(<span class="string">&quot;world&quot;</span>),
         ])
-        .<span class="ident">at</span>(<span class="string">&quot;foo&quot;</span>)
-        .<span class="ident">flatten</span>();
+        .at(<span class="string">&quot;foo&quot;</span>)
+        .flatten();
 
-        <span class="macro">assert!</span>(<span class="ident">err</span>.<span class="ident">location</span>().<span class="ident">is_empty</span>());
+        <span class="macro">assert!</span>(err.location().is_empty());
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">err_iter</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">into_iter</span>();
+        <span class="kw">let </span><span class="kw-2">mut </span>err_iter = err.into_iter();
 
-        <span class="kw">let</span> <span class="ident">first</span> <span class="op">=</span> <span class="ident">err_iter</span>.<span class="ident">next</span>();
-        <span class="macro">assert!</span>(<span class="ident">first</span>.<span class="ident">is_some</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">first</span>.<span class="ident">unwrap</span>().<span class="ident">location</span>(), <span class="macro">vec!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;world&quot;</span>]);
+        <span class="kw">let </span>first = err_iter.next();
+        <span class="macro">assert!</span>(first.is_some());
+        <span class="macro">assert_eq!</span>(first.unwrap().location(), <span class="macro">vec!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;world&quot;</span>]);
 
-        <span class="kw">let</span> <span class="ident">second</span> <span class="op">=</span> <span class="ident">err_iter</span>.<span class="ident">next</span>();
-        <span class="macro">assert!</span>(<span class="ident">second</span>.<span class="ident">is_some</span>());
+        <span class="kw">let </span>second = err_iter.next();
+        <span class="macro">assert!</span>(second.is_some());
 
-        <span class="macro">assert_eq!</span>(<span class="ident">second</span>.<span class="ident">unwrap</span>().<span class="ident">location</span>(), <span class="macro">vec!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;world&quot;</span>]);
+        <span class="macro">assert_eq!</span>(second.unwrap().location(), <span class="macro">vec!</span>[<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;world&quot;</span>]);
 
-        <span class="macro">assert!</span>(<span class="ident">err_iter</span>.<span class="ident">next</span>().<span class="ident">is_none</span>());
+        <span class="macro">assert!</span>(err_iter.next().is_none());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">len_single</span>() {
-        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::duplicate_field</span>(<span class="string">&quot;hello&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="number">1</span>, <span class="ident">err</span>.<span class="ident">len</span>());
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>len_single() {
+        <span class="kw">let </span>err = Error::duplicate_field(<span class="string">&quot;hello&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="number">1</span>, err.len());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">len_multiple</span>() {
-        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::multiple</span>(<span class="macro">vec!</span>[
-            <span class="ident">Error::duplicate_field</span>(<span class="string">&quot;hello&quot;</span>),
-            <span class="ident">Error::missing_field</span>(<span class="string">&quot;hell_no&quot;</span>),
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>len_multiple() {
+        <span class="kw">let </span>err = Error::multiple(<span class="macro">vec!</span>[
+            Error::duplicate_field(<span class="string">&quot;hello&quot;</span>),
+            Error::missing_field(<span class="string">&quot;hell_no&quot;</span>),
         ]);
-        <span class="macro">assert_eq!</span>(<span class="number">2</span>, <span class="ident">err</span>.<span class="ident">len</span>());
+        <span class="macro">assert_eq!</span>(<span class="number">2</span>, err.len());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">len_nested</span>() {
-        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">Error::multiple</span>(<span class="macro">vec!</span>[
-            <span class="ident">Error::duplicate_field</span>(<span class="string">&quot;hello&quot;</span>),
-            <span class="ident">Error::multiple</span>(<span class="macro">vec!</span>[
-                <span class="ident">Error::duplicate_field</span>(<span class="string">&quot;hi&quot;</span>),
-                <span class="ident">Error::missing_field</span>(<span class="string">&quot;bye&quot;</span>),
-                <span class="ident">Error::multiple</span>(<span class="macro">vec!</span>[<span class="ident">Error::duplicate_field</span>(<span class="string">&quot;whatsup&quot;</span>)]),
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>len_nested() {
+        <span class="kw">let </span>err = Error::multiple(<span class="macro">vec!</span>[
+            Error::duplicate_field(<span class="string">&quot;hello&quot;</span>),
+            Error::multiple(<span class="macro">vec!</span>[
+                Error::duplicate_field(<span class="string">&quot;hi&quot;</span>),
+                Error::missing_field(<span class="string">&quot;bye&quot;</span>),
+                Error::multiple(<span class="macro">vec!</span>[Error::duplicate_field(<span class="string">&quot;whatsup&quot;</span>)]),
             ]),
         ]);
 
-        <span class="macro">assert_eq!</span>(<span class="number">4</span>, <span class="ident">err</span>.<span class="ident">len</span>());
+        <span class="macro">assert_eq!</span>(<span class="number">4</span>, err.len());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">accum_ok</span>() {
-        <span class="kw">let</span> <span class="ident">errs</span> <span class="op">=</span> <span class="ident">Error::accumulator</span>();
-        <span class="macro">assert_eq!</span>(<span class="string">&quot;test&quot;</span>, <span class="ident">errs</span>.<span class="ident">finish_with</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">unwrap</span>());
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>accum_ok() {
+        <span class="kw">let </span>errs = Error::accumulator();
+        <span class="macro">assert_eq!</span>(<span class="string">&quot;test&quot;</span>, errs.finish_with(<span class="string">&quot;test&quot;</span>).unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">accum_errr</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errs</span> <span class="op">=</span> <span class="ident">Error::accumulator</span>();
-        <span class="ident">errs</span>.<span class="ident">push</span>(<span class="ident">Error::custom</span>(<span class="string">&quot;foo!&quot;</span>));
-        <span class="ident">errs</span>.<span class="ident">finish</span>().<span class="ident">unwrap_err</span>();
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>accum_errr() {
+        <span class="kw">let </span><span class="kw-2">mut </span>errs = Error::accumulator();
+        errs.push(Error::custom(<span class="string">&quot;foo!&quot;</span>));
+        errs.finish().unwrap_err();
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">accum_into_inner</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errs</span> <span class="op">=</span> <span class="ident">Error::accumulator</span>();
-        <span class="ident">errs</span>.<span class="ident">push</span>(<span class="ident">Error::custom</span>(<span class="string">&quot;foo!&quot;</span>));
-        <span class="kw">let</span> <span class="ident">errs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">errs</span>.<span class="ident">into_inner</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">errs</span>.<span class="ident">len</span>(), <span class="number">1</span>);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>accum_into_inner() {
+        <span class="kw">let </span><span class="kw-2">mut </span>errs = Error::accumulator();
+        errs.push(Error::custom(<span class="string">&quot;foo!&quot;</span>));
+        <span class="kw">let </span>errs: Vec&lt;<span class="kw">_</span>&gt; = errs.into_inner();
+        <span class="macro">assert_eq!</span>(errs.len(), <span class="number">1</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">should_panic</span>(<span class="ident">expected</span> <span class="op">=</span> <span class="string">&quot;Accumulator dropped&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">accum_drop_panic</span>() {
-        <span class="kw">let</span> <span class="ident">_errs</span> <span class="op">=</span> <span class="ident">Error::accumulator</span>();
+    <span class="attribute">#[test]
+    #[should_panic(expected = <span class="string">&quot;Accumulator dropped&quot;</span>)]
+    </span><span class="kw">fn </span>accum_drop_panic() {
+        <span class="kw">let </span>_errs = Error::accumulator();
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">should_panic</span>(<span class="ident">expected</span> <span class="op">=</span> <span class="string">&quot;2 errors&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">accum_drop_panic_with_error_count</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errors</span> <span class="op">=</span> <span class="ident">Error::accumulator</span>();
-        <span class="ident">errors</span>.<span class="ident">push</span>(<span class="ident">Error::custom</span>(<span class="string">&quot;first&quot;</span>));
-        <span class="ident">errors</span>.<span class="ident">push</span>(<span class="ident">Error::custom</span>(<span class="string">&quot;second&quot;</span>));
+    <span class="attribute">#[test]
+    #[should_panic(expected = <span class="string">&quot;2 errors&quot;</span>)]
+    </span><span class="kw">fn </span>accum_drop_panic_with_error_count() {
+        <span class="kw">let </span><span class="kw-2">mut </span>errors = Error::accumulator();
+        errors.push(Error::custom(<span class="string">&quot;first&quot;</span>));
+        errors.push(Error::custom(<span class="string">&quot;second&quot;</span>));
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">accum_checkpoint_error</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errs</span> <span class="op">=</span> <span class="ident">Error::accumulator</span>();
-        <span class="ident">errs</span>.<span class="ident">push</span>(<span class="ident">Error::custom</span>(<span class="string">&quot;foo!&quot;</span>));
-        <span class="ident">errs</span>.<span class="ident">checkpoint</span>().<span class="ident">unwrap_err</span>();
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>accum_checkpoint_error() {
+        <span class="kw">let </span><span class="kw-2">mut </span>errs = Error::accumulator();
+        errs.push(Error::custom(<span class="string">&quot;foo!&quot;</span>));
+        errs.checkpoint().unwrap_err();
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">should_panic</span>(<span class="ident">expected</span> <span class="op">=</span> <span class="string">&quot;Accumulator dropped&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">accum_checkpoint_drop_panic</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errs</span> <span class="op">=</span> <span class="ident">Error::accumulator</span>();
-        <span class="ident">errs</span> <span class="op">=</span> <span class="ident">errs</span>.<span class="ident">checkpoint</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">errs</span>;
+    <span class="attribute">#[test]
+    #[should_panic(expected = <span class="string">&quot;Accumulator dropped&quot;</span>)]
+    </span><span class="kw">fn </span>accum_checkpoint_drop_panic() {
+        <span class="kw">let </span><span class="kw-2">mut </span>errs = Error::accumulator();
+        errs = errs.checkpoint().unwrap();
+        <span class="kw">let _ </span>= errs;
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

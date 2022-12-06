@@ -5,7 +5,6 @@
         <meta charset="UTF-8">
         <title>Introduction - SuperStruct Guide</title>
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -28,13 +27,13 @@
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -50,7 +49,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -62,7 +61,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -93,7 +92,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -124,7 +123,7 @@
                     </div>
                 </div>
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -144,8 +143,7 @@ In the first version of the program you only allow users to specify a <code>star
 </span>pub struct Request {
     start: u16,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>After a while you realise that it would be nice if users could also specify an <code>end: u16</code> in their
 requests, so you would like to change the definition of <code>Request</code> to:</p>
 <pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
@@ -154,8 +152,7 @@ requests, so you would like to change the definition of <code>Request</code> to:
     start: u16,
     end: u16,
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Now imagine that your program needs to work with old versions of <code>Request</code> as well as new, i.e.
 it needs to be backwards-compatible. This is reasonably common when databases are involved and
 you need to write schema migrations, or when working with network protocols.</p>
@@ -178,8 +175,7 @@ fn main() {
     assert_eq!(r1.start(), r2.start());
     assert_eq!(r1.end(), Err(()));
     assert_eq!(r2.end(), Ok(&amp;10));
-}
-</code></pre>
+}</code></pre>
 <p>The <code>superstruct</code> definition generates:</p>
 <ul>
 <li>Two structs <code>RequestV1</code> and <code>RequestV2</code> where the <code>end</code> field is only present in <code>RequestV2</code>.</li>
@@ -228,15 +224,15 @@ control <code>superstruct</code>'s behaviour, including renaming getters, workin
 
         </div>
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
     </body>

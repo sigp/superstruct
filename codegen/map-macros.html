@@ -5,7 +5,6 @@
         <meta charset="UTF-8">
         <title>Mapping macros - SuperStruct Guide</title>
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -28,13 +27,13 @@
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -50,7 +49,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -62,7 +61,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -93,7 +92,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -124,7 +123,7 @@
                     </div>
                 </div>
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -149,8 +148,7 @@ struct Foo {
     #[only(Second)]
     y: u8
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The mapping macro for <code>Foo</code> will be:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -162,8 +160,7 @@ struct Foo {
         }
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>i.e. <code>map_foo!</code> is a macro taking two arguments:</p>
 <ul>
 <li><code>value</code>: an expression which must be of type <code>Foo</code>.</li>
@@ -188,8 +185,7 @@ of the <code>First</code> branch.</li>
         })
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Although the type of <code>inner</code> could be <code>FooFirst</code> or <code>FooSecond</code>, both have an <code>x</code> field, so it is
 legal to increment it. The <code>constructor</code> is then used to re-construct an instance of <code>Foo</code> by
 injecting the updated <code>inner</code> value. If an invalid closure is provided then the type errors may
@@ -214,8 +210,7 @@ on the <code>Ref</code>/<code>RefMut</code> type.</p>
         })
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="mapping-into-other-types"><a class="header" href="#mapping-into-other-types">Mapping into other types</a></h2>
 <p>Mappings can also be generated between two <code>superstruct</code>s with identically named variants.</p>
 <p>These mapping macros are available for the top-level enum, <code>Ref</code> and <code>RefMut</code>, and take the same
@@ -260,8 +255,7 @@ fn thing1_ref_mut_to_thing2_ref_mut&lt;'a&gt;(thing1: Thing1RefMut&lt;'a&gt;) -&
         cons(&amp;mut inner.thing2)
     })
 }
-<span class="boring">}
-</span></code></pre></pre>
+<span class="boring">}</span></code></pre></pre>
 <h2 id="naming"><a class="header" href="#naming">Naming</a></h2>
 <p>Type names are converted from <code>CamelCase</code> to <code>snake_case</code> on a best-effort basis. E.g.</p>
 <ul>
@@ -306,15 +300,15 @@ defining regular types.</li>
 
         </div>
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
     </body>
