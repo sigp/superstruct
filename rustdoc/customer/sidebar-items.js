@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Customer","CustomerRef","CustomerRefMut"],"macro":["map_customer","map_customer_ref","map_customer_ref_mut"],"struct":["CustomerV1","CustomerV2","CustomerV3"]};

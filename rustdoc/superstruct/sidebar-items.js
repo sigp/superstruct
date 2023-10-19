@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"attr":[["superstruct",""]]};
+window.SIDEBAR_ITEMS = {"attr":["superstruct"]};

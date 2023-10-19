@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Request",""],["RequestRef",""],["RequestRefMut",""]],"macro":[["map_request",""],["map_request_ref",""],["map_request_ref_mut",""]],"struct":[["RequestV1",""],["RequestV2",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Request","RequestRef","RequestRefMut"],"macro":["map_request","map_request_ref","map_request_ref_mut"],"struct":["RequestV1","RequestV2"]};
