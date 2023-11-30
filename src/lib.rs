@@ -26,7 +26,8 @@ mod utils;
 #[derive(Debug, FromMeta)]
 struct StructOpts {
     /// List of variant names of the superstruct being derived.
-    variants: IdentList,
+    #[darling(default)]
+    variants: Option<IdentList>,
     /// List of attributes to apply to the variant structs.
     #[darling(default)]
     variant_attributes: Option<NestedMetaList>,
@@ -60,6 +61,18 @@ struct StructOpts {
     /// List of other superstruct types to generate mappings into from RefMut.
     #[darling(default)]
     map_ref_mut_into: Option<IdentList>,
+
+    /*
+     * FEATURE EXPERIMENT
+     */
+    #[darling(default)]
+    variants_and_features_from: Option<IdentList>,
+    #[darling(default)]
+    feature_dependencies: Option<IdentList>,
+    #[darling(default)]
+    variant_type: Option<IdentList>,
+    #[darling(default)]
+    feature_type: Option<IdentList>,
 }
 
 /// Field-level configuration.
@@ -71,6 +84,14 @@ struct FieldOpts {
     getter: Option<GetterOpts>,
     #[darling(default)]
     partial_getter: Option<GetterOpts>,
+
+    /*
+     * FEATURE EXPERIMENT
+     */
+    #[darling(default)]
+    from: Option<IdentList>,
+    #[darling(default)]
+    until: Option<IdentList>,
 }
 
 /// Getter configuration for a specific field
@@ -132,6 +153,21 @@ impl FieldData {
     }
 }
 
+fn get_variant_and_feature_names(opts: &StructOpts) -> (Vec<Ident>, Option<Vec<Ident>>) {
+    // Fixed list of variants.
+    if let Some(variants) = &opts.variants {
+        assert!(
+            opts.variants_and_features_from.is_none(),
+            "cannot have variants and variants_and_features_from"
+        );
+        return (variants.idents.clone(), None);
+    }
+
+    // Dynamic list of variants and features.
+
+    todo!()
+}
+
 #[proc_macro_attribute]
 pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let attr_args = parse_macro_input!(args as AttributeArgs);
@@ -150,7 +186,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let mk_struct_name = |variant_name: &Ident| format_ident!("{}{}", type_name, variant_name);
 
-    let variant_names = &opts.variants.idents;
+    let (variant_names, feature_names) = get_variant_and_feature_names(&opts);
     let struct_names = variant_names.iter().map(mk_struct_name).collect_vec();
 
     // Vec of field data.
@@ -515,7 +551,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             &ref_mut_ty_name,
             num_generics,
             &struct_names,
-            variant_names,
+            &variant_names,
             &opts,
             &mut output_items,
         );
