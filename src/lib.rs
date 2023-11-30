@@ -12,8 +12,8 @@ use quote::{format_ident, quote, ToTokens};
 use std::collections::HashMap;
 use std::iter::{self, FromIterator};
 use syn::{
-    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
-    Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
+    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemConst,
+    ItemStruct, Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
 };
 
 mod attributes;
@@ -73,6 +73,12 @@ struct StructOpts {
     variant_type: Option<IdentList>,
     #[darling(default)]
     feature_type: Option<IdentList>,
+
+    // Separate invocations
+    #[darling(default)]
+    variants_and_features_decl: Option<String>,
+    #[darling(default)]
+    feature_dependencies_decl: Option<String>,
 }
 
 /// Field-level configuration.
@@ -164,13 +170,71 @@ fn get_variant_and_feature_names(opts: &StructOpts) -> (Vec<Ident>, Option<Vec<I
     }
 
     // Dynamic list of variants and features.
-
+    // TODO:
+    // - read variants/features order from macro_state
+    // - generate a list of idents for variants & features
+    // - (optional) sanity check the variant order using the feature dependencies
     todo!()
 }
 
 #[proc_macro_attribute]
 pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let attr_args = parse_macro_input!(args as AttributeArgs);
+    let opts = StructOpts::from_list(&attr_args).unwrap();
+
+    // Early return for "helper" invocations.
+    if opts.variants_and_features_decl.is_some() || opts.feature_dependencies_decl.is_some() {
+        let input2 = input.clone();
+        let item = parse_macro_input!(input2 as ItemConst);
+
+        let Expr::Reference(ref_expr) = *item.expr else {
+            panic!("ref bad");
+        };
+        let Expr::Array(array_expr) = *ref_expr.expr else {
+            panic!("bad");
+        };
+
+        fn path_to_string(e: &Expr) -> String {
+            let Expr::Path(path) = e else {
+                panic!("path bad");
+            };
+            let last_segment_str = path.path.segments.iter().last().unwrap().ident.to_string();
+            last_segment_str
+        }
+
+        let data: Vec<(String, Vec<String>)> = array_expr
+            .elems
+            .iter()
+            .map(|expr| {
+                let Expr::Tuple(tuple_expr) = expr else {
+                    panic!("bad2");
+                };
+                let tuple_parts = tuple_expr.elems.iter().cloned().collect::<Vec<_>>();
+                assert_eq!(tuple_parts.len(), 2);
+
+                let variant_name = path_to_string(&tuple_parts[0]);
+
+                let Expr::Reference(feature_ref_expr) = tuple_parts[1].clone() else {
+                    panic!("ref bad");
+                };
+                let Expr::Array(feature_array_expr) = *feature_ref_expr.expr else {
+                    panic!("bad");
+                };
+                let feature_names = feature_array_expr
+                    .elems
+                    .iter()
+                    .map(|expr| path_to_string(expr))
+                    .collect::<Vec<_>>();
+
+                (variant_name, feature_names)
+            })
+            .collect::<Vec<_>>();
+
+        // TODO: write data as JSON using macro_state
+
+        return input;
+    }
+
     let item = parse_macro_input!(input as ItemStruct);
 
     let type_name = &item.ident;
@@ -179,8 +243,6 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let decl_generics = &item.generics;
     // Generics used for the impl block.
     let (impl_generics, ty_generics, where_clause) = &item.generics.split_for_impl();
-
-    let opts = StructOpts::from_list(&attr_args).unwrap();
 
     let mut output_items: Vec<TokenStream> = vec![];
 

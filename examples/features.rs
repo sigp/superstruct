@@ -1,5 +1,7 @@
+use serde::{Deserialize, Serialize};
 use superstruct::superstruct;
 
+#[derive(Serialize, Deserialize)]
 enum ForkName {
     Bellatrix,
     Capella,
@@ -7,6 +9,7 @@ enum ForkName {
     Electra,
 }
 
+#[derive(Serialize, Deserialize)]
 enum FeatureName {
     Merge,
     Withdrawals,
@@ -15,25 +18,26 @@ enum FeatureName {
     Verge,
 }
 
-#[superstruct(FORK_ORDER)]
-const FORK_ORDER: Vec<(ForkName, Vec<FeatureName>)> = vec![
-    (ForkName::Bellatrix, vec![FeatureName::Merge]),
-    (ForkName::Capella, vec![FeatureName::Withdrawals]),
+#[superstruct(variants_and_features_decl = "fork_order")]
+const FORK_ORDER: &[(ForkName, &[FeatureName])] = &[
+    (ForkName::Bellatrix, &[FeatureName::Merge]),
+    (ForkName::Capella, &[FeatureName::Withdrawals]),
     (
         ForkName::Electra,
-        vec![FeatureName::EIP6110, FeatureName::Verge],
+        &[FeatureName::EIP6110, FeatureName::Verge],
     ),
 ];
 
-const FEATURE_DEPENDENCIES: Vec<(FeatureName, Vec<FeatureName>)> = vec![
-    (FeatureName::Withdrawals, vec![FeatureName::Merge]),
-    (FeatureName::Blobs, vec![FeatureName::Withdrawals]),
-    (FeatureName::EIP6110, vec![FeatureName::Merge]),
-    (FeatureName::Verge, vec![FeatureName::Merge]),
+#[superstruct(feature_dependencies_decl = "feature_dependencies")]
+const FEATURE_DEPENDENCIES: &[(FeatureName, &[FeatureName])] = &[
+    (FeatureName::Withdrawals, &[FeatureName::Merge]),
+    (FeatureName::Blobs, &[FeatureName::Withdrawals]),
+    (FeatureName::EIP6110, &[FeatureName::Merge]),
+    (FeatureName::Verge, &[FeatureName::Merge]),
 ];
 
 #[superstruct(
-    variants_and_features_from(FORK_NAME),
+    variants_and_features_from(FORK_ORDER),
     feature_dependencies(FEATURE_DEPENDENCIES),
     variant_type(ForkName),
     feature_type(FeatureName)
