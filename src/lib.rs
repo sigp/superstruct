@@ -12,8 +12,8 @@ use quote::{format_ident, quote, ToTokens};
 use std::collections::HashMap;
 use std::iter::{self, FromIterator};
 use syn::{
-    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
-    Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
+    parse2, parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident,
+    ItemEnum, ItemStruct, Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
 };
 
 mod attributes;
@@ -65,6 +65,8 @@ struct StructOpts {
 /// Field-level configuration.
 #[derive(Debug, Default, FromMeta)]
 struct FieldOpts {
+    #[darling(default)]
+    flatten: bool,
     #[darling(default)]
     only: Option<HashMap<Ident, ()>>,
     #[darling(default)]
@@ -193,20 +195,62 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             panic!("can't configure `only` and `getter` on the same field");
         } else if field_opts.only.is_none() && field_opts.partial_getter.is_some() {
             panic!("can't set `partial_getter` options on common field");
+        } else if field_opts.flatten && field_opts.only.is_some() {
+            panic!("can't set `flatten` and `only` on the same field");
+        } else if field_opts.flatten && field_opts.getter.is_some() {
+            panic!("can't set `flatten` and `getter` on the same field");
+        } else if field_opts.flatten && field_opts.partial_getter.is_some() {
+            panic!("can't set `flatten` and `partial_getter` on the same field");
         }
 
         let only = field_opts.only.map(|only| only.keys().cloned().collect());
         let getter_opts = field_opts.getter.unwrap_or_default();
         let partial_getter_opts = field_opts.partial_getter.unwrap_or_default();
 
-        // Add to list of all fields
-        fields.push(FieldData {
-            name,
-            field: output_field,
-            only,
-            getter_opts,
-            partial_getter_opts,
-        });
+        if field_opts.flatten {
+            // Parse the inner type, making sure it's an enum.
+            let ty = &output_field.ty;
+
+            let inner_enum: ItemEnum = parse2(output_field.ty.to_token_stream())
+                .expect(format!("inner type must be an enum {ty:?}").as_str());
+
+            // Extract the names of the variants for the inner enum.
+            let variant_names_inner: Vec<_> = inner_enum
+                .variants
+                .iter()
+                .map(|v| v.ident.clone())
+                .collect();
+
+            // Compare the sets of variant names.
+            assert_eq!(
+                variant_names, &variant_names_inner,
+                "variant names must match"
+            );
+
+            for variant in inner_enum.variants {
+                assert!(
+                    variant.fields.len() == 1,
+                    "only one field allowed in flattened enum variants"
+                );
+                let inner_field = variant.fields.into_iter().next().unwrap();
+                // Add the variant name as a suffix to the getter name.
+                fields.push(FieldData {
+                    name: format_ident!("{}_{}", name, variant.ident.to_string().to_lowercase()),
+                    field: inner_field,
+                    only: None,
+                    getter_opts: <_>::default(),
+                    partial_getter_opts: <_>::default(),
+                });
+            }
+        } else {
+            fields.push(FieldData {
+                name,
+                field: output_field,
+                only,
+                getter_opts,
+                partial_getter_opts,
+            });
+        }
     }
 
     // Generate structs for all of the variants.
