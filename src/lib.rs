@@ -66,6 +66,9 @@ struct StructOpts {
 /// Field-level configuration.
 #[derive(Debug, Default, FromMeta)]
 struct FieldOpts {
+    // TODO: When we update darling, we can replace `Override`
+    // with a custom enum and use `#[darling(word)]` on the variant
+    // we want to use for `#[superstruct(flatten)]` (no variants specified).
     #[darling(default)]
     flatten: Option<Override<HashMap<Ident, ()>>>,
     #[darling(default)]
