@@ -110,3 +110,19 @@ struct Message {
     pub inner: InnerMessageB,
 }
 ```
+
+If you wish to only flatten into only a subset of variants, you can define them like so: 
+
+```
+#[superstruct(variants(A, B))]
+struct InnerMessage {
+    pub x: u64,
+    pub y: u64,
+}
+
+#[superstruct(variants(A, B, C))]
+struct Message {
+    #[superstruct(flatten(A,B))]
+    pub inner: InnerMessage,
+}
+```

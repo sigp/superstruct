@@ -60,3 +60,36 @@ fn flatten() {
     let mut message_b_ref_mut = MessageRefMut::B(&mut inner_b);
     assert!(message_b_ref_mut.inner_a_mut().is_err());
 }
+
+#[test]
+fn flatten_subset() {
+    #[superstruct(variants(A, B), variant_attributes(derive(Debug, PartialEq, Eq)))]
+    #[derive(Debug, PartialEq, Eq)]
+    struct InnerMessageSubset {
+        pub x: u64,
+        #[superstruct(only(B))]
+        pub y: u64,
+    }
+
+    #[superstruct(variants(A, B, C), variant_attributes(derive(Debug, PartialEq, Eq)))]
+    #[derive(Debug, PartialEq, Eq)]
+    struct MessageSubset {
+        #[superstruct(flatten(A, B))]
+        pub inner: InnerMessageSubset,
+    }
+
+    let message_a = MessageSubset::A(MessageSubsetA {
+        inner: InnerMessageSubsetA { x: 1 },
+    });
+    let message_b = MessageSubset::B(MessageSubsetB {
+        inner: InnerMessageSubsetB { x: 3, y: 4 },
+    });
+    let message_c = MessageSubset::C(MessageSubsetC {});
+    assert_eq!(message_a.inner_a().unwrap().x, 1);
+    assert!(message_a.inner_b().is_err());
+    assert_eq!(message_b.inner_b().unwrap().x, 3);
+    assert_eq!(message_b.inner_b().unwrap().y, 4);
+    assert!(message_b.inner_a().is_err());
+    assert!(message_c.inner_a().is_err());
+    assert!(message_c.inner_b().is_err());
+}

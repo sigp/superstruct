@@ -1,4 +1,5 @@
 use attributes::{IdentList, NestedMetaList};
+use darling::util::Override;
 use darling::FromMeta;
 use from::{
     generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
@@ -66,13 +67,20 @@ struct StructOpts {
 #[derive(Debug, Default, FromMeta)]
 struct FieldOpts {
     #[darling(default)]
-    flatten: bool,
+    flatten: Option<Override<HashMap<Ident, ()>>>,
     #[darling(default)]
     only: Option<HashMap<Ident, ()>>,
     #[darling(default)]
     getter: Option<GetterOpts>,
     #[darling(default)]
     partial_getter: Option<GetterOpts>,
+}
+
+fn should_skip(flatten: &Override<HashMap<Ident, ()>>, key: &Ident) -> bool {
+    match flatten {
+        Override::Inherit => false,
+        Override::Explicit(map) => !map.is_empty() && !map.contains_key(key),
+    }
 }
 
 /// Getter configuration for a specific field
@@ -195,11 +203,11 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             panic!("can't configure `only` and `getter` on the same field");
         } else if field_opts.only.is_none() && field_opts.partial_getter.is_some() {
             panic!("can't set `partial_getter` options on common field");
-        } else if field_opts.flatten && field_opts.only.is_some() {
+        } else if field_opts.flatten.is_some() && field_opts.only.is_some() {
             panic!("can't set `flatten` and `only` on the same field");
-        } else if field_opts.flatten && field_opts.getter.is_some() {
+        } else if field_opts.flatten.is_some() && field_opts.getter.is_some() {
             panic!("can't set `flatten` and `getter` on the same field");
-        } else if field_opts.flatten && field_opts.partial_getter.is_some() {
+        } else if field_opts.flatten.is_some() && field_opts.partial_getter.is_some() {
             panic!("can't set `flatten` and `partial_getter` on the same field");
         }
 
@@ -207,8 +215,17 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         let getter_opts = field_opts.getter.unwrap_or_default();
         let partial_getter_opts = field_opts.partial_getter.unwrap_or_default();
 
-        if field_opts.flatten {
+        if let Some(flatten_opts) = field_opts.flatten {
             for variant in variant_names {
+                if should_skip(&flatten_opts, variant) {
+                    // Remove the field from the field map
+                    let fields = variant_fields
+                        .get_mut(variant)
+                        .expect("invalid variant name");
+                    fields.remove(field_index);
+                    continue;
+                }
+
                 // Update the struct name for this variant.
                 let mut next_variant_field = output_field.clone();
                 match &mut next_variant_field.ty {
