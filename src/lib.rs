@@ -12,8 +12,8 @@ use quote::{format_ident, quote, ToTokens};
 use std::collections::HashMap;
 use std::iter::{self, FromIterator};
 use syn::{
-    parse2, parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident,
-    ItemEnum, ItemStruct, Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
+    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
+    Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
 };
 
 mod attributes;
@@ -76,7 +76,7 @@ struct FieldOpts {
 }
 
 /// Getter configuration for a specific field
-#[derive(Debug, Default, FromMeta)]
+#[derive(Clone, Debug, Default, FromMeta)]
 struct GetterOpts {
     #[darling(default)]
     copy: bool,
@@ -208,39 +208,45 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         let partial_getter_opts = field_opts.partial_getter.unwrap_or_default();
 
         if field_opts.flatten {
-            // Parse the inner type, making sure it's an enum.
-            let ty = &output_field.ty;
+            for variant in variant_names {
+                // Update the struct name for this variant.
+                let mut next_variant_field = output_field.clone();
+                match &mut next_variant_field.ty {
+                    Type::Path(ref mut p) => {
+                        let first_segment = &mut p
+                            .path
+                            .segments
+                            .first_mut()
+                            .expect("path should have at least one segment");
+                        let inner_ty_name = first_segment.ident.clone();
+                        let next_variant_ty_name = format_ident!("{}{}", inner_ty_name, variant);
+                        first_segment.ident = next_variant_ty_name;
+                    }
+                    _ => panic!("field must be a path"),
+                };
 
-            let inner_enum: ItemEnum = parse2(output_field.ty.to_token_stream())
-                .expect(format!("inner type must be an enum {ty:?}").as_str());
+                // Create a partial getter for the field.
+                let partial_getter_rename =
+                    format_ident!("{}_{}", name, variant.to_string().to_lowercase());
+                let partial_getter_opts = GetterOpts {
+                    rename: Some(partial_getter_rename),
+                    ..<_>::default()
+                };
 
-            // Extract the names of the variants for the inner enum.
-            let variant_names_inner: Vec<_> = inner_enum
-                .variants
-                .iter()
-                .map(|v| v.ident.clone())
-                .collect();
-
-            // Compare the sets of variant names.
-            assert_eq!(
-                variant_names, &variant_names_inner,
-                "variant names must match"
-            );
-
-            for variant in inner_enum.variants {
-                assert!(
-                    variant.fields.len() == 1,
-                    "only one field allowed in flattened enum variants"
-                );
-                let inner_field = variant.fields.into_iter().next().unwrap();
-                // Add the variant name as a suffix to the getter name.
                 fields.push(FieldData {
-                    name: format_ident!("{}_{}", name, variant.ident.to_string().to_lowercase()),
-                    field: inner_field,
-                    only: None,
+                    name: name.clone(),
+                    field: next_variant_field.clone(),
+                    // Make sure the field is only accessible from this variant.
+                    only: Some(vec![variant.clone()]),
                     getter_opts: <_>::default(),
-                    partial_getter_opts: <_>::default(),
+                    partial_getter_opts,
                 });
+
+                // Update the variant field map
+                let fields = variant_fields
+                    .get_mut(variant)
+                    .expect("invalid variant name");
+                *fields.get_mut(0).expect("no fields for variant") = next_variant_field;
             }
         } else {
             fields.push(FieldData {

@@ -68,3 +68,45 @@ may be applied in a single attribute, e.g. `#[superstruct(partial_getter(copy, n
 The error type for partial getters can currently only be configured on a per-struct basis
 via the [`partial_getter_error`](./struct.md#partial-getter-error) attribute, although this may
 change in a future release.
+
+## Flatten
+
+```
+#[superstruct(flatten)]
+```
+
+This attribute can only be applied to enum fields that whose variants match each variant of the
+superstruct. This is useful for nesting superstructs whose variant types should be linked.
+
+This will automatically create a partial getter for each variant. The following two examples are equivalent.
+
+Using `flatten`:
+```
+#[superstruct(variants(A, B))]
+struct InnerMessage {
+    pub x: u64,
+    pub y: u64,
+}
+
+#[superstruct(variants(A, B))]
+struct Message {
+    #[superstruct(flatten)]
+    pub inner: InnerMessage,
+}
+```
+Equivalent without `flatten`:
+```
+#[superstruct(variants(A, B))]
+struct InnerMessage {
+    pub x: u64,
+    pub y: u64,
+}
+
+#[superstruct(variants(A, B))]
+struct Message {
+    #[superstruct(only(A), partial_getter(rename = "inner_a"))]
+    pub inner: InnerMessageA,
+    #[superstruct(only(B), partial_getter(rename = "inner_b"))]
+    pub inner: InnerMessageB,
+}
+```
