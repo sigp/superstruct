@@ -76,7 +76,7 @@ struct FieldOpts {
 }
 
 /// Getter configuration for a specific field
-#[derive(Clone, Debug, Default, FromMeta)]
+#[derive(Debug, Default, FromMeta)]
 struct GetterOpts {
     #[darling(default)]
     copy: bool,
