@@ -1,4 +1,5 @@
 use attributes::{IdentList, NestedMetaList};
+use darling::util::Override;
 use darling::FromMeta;
 use from::{
     generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
@@ -65,12 +66,24 @@ struct StructOpts {
 /// Field-level configuration.
 #[derive(Debug, Default, FromMeta)]
 struct FieldOpts {
+    // TODO: When we update darling, we can replace `Override`
+    // with a custom enum and use `#[darling(word)]` on the variant
+    // we want to use for `#[superstruct(flatten)]` (no variants specified).
+    #[darling(default)]
+    flatten: Option<Override<HashMap<Ident, ()>>>,
     #[darling(default)]
     only: Option<HashMap<Ident, ()>>,
     #[darling(default)]
     getter: Option<GetterOpts>,
     #[darling(default)]
     partial_getter: Option<GetterOpts>,
+}
+
+fn should_skip(flatten: &Override<HashMap<Ident, ()>>, key: &Ident) -> bool {
+    match flatten {
+        Override::Inherit => false,
+        Override::Explicit(map) => !map.is_empty() && !map.contains_key(key),
+    }
 }
 
 /// Getter configuration for a specific field
@@ -159,7 +172,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let mut variant_fields =
         HashMap::<_, _>::from_iter(variant_names.iter().zip(iter::repeat(vec![])));
 
-    for field in item.fields.iter() {
+    for field in &item.fields {
         let name = field.ident.clone().expect("named fields only");
         let field_opts = field
             .attrs
@@ -193,20 +206,86 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             panic!("can't configure `only` and `getter` on the same field");
         } else if field_opts.only.is_none() && field_opts.partial_getter.is_some() {
             panic!("can't set `partial_getter` options on common field");
+        } else if field_opts.flatten.is_some() && field_opts.only.is_some() {
+            panic!("can't set `flatten` and `only` on the same field");
+        } else if field_opts.flatten.is_some() && field_opts.getter.is_some() {
+            panic!("can't set `flatten` and `getter` on the same field");
+        } else if field_opts.flatten.is_some() && field_opts.partial_getter.is_some() {
+            panic!("can't set `flatten` and `partial_getter` on the same field");
         }
 
         let only = field_opts.only.map(|only| only.keys().cloned().collect());
         let getter_opts = field_opts.getter.unwrap_or_default();
         let partial_getter_opts = field_opts.partial_getter.unwrap_or_default();
 
-        // Add to list of all fields
-        fields.push(FieldData {
-            name,
-            field: output_field,
-            only,
-            getter_opts,
-            partial_getter_opts,
-        });
+        if let Some(flatten_opts) = field_opts.flatten {
+            for variant in variant_names {
+                let variant_field_index = variant_fields
+                    .get(variant)
+                    .expect("invalid variant name")
+                    .iter()
+                    .position(|f| f.ident.as_ref() == Some(&name))
+                    .expect("flattened fields are present on all variants");
+
+                if should_skip(&flatten_opts, variant) {
+                    // Remove the field from the field map
+                    let fields = variant_fields
+                        .get_mut(variant)
+                        .expect("invalid variant name");
+                    fields.remove(variant_field_index);
+                    continue;
+                }
+
+                // Update the struct name for this variant.
+                let mut next_variant_field = output_field.clone();
+                match &mut next_variant_field.ty {
+                    Type::Path(ref mut p) => {
+                        let last_segment = &mut p
+                            .path
+                            .segments
+                            .last_mut()
+                            .expect("path should have at least one segment");
+                        let inner_ty_name = last_segment.ident.clone();
+                        let next_variant_ty_name = format_ident!("{}{}", inner_ty_name, variant);
+                        last_segment.ident = next_variant_ty_name;
+                    }
+                    _ => panic!("field must be a path"),
+                };
+
+                // Create a partial getter for the field.
+                let partial_getter_rename =
+                    format_ident!("{}_{}", name, variant.to_string().to_lowercase());
+                let partial_getter_opts = GetterOpts {
+                    rename: Some(partial_getter_rename),
+                    ..<_>::default()
+                };
+
+                fields.push(FieldData {
+                    name: name.clone(),
+                    field: next_variant_field.clone(),
+                    // Make sure the field is only accessible from this variant.
+                    only: Some(vec![variant.clone()]),
+                    getter_opts: <_>::default(),
+                    partial_getter_opts,
+                });
+
+                // Update the variant field map
+                let fields = variant_fields
+                    .get_mut(variant)
+                    .expect("invalid variant name");
+                *fields
+                    .get_mut(variant_field_index)
+                    .expect("invalid field index") = next_variant_field;
+            }
+        } else {
+            fields.push(FieldData {
+                name,
+                field: output_field,
+                only,
+                getter_opts,
+                partial_getter_opts,
+            });
+        }
     }
 
     // Generate structs for all of the variants.
