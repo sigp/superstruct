@@ -240,14 +240,14 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 let mut next_variant_field = output_field.clone();
                 match &mut next_variant_field.ty {
                     Type::Path(ref mut p) => {
-                        let first_segment = &mut p
+                        let last_segment = &mut p
                             .path
                             .segments
-                            .first_mut()
+                            .last_mut()
                             .expect("path should have at least one segment");
-                        let inner_ty_name = first_segment.ident.clone();
+                        let inner_ty_name = last_segment.ident.clone();
                         let next_variant_ty_name = format_ident!("{}{}", inner_ty_name, variant);
-                        first_segment.ident = next_variant_ty_name;
+                        last_segment.ident = next_variant_ty_name;
                     }
                     _ => panic!("field must be a path"),
                 };

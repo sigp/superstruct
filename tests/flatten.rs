@@ -96,12 +96,19 @@ fn flatten_subset() {
 
 #[test]
 fn flatten_not_first_field() {
-    #[superstruct(variants(A, B), variant_attributes(derive(Debug, PartialEq, Eq)))]
-    #[derive(Debug, PartialEq, Eq)]
-    struct InnerMessageTwo {
-        pub x: u64,
-        #[superstruct(only(B))]
-        pub y: u64,
+    use test_mod::*;
+
+    // Put this type in a submodule to test path parsing in `flatten`.
+    pub mod test_mod {
+        use superstruct::superstruct;
+
+        #[superstruct(variants(A, B), variant_attributes(derive(Debug, PartialEq, Eq)))]
+        #[derive(Debug, PartialEq, Eq)]
+        pub struct InnerMessageTwo {
+            pub x: u64,
+            #[superstruct(only(B))]
+            pub y: u64,
+        }
     }
 
     #[superstruct(variants(A, B), variant_attributes(derive(Debug, PartialEq, Eq)))]
@@ -110,7 +117,7 @@ fn flatten_not_first_field() {
         #[superstruct(only(A), partial_getter(copy))]
         pub other: u64,
         #[superstruct(flatten)]
-        pub inner: InnerMessageTwo,
+        pub inner: test_mod::InnerMessageTwo,
     }
 
     let message_a = MessageTwo::A(MessageTwoA {
