@@ -172,7 +172,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let mut variant_fields =
         HashMap::<_, _>::from_iter(variant_names.iter().zip(iter::repeat(vec![])));
 
-    for (field_index, field) in item.fields.iter().enumerate() {
+    for field in &item.fields {
         let name = field.ident.clone().expect("named fields only");
         let field_opts = field
             .attrs
@@ -220,12 +220,19 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
         if let Some(flatten_opts) = field_opts.flatten {
             for variant in variant_names {
+                let variant_field_index = variant_fields
+                    .get(variant)
+                    .expect("invalid variant name")
+                    .iter()
+                    .position(|f| f.ident.as_ref() == Some(&name))
+                    .expect("flattened fields are present on all variants");
+
                 if should_skip(&flatten_opts, variant) {
                     // Remove the field from the field map
                     let fields = variant_fields
                         .get_mut(variant)
                         .expect("invalid variant name");
-                    fields.remove(field_index);
+                    fields.remove(variant_field_index);
                     continue;
                 }
 
@@ -266,7 +273,9 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 let fields = variant_fields
                     .get_mut(variant)
                     .expect("invalid variant name");
-                *fields.get_mut(field_index).expect("invalid field index") = next_variant_field;
+                *fields
+                    .get_mut(variant_field_index)
+                    .expect("invalid field index") = next_variant_field;
             }
         } else {
             fields.push(FieldData {

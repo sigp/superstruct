@@ -75,13 +75,13 @@ change in a future release.
 #[superstruct(flatten)]
 ```
 
-This attribute can only be applied to enum fields that whose variants match each variant of the
+This attribute can only be applied to enum fields with variants that match each variant of the
 superstruct. This is useful for nesting superstructs whose variant types should be linked.
 
 This will automatically create a partial getter for each variant. The following two examples are equivalent.
 
 Using `flatten`:
-```
+```rust
 #[superstruct(variants(A, B))]
 struct InnerMessage {
     pub x: u64,
@@ -95,7 +95,7 @@ struct Message {
 }
 ```
 Equivalent without `flatten`:
-```
+```rust
 #[superstruct(variants(A, B))]
 struct InnerMessage {
     pub x: u64,
@@ -113,7 +113,7 @@ struct Message {
 
 If you wish to only flatten into only a subset of variants, you can define them like so: 
 
-```
+```rust
 #[superstruct(variants(A, B))]
 struct InnerMessage {
     pub x: u64,
