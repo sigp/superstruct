@@ -284,8 +284,6 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             panic!("can't set `partial_getter` options on common field");
         } else if field_opts.flatten.is_some() && field_opts.only.is_some() {
             panic!("can't set `flatten` and `only` on the same field");
-        } else if field_opts.flatten.is_some() && field_opts.meta_only.is_some() {
-            panic!("can't set `flatten` and `meta_only` on the same field");
         } else if field_opts.flatten.is_some() && field_opts.getter.is_some() {
             panic!("can't set `flatten` and `getter` on the same field");
         } else if field_opts.flatten.is_some() && field_opts.partial_getter.is_some() {
@@ -300,12 +298,14 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 let variant = &variant_key.variant;
                 let meta_variant = variant_key.meta_variant.as_ref();
 
-                let variant_field_index = variant_fields
+                let Some(variant_field_index) = variant_fields
                     .get(&variant_key)
                     .expect("invalid variant name")
                     .iter()
                     .position(|f| f.ident.as_ref() == Some(&name))
-                    .expect("flattened fields are present on all variants");
+                else {
+                    continue;
+                };
 
                 if should_skip(
                     variant_names,
@@ -338,20 +338,38 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
                 let (next_variant_ty_name, partial_getter_rename) =
                     if let Some(meta_variant) = meta_variant {
-                        (
-                            format_ident!(
-                                "{}{}{}",
-                                last_segment_mut_ref.clone(),
+                        if let Some(meta_only) = field_opts.meta_only.as_ref() {
+                            assert_eq!(
+                                meta_only.len(),
+                                1,
+                                "when used in combination with flatten, only 
+                                one meta variant specification is allowed"
+                            );
+                            assert_eq!(
+                                meta_only.keys().next().unwrap(),
                                 meta_variant,
-                                variant
-                            ),
-                            format_ident!(
-                                "{}_{}_{}",
-                                name,
-                                meta_variant.to_string().to_lowercase(),
-                                variant.to_string().to_lowercase()
-                            ),
-                        )
+                                "flattened meta variatn does not match"
+                            );
+                            (
+                                format_ident!("{}{}", last_segment_mut_ref.clone(), variant),
+                                format_ident!("{}_{}", name, variant.to_string().to_lowercase()),
+                            )
+                        } else {
+                            (
+                                format_ident!(
+                                    "{}{}{}",
+                                    last_segment_mut_ref.clone(),
+                                    meta_variant,
+                                    variant
+                                ),
+                                format_ident!(
+                                    "{}_{}_{}",
+                                    name,
+                                    meta_variant.to_string().to_lowercase(),
+                                    variant.to_string().to_lowercase()
+                                ),
+                            )
+                        }
                     } else {
                         (
                             format_ident!("{}{}", last_segment_mut_ref.clone(), variant),

@@ -228,3 +228,58 @@ fn meta_variants_have_specific_attributes() {
     let x = TingIsCopyTwo { x: 0 };
     assert_eq!(copy(x), (x, x));
 }
+
+#[test]
+fn meta_only_flatten() {
+    #[superstruct(
+        variants(Merge, Capella),
+        variant_attributes(derive(Debug, PartialEq, Clone)),
+        specific_variant_attributes(IsCopy(derive(Copy)))
+    )]
+    #[derive(Clone, PartialEq, Debug)]
+    pub struct Payload {
+        pub transactions: u64,
+    }
+
+    #[superstruct(
+        variants(Merge, Capella),
+        variant_attributes(derive(Debug, PartialEq, Clone)),
+        specific_variant_attributes(IsCopy(derive(Copy)))
+    )]
+    #[derive(Clone, PartialEq, Debug)]
+    pub struct PayloadHeader {
+        pub transactions_root: u64,
+    }
+
+    #[superstruct(
+        meta_variants(Blinded, Full),
+        variants(Base, Merge, Capella),
+        variant_attributes(derive(Debug, PartialEq, Clone)),
+        specific_variant_attributes(IsCopy(derive(Copy)))
+    )]
+    #[derive(Clone, PartialEq, Debug)]
+    pub struct Block {
+        #[superstruct(flatten(Merge, Capella), meta_only(Full))]
+        pub payload: Payload,
+        #[superstruct(flatten(Merge, Capella), meta_only(Blinded))]
+        pub payload_header: PayloadHeader,
+    }
+
+    let block = Block::Full(BlockFull::Merge(BlockFullMerge {
+        payload: PayloadMerge { transactions: 1 },
+    }));
+    let blinded_block = Block::Blinded(BlockBlinded::Merge(BlockBlindedMerge {
+        payload_header: PayloadHeaderMerge {
+            transactions_root: 1,
+        },
+    }));
+
+    assert_eq!(block.payload_merge().unwrap().transactions, 1);
+    assert_eq!(
+        blinded_block
+            .payload_header_merge()
+            .unwrap()
+            .transactions_root,
+        1
+    );
+}
