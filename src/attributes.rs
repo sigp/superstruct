@@ -21,7 +21,7 @@ impl FromMeta for NestedMetaList {
 /// List of identifiers implementing `FromMeta`.
 ///
 /// Useful for imposing ordering, unlike the `HashMap` options provided by `darling`.
-#[derive(Debug)]
+#[derive(Debug, Default, Clone)]
 pub struct IdentList {
     pub idents: Vec<Ident>,
 }

@@ -26,6 +26,9 @@ mod utils;
 /// Top-level configuration via the `superstruct` attribute.
 #[derive(Debug, FromMeta)]
 struct StructOpts {
+    /// List of meta variant names of the superstruct being derived.
+    #[darling(default)]
+    meta_variants: Option<IdentList>,
     /// List of variant names of the superstruct being derived.
     variants: IdentList,
     /// List of attributes to apply to the variant structs.
@@ -74,16 +77,11 @@ struct FieldOpts {
     #[darling(default)]
     only: Option<HashMap<Ident, ()>>,
     #[darling(default)]
+    meta_only: Option<HashMap<Ident, ()>>,
+    #[darling(default)]
     getter: Option<GetterOpts>,
     #[darling(default)]
     partial_getter: Option<GetterOpts>,
-}
-
-fn should_skip(flatten: &Override<HashMap<Ident, ()>>, key: &Ident) -> bool {
-    match flatten {
-        Override::Inherit => false,
-        Override::Explicit(map) => !map.is_empty() && !map.contains_key(key),
-    }
 }
 
 /// Getter configuration for a specific field
@@ -134,15 +132,40 @@ impl ErrorOpts {
 struct FieldData {
     name: Ident,
     field: Field,
-    only: Option<Vec<Ident>>,
+    only_combinations: Vec<VariantKey>,
     getter_opts: GetterOpts,
     partial_getter_opts: GetterOpts,
+    is_common: bool,
 }
 
 impl FieldData {
     fn is_common(&self) -> bool {
-        self.only.is_none()
+        self.is_common
     }
+
+    /// Checks whether this field should be included in creating
+    /// partial getters for the given type name.
+    fn exists_in_meta(&self, type_name: &Ident) -> bool {
+        let only_metas = self
+            .only_combinations
+            .iter()
+            .filter_map(|only| only.meta_variant.as_ref())
+            .map(ToString::to_string)
+            .collect::<Vec<_>>();
+
+        if only_metas.is_empty() {
+            return true;
+        }
+        only_metas
+            .iter()
+            .any(|only| type_name.to_string().ends_with(only))
+    }
+}
+
+#[derive(Hash, Eq, PartialEq, Debug, Clone)]
+struct VariantKey {
+    variant: Ident,
+    meta_variant: Option<Ident>,
 }
 
 #[proc_macro_attribute]
@@ -151,26 +174,54 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let item = parse_macro_input!(input as ItemStruct);
 
     let type_name = &item.ident;
-    let visibility = item.vis;
+    let visibility = item.vis.clone();
     // Extract the generics to use for the top-level type and all variant structs.
     let decl_generics = &item.generics;
     // Generics used for the impl block.
-    let (impl_generics, ty_generics, where_clause) = &item.generics.split_for_impl();
+    let (_, _, where_clause) = &item.generics.split_for_impl();
 
     let opts = StructOpts::from_list(&attr_args).unwrap();
 
     let mut output_items: Vec<TokenStream> = vec![];
 
-    let mk_struct_name = |variant_name: &Ident| format_ident!("{}{}", type_name, variant_name);
+    let mk_struct_name = |variant_key: &VariantKey| {
+        let VariantKey {
+            variant,
+            meta_variant,
+        } = variant_key;
+
+        if let Some(meta_variant) = meta_variant {
+            format_ident!("{}{}{}", type_name, meta_variant, variant)
+        } else {
+            format_ident!("{}{}", type_name, variant)
+        }
+    };
 
     let variant_names = &opts.variants.idents;
-    let struct_names = variant_names.iter().map(mk_struct_name).collect_vec();
+    let meta_variant_names = &opts
+        .meta_variants
+        .clone()
+        .map(|mv| mv.idents.into_iter().map(Some).collect_vec())
+        .unwrap_or(vec![None]);
+    let variant_combinations = variant_names
+        .iter()
+        .cloned()
+        .cartesian_product(meta_variant_names.iter().cloned())
+        .map(|(v, mv)| VariantKey {
+            variant: v,
+            meta_variant: mv,
+        });
+
+    let struct_names = variant_combinations
+        .clone()
+        .map(|key| mk_struct_name(&key))
+        .collect_vec();
 
     // Vec of field data.
     let mut fields = vec![];
-    // Map from variant to variant fields.
+    // Map from variant or meta variant to variant fields.
     let mut variant_fields =
-        HashMap::<_, _>::from_iter(variant_names.iter().zip(iter::repeat(vec![])));
+        HashMap::<_, _>::from_iter(variant_combinations.clone().zip(iter::repeat(vec![])));
 
     for field in &item.fields {
         let name = field.ident.clone().expect("named fields only");
@@ -193,10 +244,30 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             || variant_names.clone(),
             |only| only.keys().cloned().collect_vec(),
         );
+        let field_meta_variants = field_opts.meta_only.as_ref().map_or_else(
+            || meta_variant_names.clone(),
+            |meta_only| meta_only.keys().cloned().map(Some).collect_vec(),
+        );
 
-        for variant_name in field_variants {
+        let is_common_meta = opts.meta_variants.as_ref().map_or(true, |mv| {
+            field_opts
+                .meta_only
+                .as_ref()
+                .map_or(true, |field_meta| field_meta.len() == mv.idents.len())
+        });
+        let is_common = (field_variants.len() == variant_names.len()) && is_common_meta;
+
+        let only_combinations = field_variants
+            .iter()
+            .cartesian_product(field_meta_variants.iter())
+            .clone();
+
+        for (variant, meta_variant) in only_combinations.clone() {
             variant_fields
-                .get_mut(&variant_name)
+                .get_mut(&VariantKey {
+                    variant: variant.clone(),
+                    meta_variant: meta_variant.clone(),
+                })
                 .expect("invalid variant name in `only`")
                 .push(output_field.clone());
         }
@@ -204,33 +275,44 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         // Check field opts
         if field_opts.only.is_some() && field_opts.getter.is_some() {
             panic!("can't configure `only` and `getter` on the same field");
+        } else if field_opts.meta_only.is_some() && field_opts.getter.is_some() {
+            panic!("can't configure `meta_only` and `getter` on the same field");
         } else if field_opts.only.is_none() && field_opts.partial_getter.is_some() {
             panic!("can't set `partial_getter` options on common field");
         } else if field_opts.flatten.is_some() && field_opts.only.is_some() {
             panic!("can't set `flatten` and `only` on the same field");
+        } else if field_opts.flatten.is_some() && field_opts.meta_only.is_some() {
+            panic!("can't set `flatten` and `meta_only` on the same field");
         } else if field_opts.flatten.is_some() && field_opts.getter.is_some() {
             panic!("can't set `flatten` and `getter` on the same field");
         } else if field_opts.flatten.is_some() && field_opts.partial_getter.is_some() {
             panic!("can't set `flatten` and `partial_getter` on the same field");
         }
 
-        let only = field_opts.only.map(|only| only.keys().cloned().collect());
         let getter_opts = field_opts.getter.unwrap_or_default();
         let partial_getter_opts = field_opts.partial_getter.unwrap_or_default();
 
         if let Some(flatten_opts) = field_opts.flatten {
-            for variant in variant_names {
+            for variant_key in variant_combinations.clone() {
+                let variant = &variant_key.variant;
+                let meta_variant = variant_key.meta_variant.as_ref();
+
                 let variant_field_index = variant_fields
-                    .get(variant)
+                    .get(&variant_key)
                     .expect("invalid variant name")
                     .iter()
                     .position(|f| f.ident.as_ref() == Some(&name))
                     .expect("flattened fields are present on all variants");
 
-                if should_skip(&flatten_opts, variant) {
+                if should_skip(
+                    variant_names,
+                    meta_variant_names,
+                    &flatten_opts,
+                    &variant_key,
+                ) {
                     // Remove the field from the field map
                     let fields = variant_fields
-                        .get_mut(variant)
+                        .get_mut(&variant_key)
                         .expect("invalid variant name");
                     fields.remove(variant_field_index);
                     continue;
@@ -238,23 +320,44 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
                 // Update the struct name for this variant.
                 let mut next_variant_field = output_field.clone();
-                match &mut next_variant_field.ty {
+
+                let last_segment_mut_ref = match next_variant_field.ty {
                     Type::Path(ref mut p) => {
-                        let last_segment = &mut p
+                        &mut p
                             .path
                             .segments
                             .last_mut()
-                            .expect("path should have at least one segment");
-                        let inner_ty_name = last_segment.ident.clone();
-                        let next_variant_ty_name = format_ident!("{}{}", inner_ty_name, variant);
-                        last_segment.ident = next_variant_ty_name;
+                            .expect("path should have at least one segment")
+                            .ident
                     }
                     _ => panic!("field must be a path"),
                 };
 
+                let (next_variant_ty_name, partial_getter_rename) =
+                    if let Some(meta_variant) = meta_variant {
+                        (
+                            format_ident!(
+                                "{}{}{}",
+                                last_segment_mut_ref.clone(),
+                                meta_variant,
+                                variant
+                            ),
+                            format_ident!(
+                                "{}_{}_{}",
+                                name,
+                                meta_variant.to_string().to_lowercase(),
+                                variant.to_string().to_lowercase()
+                            ),
+                        )
+                    } else {
+                        (
+                            format_ident!("{}{}", last_segment_mut_ref.clone(), variant),
+                            format_ident!("{}_{}", name, variant.to_string().to_lowercase()),
+                        )
+                    };
+                *last_segment_mut_ref = next_variant_ty_name;
+
                 // Create a partial getter for the field.
-                let partial_getter_rename =
-                    format_ident!("{}_{}", name, variant.to_string().to_lowercase());
                 let partial_getter_opts = GetterOpts {
                     rename: Some(partial_getter_rename),
                     ..<_>::default()
@@ -264,14 +367,15 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     name: name.clone(),
                     field: next_variant_field.clone(),
                     // Make sure the field is only accessible from this variant.
-                    only: Some(vec![variant.clone()]),
+                    only_combinations: vec![variant_key.clone()],
                     getter_opts: <_>::default(),
                     partial_getter_opts,
+                    is_common: false,
                 });
 
                 // Update the variant field map
                 let fields = variant_fields
-                    .get_mut(variant)
+                    .get_mut(&variant_key)
                     .expect("invalid variant name");
                 *fields
                     .get_mut(variant_field_index)
@@ -281,9 +385,15 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             fields.push(FieldData {
                 name,
                 field: output_field,
-                only,
+                only_combinations: only_combinations
+                    .map(|(variant, meta_variant)| VariantKey {
+                        variant: variant.clone(),
+                        meta_variant: meta_variant.clone(),
+                    })
+                    .collect_vec(),
                 getter_opts,
                 partial_getter_opts,
+                is_common,
             });
         }
     }
@@ -294,13 +404,14 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         .as_ref()
         .map_or(&[][..], |attrs| &attrs.metas);
 
-    for (variant_name, struct_name) in variant_names.iter().zip(struct_names.iter()) {
-        let fields = &variant_fields[variant_name];
+    for (variant_key, struct_name) in variant_combinations.zip(struct_names.iter()) {
+        let fields = &variant_fields[&variant_key];
 
+        // TODO: think about how to handle this with meta
         let specific_struct_attributes = opts
             .specific_variant_attributes
             .as_ref()
-            .and_then(|sv| sv.get(&variant_name))
+            .and_then(|sv| sv.get(&variant_key.variant))
             .map_or(&[][..], |attrs| &attrs.metas);
 
         let variant_code = quote! {
@@ -323,6 +434,71 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     if opts.no_enum {
         return TokenStream::from_iter(output_items);
     }
+
+    let mut inner_enum_names = vec![];
+
+    // Generate inner enums if necessary.
+    for meta_variant in meta_variant_names {
+        if let Some(meta_variant) = meta_variant {
+            let inner_enum_name = format_ident!("{}{}", type_name, meta_variant);
+            inner_enum_names.push(inner_enum_name.clone());
+            let inner_struct_names = variant_names
+                .iter()
+                .map(|variant_name| format_ident!("{}{}", inner_enum_name, variant_name))
+                .collect_vec();
+            generate_wrapper_enums(
+                &inner_enum_name,
+                &item,
+                &opts,
+                &mut output_items,
+                variant_names,
+                &inner_struct_names,
+                &fields,
+                false,
+            );
+        }
+    }
+
+    // Generate outer enum.
+    let variant_names = opts
+        .meta_variants
+        .as_ref()
+        .map(|mv| &mv.idents)
+        .unwrap_or(variant_names);
+    let struct_names = &opts
+        .meta_variants
+        .as_ref()
+        .map(|_| inner_enum_names)
+        .unwrap_or(struct_names);
+    generate_wrapper_enums(
+        type_name,
+        &item,
+        &opts,
+        &mut output_items,
+        variant_names,
+        struct_names,
+        &fields,
+        opts.meta_variants.is_some(),
+    );
+
+    TokenStream::from_iter(output_items)
+}
+
+fn generate_wrapper_enums(
+    type_name: &Ident,
+    item: &ItemStruct,
+    opts: &StructOpts,
+    mut output_items: &mut Vec<TokenStream>,
+    variant_names: &[Ident],
+    struct_names: &[Ident],
+    fields: &[FieldData],
+    is_meta: bool,
+) {
+    let visibility = &item.vis;
+    // Extract the generics to use for the top-level type and all variant structs.
+    let decl_generics = &item.generics;
+    // Generics used for the impl block.
+    let (impl_generics, ty_generics, where_clause) = &item.generics.split_for_impl();
 
     // Construct the top-level enum.
     let top_level_attrs = discard_superstruct_attrs(&item.attrs);
@@ -422,19 +598,22 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let getters = fields
         .iter()
         .filter(|f| f.is_common())
-        .map(|field_data| make_field_getter(type_name, &variant_names, &field_data, None));
+        .map(|field_data| make_field_getter(type_name, &variant_names, &field_data, None, is_meta));
 
     let mut_getters = fields
         .iter()
         .filter(|f| f.is_common() && !f.getter_opts.no_mut)
-        .map(|field_data| make_mut_field_getter(type_name, &variant_names, &field_data, None));
+        .map(|field_data| {
+            make_mut_field_getter(type_name, &variant_names, &field_data, None, is_meta)
+        });
 
     let partial_getters = fields
         .iter()
         .filter(|f| !f.is_common())
+        .filter(|f| is_meta || f.exists_in_meta(type_name))
         .cartesian_product(&[false, true])
         .flat_map(|(field_data, mutability)| {
-            let field_variants = field_data.only.as_ref()?;
+            let field_variants = &field_data.only_combinations;
             Some(make_partial_getter(
                 type_name,
                 &field_data,
@@ -442,6 +621,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 &opts.partial_getter_error,
                 *mutability,
                 None,
+                is_meta,
             ))
         });
 
@@ -507,21 +687,24 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             &variant_names,
             &field_data,
             Some(&ref_ty_lifetime),
+            is_meta,
         )
     });
 
     let ref_partial_getters = fields
         .iter()
         .filter(|f| !f.is_common())
+        .filter(|f| is_meta || f.exists_in_meta(type_name))
         .flat_map(|field_data| {
-            let field_variants = field_data.only.as_ref()?;
+            let field_variants = &field_data.only_combinations;
             Some(make_partial_getter(
                 &ref_ty_name,
-                &field_data,
-                &field_variants,
+                field_data,
+                field_variants,
                 &opts.partial_getter_error,
                 false,
                 Some(&ref_ty_lifetime),
+                is_meta,
             ))
         });
 
@@ -554,14 +737,16 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 &variant_names,
                 &field_data,
                 Some(&ref_mut_ty_lifetime),
+                is_meta,
             )
         });
 
     let ref_mut_partial_getters = fields
         .iter()
         .filter(|f| !f.is_common() && !f.partial_getter_opts.no_mut)
+        .filter(|f| is_meta || f.exists_in_meta(type_name))
         .flat_map(|field_data| {
-            let field_variants = field_data.only.as_ref()?;
+            let field_variants = &field_data.only_combinations;
             Some(make_partial_getter(
                 &ref_mut_ty_name,
                 &field_data,
@@ -569,6 +754,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                 &opts.partial_getter_error,
                 true,
                 Some(&ref_mut_ty_lifetime),
+                is_meta,
             ))
         });
 
@@ -614,7 +800,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     }
 
     // Generate trait implementations.
-    for (variant_name, struct_name) in variant_names.iter().zip_eq(&struct_names) {
+    for (variant_name, struct_name) in variant_names.into_iter().zip_eq(struct_names) {
         let from_impl = generate_from_variant_trait_impl(
             type_name,
             impl_generics,
@@ -649,8 +835,6 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         where_clause,
     );
     output_items.push(ref_from_top_level_impl.into());
-
-    TokenStream::from_iter(output_items)
 }
 
 /// Generate a getter method for a field.
@@ -659,6 +843,7 @@ fn make_field_getter(
     variant_names: &[Ident],
     field_data: &FieldData,
     lifetime: Option<&Lifetime>,
+    is_meta: bool,
 ) -> proc_macro2::TokenStream {
     let field_name = &field_data.name;
     let field_type = &field_data.field.ty;
@@ -670,7 +855,10 @@ fn make_field_getter(
     } else {
         quote! { &#lifetime #field_type}
     };
-    let return_expr = if getter_opts.copy {
+
+    let return_expr = if is_meta {
+        quote! { inner.#field_name() }
+    } else if getter_opts.copy {
         quote! { inner.#field_name }
     } else {
         quote! { &inner.#field_name }
@@ -701,6 +889,7 @@ fn make_mut_field_getter(
     variant_names: &[Ident],
     field_data: &FieldData,
     lifetime: Option<&Lifetime>,
+    is_meta: bool,
 ) -> proc_macro2::TokenStream {
     let field_name = &field_data.name;
     let field_type = &field_data.field.ty;
@@ -709,7 +898,11 @@ fn make_mut_field_getter(
     let fn_name = format_ident!("{}_mut", getter_opts.rename.as_ref().unwrap_or(field_name));
     let return_type = quote! { &#lifetime mut #field_type };
     let param = make_self_arg(true, lifetime);
-    let return_expr = quote! { &mut inner.#field_name };
+    let return_expr = if is_meta {
+        quote! { inner.#fn_name() }
+    } else {
+        quote! { &mut inner.#field_name }
+    };
 
     // Pass-through `cfg` attributes as they affect the existence of this field.
     let cfg_attrs = get_cfg_attrs(&field_data.field.attrs);
@@ -760,11 +953,25 @@ fn make_type_ref(
 fn make_partial_getter(
     type_name: &Ident,
     field_data: &FieldData,
-    field_variants: &[Ident],
+    field_variants: &[VariantKey],
     error_opts: &ErrorOpts,
     mutable: bool,
     lifetime: Option<&Lifetime>,
+    is_meta: bool,
 ) -> proc_macro2::TokenStream {
+    let field_variants = field_variants
+        .iter()
+        .filter_map(|key| {
+            if is_meta {
+                key.meta_variant.clone()
+            } else {
+                Some(key.variant.clone())
+            }
+        })
+        .unique()
+        .collect_vec();
+    let type_name = type_name.clone();
+
     let field_name = &field_data.name;
     let renamed_field = field_data
         .partial_getter_opts
@@ -779,7 +986,9 @@ fn make_partial_getter(
     let copy = field_data.partial_getter_opts.copy;
     let self_arg = make_self_arg(mutable, lifetime);
     let ret_ty = make_type_ref(&field_data.field.ty, mutable, copy, lifetime);
-    let ret_expr = if mutable {
+    let ret_expr = if is_meta {
+        quote! { inner.#fn_name()? }
+    } else if mutable {
         quote! { &mut inner.#field_name }
     } else if copy {
         quote! { inner.#field_name }
@@ -870,4 +1079,40 @@ fn is_attr_with_ident(attr: &Attribute, ident: &str) -> bool {
     attr.path
         .get_ident()
         .map_or(false, |attr_ident| attr_ident.to_string() == ident)
+}
+
+/// Predicate for determining whether a field should be excluded from a flattened
+/// variant combination.
+fn should_skip(
+    variant_names: &[Ident],
+    meta_variant_names: &[Option<Ident>],
+    flatten: &Override<HashMap<Ident, ()>>,
+    variant_key: &VariantKey,
+) -> bool {
+    let variant = &variant_key.variant;
+    let meta_variant = variant_key.meta_variant.as_ref();
+    match flatten {
+        Override::Inherit => false,
+        Override::Explicit(map) => {
+            let contains_variant = map.contains_key(variant);
+            let contains_meta_variant = meta_variant.map_or(true, |mv| map.contains_key(&mv));
+
+            let variants_exist = variant_names.iter().any(|v| map.contains_key(v));
+            let meta_variants_exist = meta_variant_names
+                .iter()
+                .flatten()
+                .any(|mv| map.contains_key(mv));
+
+            if contains_variant && !meta_variants_exist {
+                return false;
+            }
+            if contains_meta_variant && !variants_exist {
+                return false;
+            }
+
+            let contains_all = contains_variant && contains_meta_variant;
+
+            !map.is_empty() && !contains_all
+        }
+    }
 }
