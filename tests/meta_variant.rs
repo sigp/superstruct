@@ -134,3 +134,97 @@ fn meta_variant_flatten() {
     assert!(message_h.inner_b_read_upper().is_err());
     assert_eq!(message_h.inner_b_write_upper().unwrap().w, 3);
 }
+
+#[test]
+fn meta_variants_map_macro() {
+    #[superstruct(
+        meta_variants(Juicy, Sour),
+        variants(Apple, Orange),
+        variant_attributes(derive(Debug, PartialEq))
+    )]
+    #[derive(Debug, PartialEq)]
+    pub struct Fruit {
+        #[superstruct(getter(copy))]
+        id: u64,
+        #[superstruct(only(Apple), partial_getter(copy))]
+        description: &'static str,
+        #[superstruct(meta_only(Juicy))]
+        name: &'static str,
+    }
+
+    fn increment_id(id: Fruit) -> Fruit {
+        map_fruit!(id, |mut inner, cons| {
+            *inner.id_mut() += 1;
+            cons(inner)
+        })
+    }
+
+    fn get_id_via_ref<'a>(fruit_ref: FruitRef<'a>) -> u64 {
+        map_fruit_ref!(&'a _, fruit_ref, |inner, _| { inner.id() })
+    }
+
+    assert_eq!(
+        increment_id(Fruit::Juicy(FruitJuicy::Orange(FruitJuicyOrange {
+            id: 10,
+            name: "orange"
+        })))
+        .id(),
+        get_id_via_ref(
+            Fruit::Juicy(FruitJuicy::Orange(FruitJuicyOrange {
+                id: 11,
+                name: "orange"
+            }))
+            .to_ref()
+        )
+    );
+}
+
+#[test]
+fn meta_variants_exist_specific_attributes() {
+    #[superstruct(
+        meta_variants(One, Two),
+        variants(IsCopy, IsNotCopy),
+        variant_attributes(derive(Debug, PartialEq, Clone)),
+        specific_variant_attributes(IsCopy(derive(Copy)))
+    )]
+    #[derive(Clone, PartialEq, Debug)]
+    pub struct Thing {
+        pub x: u64,
+        #[superstruct(only(IsNotCopy))]
+        pub y: String,
+    }
+
+    fn copy<T: Copy>(t: T) -> (T, T) {
+        (t, t)
+    }
+
+    let x = ThingOneIsCopy { x: 0 };
+    assert_eq!(copy(x), (x, x));
+    let x = ThingTwoIsCopy { x: 0 };
+    assert_eq!(copy(x), (x, x));
+}
+
+#[test]
+fn meta_variants_have_specific_attributes() {
+    #[superstruct(
+        meta_variants(IsCopy, IsNotCopy),
+        variants(One, Two),
+        variant_attributes(derive(Debug, PartialEq, Clone)),
+        specific_variant_attributes(IsCopy(derive(Copy)))
+    )]
+    #[derive(Clone, PartialEq, Debug)]
+    pub struct Ting {
+        pub x: u64,
+        #[superstruct(meta_only(IsNotCopy))]
+        pub y: String,
+    }
+
+    fn copy<T: Copy>(t: T) -> (T, T) {
+        (t, t)
+    }
+
+    let x = TingIsCopyOne { x: 0 };
+    assert_eq!(copy(x), (x, x));
+    let x = TingIsCopyTwo { x: 0 };
+    assert_eq!(copy(x), (x, x));
+}

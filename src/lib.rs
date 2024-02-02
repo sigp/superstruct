@@ -277,7 +277,10 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             panic!("can't configure `only` and `getter` on the same field");
         } else if field_opts.meta_only.is_some() && field_opts.getter.is_some() {
             panic!("can't configure `meta_only` and `getter` on the same field");
-        } else if field_opts.only.is_none() && field_opts.partial_getter.is_some() {
+        } else if field_opts.only.is_none()
+            && field_opts.meta_only.is_none()
+            && field_opts.partial_getter.is_some()
+        {
             panic!("can't set `partial_getter` options on common field");
         } else if field_opts.flatten.is_some() && field_opts.only.is_some() {
             panic!("can't set `flatten` and `only` on the same field");
@@ -407,19 +410,27 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     for (variant_key, struct_name) in variant_combinations.zip(struct_names.iter()) {
         let fields = &variant_fields[&variant_key];
 
-        // TODO: think about how to handle this with meta
         let specific_struct_attributes = opts
             .specific_variant_attributes
             .as_ref()
             .and_then(|sv| sv.get(&variant_key.variant))
             .map_or(&[][..], |attrs| &attrs.metas);
+        let specific_struct_attributes_meta = opts
+            .specific_variant_attributes
+            .as_ref()
+            .and_then(|sv| variant_key.meta_variant.and_then(|mv| sv.get(&mv)))
+            .map_or(&[][..], |attrs| &attrs.metas);
+        let spatt = specific_struct_attributes
+            .iter()
+            .chain(specific_struct_attributes_meta.iter())
+            .unique();
 
         let variant_code = quote! {
             #(
                 #[#universal_struct_attributes]
             )*
             #(
-                #[#specific_struct_attributes]
+                #[#spatt]
             )*
             #visibility struct #struct_name #decl_generics #where_clause {
                 #(
