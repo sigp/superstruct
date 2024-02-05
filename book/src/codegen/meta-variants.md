@@ -2,7 +2,7 @@
 
 Meta variants are an optional feature, useful for scenarios where you'd want nested
 enums at the top-level. structs will be created for all combinations of `meta_variants`
-and `variants`, names in the format `{BaseName}{MetaVariantName}{VariantName}`. 
+and `variants`, names in the format `{BaseName}{MetaVariantName}{VariantName}`.
 Additionally, enums will be created for each `meta_variant` named `{BaseName}{MetaVariantName}`.
 
 For example:
@@ -20,23 +20,23 @@ struct MyStruct {
 }
 ```
 
-Here the `BaseName` is `MyStruct` and there are two variants in the meta-enum called 
+Here the `BaseName` is `MyStruct` and there are two variants in the meta-enum called
 `Baz` and `Qux`.
 
 The generated enums are:
 
 ```rust,no_run,no_playground
-enum MyStruct{
+enum MyStruct {
     Baz(MyStructBaz),
     Qux(MyStructQux),
 }
 
-enum MyStructBaz{
+enum MyStructBaz {
     Foo(MyStructBazFoo),
     Bar(MyStructBazBar),
 }
 
-enum MyStructQux{
+enum MyStructQux {
     Foo(MyStructQuxFoo),
     Bar(MyStructQuxBar),
 }
