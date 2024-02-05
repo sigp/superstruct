@@ -235,6 +235,13 @@ procedural macro is being invoked on the variant struct which requires different
 <p>Please see the documentation on <a href="./codegen/map-macros.html#mapping-into-other-types">Mapping into other types</a>
 for an explanation of how these macros operate.</p>
 <p><strong>Format</strong>: one or more <code>superstruct</code> type names</p>
+<h2 id="meta-variants"><a class="header" href="#meta-variants">Meta variants</a></h2>
+<pre><code>#[superstruct(meta_variants(A, B, ...), variants(C, D, ...))]
+</code></pre>
+<p>Generate a two-dimensional superstruct.
+See <a href="../codegen/meta-variants.html">meta variant structs</a>.</p>
+<p>The <code>meta_variants</code> attribute is optional.</p>
+<p><strong>Format</strong>: 1+ comma-separated identifiers.</p>
 
                     </main>
 
