@@ -249,18 +249,18 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             |meta_only| meta_only.keys().cloned().map(Some).collect_vec(),
         );
 
-        let is_common_meta = opts.meta_variants.as_ref().map_or(true, |mv| {
-            field_opts
-                .meta_only
-                .as_ref()
-                .map_or(true, |field_meta| field_meta.len() == mv.idents.len())
-        });
-        let is_common = (field_variants.len() == variant_names.len()) && is_common_meta;
+        // Field is common if it is part of every meta variant AND every variant.
+        let is_common_meta = opts
+            .meta_variants
+            .as_ref()
+            .map_or(true, |struct_meta_variants| {
+                struct_meta_variants.idents.len() == field_meta_variants.len()
+            });
+        let is_common = field_variants.len() == variant_names.len() && is_common_meta;
 
         let only_combinations = field_variants
             .iter()
-            .cartesian_product(field_meta_variants.iter())
-            .clone();
+            .cartesian_product(field_meta_variants.iter());
 
         for (variant, meta_variant) in only_combinations.clone() {
             variant_fields
@@ -268,7 +268,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     variant: variant.clone(),
                     meta_variant: meta_variant.clone(),
                 })
-                .expect("invalid variant name in `only`")
+                .expect("invalid variant name in `only` or `meta_only`")
                 .push(output_field.clone());
         }
 
@@ -342,13 +342,13 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                             assert_eq!(
                                 meta_only.len(),
                                 1,
-                                "when used in combination with flatten, only 
+                                "when used in combination with flatten, only \
                                 one meta variant specification is allowed"
                             );
                             assert_eq!(
                                 meta_only.keys().next().unwrap(),
                                 meta_variant,
-                                "flattened meta variatn does not match"
+                                "flattened meta variant does not match"
                             );
                             (
                                 format_ident!("{}{}", last_segment_mut_ref.clone(), variant),
