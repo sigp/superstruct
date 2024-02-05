@@ -1376,10 +1376,11 @@
             .attrs
             .iter()
             .filter(|attr| is_superstruct_attr(attr))
-            .find_map(|attr| {
+            .map(|attr| {
                 <span class="kw">let </span>meta = attr.parse_meta().unwrap();
-                <span class="prelude-val">Some</span>(FieldOpts::from_meta(<span class="kw-2">&amp;</span>meta).unwrap())
+                FieldOpts::from_meta(<span class="kw-2">&amp;</span>meta).unwrap()
             })
+            .next()
             .unwrap_or_default();
 
         <span class="comment">// Drop the field-level superstruct attributes
@@ -1614,25 +1615,23 @@
     <span class="kw">let </span><span class="kw-2">mut </span>inner_enum_names = <span class="macro">vec!</span>[];
 
     <span class="comment">// Generate inner enums if necessary.
-    </span><span class="kw">for </span>meta_variant <span class="kw">in </span>meta_variant_names {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(meta_variant) = meta_variant {
-            <span class="kw">let </span>inner_enum_name = <span class="macro">format_ident!</span>(<span class="string">&quot;{}{}&quot;</span>, type_name, meta_variant);
-            inner_enum_names.push(inner_enum_name.clone());
-            <span class="kw">let </span>inner_struct_names = variant_names
-                .iter()
-                .map(|variant_name| <span class="macro">format_ident!</span>(<span class="string">&quot;{}{}&quot;</span>, inner_enum_name, variant_name))
-                .collect_vec();
-            generate_wrapper_enums(
-                <span class="kw-2">&amp;</span>inner_enum_name,
-                <span class="kw-2">&amp;</span>item,
-                <span class="kw-2">&amp;</span>opts,
-                <span class="kw-2">&amp;mut </span>output_items,
-                variant_names,
-                <span class="kw-2">&amp;</span>inner_struct_names,
-                <span class="kw-2">&amp;</span>fields,
-                <span class="bool-val">false</span>,
-            );
-        }
+    </span><span class="kw">for </span>meta_variant <span class="kw">in </span>meta_variant_names.iter().flatten() {
+        <span class="kw">let </span>inner_enum_name = <span class="macro">format_ident!</span>(<span class="string">&quot;{}{}&quot;</span>, type_name, meta_variant);
+        inner_enum_names.push(inner_enum_name.clone());
+        <span class="kw">let </span>inner_struct_names = variant_names
+            .iter()
+            .map(|variant_name| <span class="macro">format_ident!</span>(<span class="string">&quot;{}{}&quot;</span>, inner_enum_name, variant_name))
+            .collect_vec();
+        generate_wrapper_enums(
+            <span class="kw-2">&amp;</span>inner_enum_name,
+            <span class="kw-2">&amp;</span>item,
+            <span class="kw-2">&amp;</span>opts,
+            <span class="kw-2">&amp;mut </span>output_items,
+            variant_names,
+            <span class="kw-2">&amp;</span>inner_struct_names,
+            <span class="kw-2">&amp;</span>fields,
+            <span class="bool-val">false</span>,
+        );
     }
 
     <span class="comment">// Generate outer enum.
@@ -1660,11 +1659,12 @@
     TokenStream::from_iter(output_items)
 }
 
-<span class="kw">fn </span>generate_wrapper_enums(
+<span class="attr">#[allow(clippy::too_many_arguments)]
+</span><span class="kw">fn </span>generate_wrapper_enums(
     type_name: <span class="kw-2">&amp;</span>Ident,
     item: <span class="kw-2">&amp;</span>ItemStruct,
     opts: <span class="kw-2">&amp;</span>StructOpts,
-    <span class="kw-2">mut </span>output_items: <span class="kw-2">&amp;mut </span>Vec&lt;TokenStream&gt;,
+    output_items: <span class="kw-2">&amp;mut </span>Vec&lt;TokenStream&gt;,
     variant_names: <span class="kw-2">&amp;</span>[Ident],
     struct_names: <span class="kw-2">&amp;</span>[Ident],
     fields: <span class="kw-2">&amp;</span>[FieldData],
@@ -1774,13 +1774,13 @@
     </span><span class="kw">let </span>getters = fields
         .iter()
         .filter(|f| f.is_common())
-        .map(|field_data| make_field_getter(type_name, <span class="kw-2">&amp;</span>variant_names, <span class="kw-2">&amp;</span>field_data, <span class="prelude-val">None</span>, is_meta));
+        .map(|field_data| make_field_getter(type_name, variant_names, field_data, <span class="prelude-val">None</span>, is_meta));
 
     <span class="kw">let </span>mut_getters = fields
         .iter()
         .filter(|f| f.is_common() &amp;&amp; !f.getter_opts.no_mut)
         .map(|field_data| {
-            make_mut_field_getter(type_name, <span class="kw-2">&amp;</span>variant_names, <span class="kw-2">&amp;</span>field_data, <span class="prelude-val">None</span>, is_meta)
+            make_mut_field_getter(type_name, variant_names, field_data, <span class="prelude-val">None</span>, is_meta)
         });
 
     <span class="kw">let </span>partial_getters = fields
@@ -1792,8 +1792,8 @@
             <span class="kw">let </span>field_variants = <span class="kw-2">&amp;</span>field_data.only_combinations;
             <span class="prelude-val">Some</span>(make_partial_getter(
                 type_name,
-                <span class="kw-2">&amp;</span>field_data,
-                <span class="kw-2">&amp;</span>field_variants,
+                field_data,
+                field_variants,
                 <span class="kw-2">&amp;</span>opts.partial_getter_error,
                 <span class="kw-2">*</span>mutability,
                 <span class="prelude-val">None</span>,
@@ -1860,8 +1860,8 @@
     </span><span class="kw">let </span>ref_getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
         make_field_getter(
             <span class="kw-2">&amp;</span>ref_ty_name,
-            <span class="kw-2">&amp;</span>variant_names,
-            <span class="kw-2">&amp;</span>field_data,
+            variant_names,
+            field_data,
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_ty_lifetime),
             is_meta,
         )
@@ -1910,8 +1910,8 @@
         .map(|field_data| {
             make_mut_field_getter(
                 <span class="kw-2">&amp;</span>ref_mut_ty_name,
-                <span class="kw-2">&amp;</span>variant_names,
-                <span class="kw-2">&amp;</span>field_data,
+                variant_names,
+                field_data,
                 <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_mut_ty_lifetime),
                 is_meta,
             )
@@ -1925,8 +1925,8 @@
             <span class="kw">let </span>field_variants = <span class="kw-2">&amp;</span>field_data.only_combinations;
             <span class="prelude-val">Some</span>(make_partial_getter(
                 <span class="kw-2">&amp;</span>ref_mut_ty_name,
-                <span class="kw-2">&amp;</span>field_data,
-                <span class="kw-2">&amp;</span>field_variants,
+                field_data,
+                field_variants,
                 <span class="kw-2">&amp;</span>opts.partial_getter_error,
                 <span class="bool-val">true</span>,
                 <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_mut_ty_lifetime),
@@ -1951,14 +1951,14 @@
     </span><span class="kw">if </span>!opts.no_map_macros &amp;&amp; !opts.no_enum {
         <span class="kw">let </span>num_generics = decl_generics.params.len();
         generate_all_map_macros(
-            <span class="kw-2">&amp;</span>type_name,
+            type_name,
             <span class="kw-2">&amp;</span>ref_ty_name,
             <span class="kw-2">&amp;</span>ref_mut_ty_name,
             num_generics,
-            <span class="kw-2">&amp;</span>struct_names,
+            struct_names,
             variant_names,
-            <span class="kw-2">&amp;</span>opts,
-            <span class="kw-2">&amp;mut </span>output_items,
+            opts,
+            output_items,
         );
     } <span class="kw">else </span>{
         <span class="macro">assert!</span>(
@@ -1976,7 +1976,7 @@
     }
 
     <span class="comment">// Generate trait implementations.
-    </span><span class="kw">for </span>(variant_name, struct_name) <span class="kw">in </span>variant_names.into_iter().zip_eq(struct_names) {
+    </span><span class="kw">for </span>(variant_name, struct_name) <span class="kw">in </span>variant_names.iter().zip_eq(struct_names) {
         <span class="kw">let </span>from_impl = generate_from_variant_trait_impl(
             type_name,
             impl_generics,
@@ -2254,7 +2254,7 @@
 </span><span class="kw">fn </span>is_attr_with_ident(attr: <span class="kw-2">&amp;</span>Attribute, ident: <span class="kw-2">&amp;</span>str) -&gt; bool {
     attr.path
         .get_ident()
-        .map_or(<span class="bool-val">false</span>, |attr_ident| attr_ident.to_string() == ident)
+        .map_or(<span class="bool-val">false</span>, |attr_ident| <span class="kw-2">*</span>attr_ident == ident)
 }
 
 <span class="doccomment">/// Predicate for determining whether a field should be excluded from a flattened
@@ -2271,7 +2271,7 @@
         Override::Inherit =&gt; <span class="bool-val">false</span>,
         Override::Explicit(map) =&gt; {
             <span class="kw">let </span>contains_variant = map.contains_key(variant);
-            <span class="kw">let </span>contains_meta_variant = meta_variant.map_or(<span class="bool-val">true</span>, |mv| map.contains_key(<span class="kw-2">&amp;</span>mv));
+            <span class="kw">let </span>contains_meta_variant = meta_variant.map_or(<span class="bool-val">true</span>, |mv| map.contains_key(mv));
 
             <span class="kw">let </span>variants_exist = variant_names.iter().any(|v| map.contains_key(v));
             <span class="kw">let </span>meta_variants_exist = meta_variant_names
