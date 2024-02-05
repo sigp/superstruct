@@ -233,8 +233,7 @@ fn meta_variants_have_specific_attributes() {
 fn meta_only_flatten() {
     #[superstruct(
         variants(Merge, Capella),
-        variant_attributes(derive(Debug, PartialEq, Clone)),
-        specific_variant_attributes(IsCopy(derive(Copy)))
+        variant_attributes(derive(Debug, PartialEq, Clone))
     )]
     #[derive(Clone, PartialEq, Debug)]
     pub struct Payload {
@@ -243,8 +242,7 @@ fn meta_only_flatten() {
 
     #[superstruct(
         variants(Merge, Capella),
-        variant_attributes(derive(Debug, PartialEq, Clone)),
-        specific_variant_attributes(IsCopy(derive(Copy)))
+        variant_attributes(derive(Debug, PartialEq, Clone))
     )]
     #[derive(Clone, PartialEq, Debug)]
     pub struct PayloadHeader {
@@ -254,8 +252,7 @@ fn meta_only_flatten() {
     #[superstruct(
         meta_variants(Blinded, Full),
         variants(Base, Merge, Capella),
-        variant_attributes(derive(Debug, PartialEq, Clone)),
-        specific_variant_attributes(IsCopy(derive(Copy)))
+        variant_attributes(derive(Debug, PartialEq, Clone))
     )]
     #[derive(Clone, PartialEq, Debug)]
     pub struct Block {
