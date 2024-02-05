@@ -110,3 +110,16 @@ Please see the documentation on [Mapping into other types](./codegen/map-macros.
 for an explanation of how these macros operate.
 
 **Format**: one or more `superstruct` type names
+
+## Meta variants
+
+```
+#[superstruct(meta_variants(A, B, ...), variants(C, D, ...))]
+```
+
+Generate a two-dimensional superstruct.
+See [meta variant structs](../codegen/meta-variants.md).
+
+The `meta_variants` attribute is optional.
+
+**Format**: 1+ comma-separated identifiers.
