@@ -15,6 +15,7 @@ pub struct MacroFromType<'a> {
 }
 
 /// Generate all the map macros for the top-level enum, Ref and RefMut.
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn generate_all_map_macros(
     type_name: &Ident,
     ref_type_name: &Ident,
@@ -90,7 +91,7 @@ fn generate_owned_map_macro(
 
     let from_type_name = &from_type.name;
     let from_type_struct_names = from_type.struct_names;
-    let to_type_name = to_type_name.unwrap_or_else(|| from_type_name);
+    let to_type_name = to_type_name.unwrap_or(from_type_name);
     let map_macro_name = generate_map_macro_name(from_type_name, to_type_name);
 
     // Generics we want the compiler to infer.
@@ -130,7 +131,7 @@ fn generate_ref_map_macro(
 
     let from_type_name = &from_type.name;
     let from_type_struct_names = from_type.struct_names;
-    let to_type_name = to_type_name.unwrap_or_else(|| from_type_name);
+    let to_type_name = to_type_name.unwrap_or(from_type_name);
     let map_macro_name = generate_map_macro_name(from_type_name, to_type_name);
 
     // Generics we want the compiler to infer.

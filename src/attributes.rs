@@ -13,7 +13,7 @@ pub struct NestedMetaList {
 impl FromMeta for NestedMetaList {
     fn from_list(items: &[NestedMeta]) -> Result<Self, Error> {
         Ok(Self {
-            metas: items.iter().cloned().collect(),
+            metas: items.to_vec(),
         })
     }
 }

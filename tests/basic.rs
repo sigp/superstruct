@@ -82,7 +82,7 @@ fn serde_deserialise_order() {
     }
 
     let message_str = r#"{"common": "hello", "exclusive": "world"}"#;
-    let message: Message = serde_json::from_str(&message_str).unwrap();
+    let message: Message = serde_json::from_str(message_str).unwrap();
 
     let expected = Message::B(MessageB {
         common: "hello".into(),
@@ -93,6 +93,7 @@ fn serde_deserialise_order() {
 }
 
 #[test]
+#[allow(clippy::non_minimal_cfg)]
 fn cfg_attribute() {
     // Use `all()` as true.
     #[superstruct(variants(A, B), no_map_macros)]

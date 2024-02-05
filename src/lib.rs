@@ -229,10 +229,11 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             .attrs
             .iter()
             .filter(|attr| is_superstruct_attr(attr))
-            .find_map(|attr| {
+            .map(|attr| {
                 let meta = attr.parse_meta().unwrap();
-                Some(FieldOpts::from_meta(&meta).unwrap())
+                FieldOpts::from_meta(&meta).unwrap()
             })
+            .next()
             .unwrap_or_default();
 
         // Drop the field-level superstruct attributes
@@ -467,25 +468,23 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let mut inner_enum_names = vec![];
 
     // Generate inner enums if necessary.
-    for meta_variant in meta_variant_names {
-        if let Some(meta_variant) = meta_variant {
-            let inner_enum_name = format_ident!("{}{}", type_name, meta_variant);
-            inner_enum_names.push(inner_enum_name.clone());
-            let inner_struct_names = variant_names
-                .iter()
-                .map(|variant_name| format_ident!("{}{}", inner_enum_name, variant_name))
-                .collect_vec();
-            generate_wrapper_enums(
-                &inner_enum_name,
-                &item,
-                &opts,
-                &mut output_items,
-                variant_names,
-                &inner_struct_names,
-                &fields,
-                false,
-            );
-        }
+    for meta_variant in meta_variant_names.iter().flatten() {
+        let inner_enum_name = format_ident!("{}{}", type_name, meta_variant);
+        inner_enum_names.push(inner_enum_name.clone());
+        let inner_struct_names = variant_names
+            .iter()
+            .map(|variant_name| format_ident!("{}{}", inner_enum_name, variant_name))
+            .collect_vec();
+        generate_wrapper_enums(
+            &inner_enum_name,
+            &item,
+            &opts,
+            &mut output_items,
+            variant_names,
+            &inner_struct_names,
+            &fields,
+            false,
+        );
     }
 
     // Generate outer enum.
@@ -513,11 +512,12 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     TokenStream::from_iter(output_items)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn generate_wrapper_enums(
     type_name: &Ident,
     item: &ItemStruct,
     opts: &StructOpts,
-    mut output_items: &mut Vec<TokenStream>,
+    output_items: &mut Vec<TokenStream>,
     variant_names: &[Ident],
     struct_names: &[Ident],
     fields: &[FieldData],
@@ -627,13 +627,13 @@ fn generate_wrapper_enums(
     let getters = fields
         .iter()
         .filter(|f| f.is_common())
-        .map(|field_data| make_field_getter(type_name, &variant_names, &field_data, None, is_meta));
+        .map(|field_data| make_field_getter(type_name, variant_names, field_data, None, is_meta));
 
     let mut_getters = fields
         .iter()
         .filter(|f| f.is_common() && !f.getter_opts.no_mut)
         .map(|field_data| {
-            make_mut_field_getter(type_name, &variant_names, &field_data, None, is_meta)
+            make_mut_field_getter(type_name, variant_names, field_data, None, is_meta)
         });
 
     let partial_getters = fields
@@ -645,8 +645,8 @@ fn generate_wrapper_enums(
             let field_variants = &field_data.only_combinations;
             Some(make_partial_getter(
                 type_name,
-                &field_data,
-                &field_variants,
+                field_data,
+                field_variants,
                 &opts.partial_getter_error,
                 *mutability,
                 None,
@@ -713,8 +713,8 @@ fn generate_wrapper_enums(
     let ref_getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
         make_field_getter(
             &ref_ty_name,
-            &variant_names,
-            &field_data,
+            variant_names,
+            field_data,
             Some(&ref_ty_lifetime),
             is_meta,
         )
@@ -763,8 +763,8 @@ fn generate_wrapper_enums(
         .map(|field_data| {
             make_mut_field_getter(
                 &ref_mut_ty_name,
-                &variant_names,
-                &field_data,
+                variant_names,
+                field_data,
                 Some(&ref_mut_ty_lifetime),
                 is_meta,
             )
@@ -778,8 +778,8 @@ fn generate_wrapper_enums(
             let field_variants = &field_data.only_combinations;
             Some(make_partial_getter(
                 &ref_mut_ty_name,
-                &field_data,
-                &field_variants,
+                field_data,
+                field_variants,
                 &opts.partial_getter_error,
                 true,
                 Some(&ref_mut_ty_lifetime),
@@ -804,14 +804,14 @@ fn generate_wrapper_enums(
     if !opts.no_map_macros && !opts.no_enum {
         let num_generics = decl_generics.params.len();
         generate_all_map_macros(
-            &type_name,
+            type_name,
             &ref_ty_name,
             &ref_mut_ty_name,
             num_generics,
-            &struct_names,
+            struct_names,
             variant_names,
-            &opts,
-            &mut output_items,
+            opts,
+            output_items,
         );
     } else {
         assert!(
@@ -829,7 +829,7 @@ fn generate_wrapper_enums(
     }
 
     // Generate trait implementations.
-    for (variant_name, struct_name) in variant_names.into_iter().zip_eq(struct_names) {
+    for (variant_name, struct_name) in variant_names.iter().zip_eq(struct_names) {
         let from_impl = generate_from_variant_trait_impl(
             type_name,
             impl_generics,
@@ -1107,7 +1107,7 @@ fn is_superstruct_attr(attr: &Attribute) -> bool {
 fn is_attr_with_ident(attr: &Attribute, ident: &str) -> bool {
     attr.path
         .get_ident()
-        .map_or(false, |attr_ident| attr_ident.to_string() == ident)
+        .map_or(false, |attr_ident| *attr_ident == ident)
 }
 
 /// Predicate for determining whether a field should be excluded from a flattened
@@ -1124,7 +1124,7 @@ fn should_skip(
         Override::Inherit => false,
         Override::Explicit(map) => {
             let contains_variant = map.contains_key(variant);
-            let contains_meta_variant = meta_variant.map_or(true, |mv| map.contains_key(&mv));
+            let contains_meta_variant = meta_variant.map_or(true, |mv| map.contains_key(mv));
 
             let variants_exist = variant_names.iter().any(|v| map.contains_key(v));
             let meta_variants_exist = meta_variant_names

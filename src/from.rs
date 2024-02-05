@@ -19,6 +19,7 @@ pub fn generate_from_variant_trait_impl(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn generate_from_variant_trait_impl_for_ref(
     ref_ty_name: &Ident,
     ref_ty_lifetime: &Lifetime,
