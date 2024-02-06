@@ -236,6 +236,9 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             .next()
             .unwrap_or_default();
 
+        // Check for conflicting attributes.
+        check_for_conflicting_superstruct_attrs(&field.attrs);
+
         // Drop the field-level superstruct attributes
         let mut output_field = field.clone();
         output_field.attrs = discard_superstruct_attrs(&output_field.attrs);
@@ -1077,6 +1080,21 @@ fn make_as_variant_method(
                 _ => Err(#err_expr),
             }
         }
+    }
+}
+
+/// Check that there is at most one superstruct attribute, and panic otherwise.
+fn check_for_conflicting_superstruct_attrs(attrs: &[Attribute]) {
+    if attrs
+        .iter()
+        .filter(|attr| is_superstruct_attr(attr))
+        .count()
+        > 1
+    {
+        // TODO: this is specific to fields right now, but we could maybe make it work for the
+        // top-level attributes. I'm just not sure how to get at them under the `AttributeArgs`
+        // stuff.
+        panic!("cannot handle more than one superstruct attribute per field");
     }
 }
 
