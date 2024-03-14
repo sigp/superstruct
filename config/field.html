@@ -189,7 +189,7 @@ created.</p>
 <h2 id="getter"><a class="header" href="#getter">Getter</a></h2>
 <pre><code>#[superstruct(getter(copy, ..))]
 #[superstruct(getter(no_mut, ..))]
-#[superstruct(getter(rename = &quot;..&quot;, ..))]
+#[superstruct(getter(rename = "..", ..))]
 </code></pre>
 <p>Customise the implementation of the <a href="../codegen/enum.html#getters-and-setters">getter functions</a> for
 this field.</p>
@@ -200,13 +200,13 @@ may be applied in a single attribute, e.g. <code>#[superstruct(getter(copy, no_m
 <li><code>copy</code>: return <code>T</code> rather than <code>&amp;T</code> where <code>T</code> is the type of the field. <code>T</code> must be <code>Copy</code>
 or the generated code will fail to typecheck.</li>
 <li><code>no_mut</code>: do not generate a mutating getter with <code>_mut</code> suffix.</li>
-<li><code>rename = &quot;name&quot;</code>: rename the immutable getter to <code>name()</code> and the mutable getter to <code>name_mut()</code>
+<li><code>rename = "name"</code>: rename the immutable getter to <code>name()</code> and the mutable getter to <code>name_mut()</code>
 (if enabled).</li>
 </ul>
 <h2 id="partial-getter"><a class="header" href="#partial-getter">Partial getter</a></h2>
 <pre><code>#[superstruct(partial_getter(copy, ..))]
 #[superstruct(partial_getter(no_mut, ..))]
-#[superstruct(partial_getter(rename = &quot;..&quot;, ..))]
+#[superstruct(partial_getter(rename = "..", ..))]
 </code></pre>
 <p>Customise the implementation of the <a href="../codegen/enum.html#getters-and-setters">partial getter
 functions</a> for this field.</p>
@@ -217,7 +217,7 @@ may be applied in a single attribute, e.g. <code>#[superstruct(partial_getter(co
 <li><code>copy</code>: return <code>Result&lt;T, E&gt;</code> rather than <code>Result&lt;&amp;T, E&gt;</code> where <code>T</code> is the type of the field. <code>T</code>
 must be <code>Copy</code> or the generated code will fail to typecheck.</li>
 <li><code>no_mut</code>: do not generate a mutating getter with <code>_mut</code> suffix.</li>
-<li><code>rename = &quot;name&quot;</code>: rename the immutable partial getter to <code>name()</code> and the mutable partial getter
+<li><code>rename = "name"</code>: rename the immutable partial getter to <code>name()</code> and the mutable partial getter
 to <code>name_mut()</code> (if enabled).</li>
 </ul>
 <p>The error type for partial getters can currently only be configured on a per-struct basis
@@ -255,13 +255,13 @@ struct InnerMessage {
 
 #[superstruct(variants(A, B))]
 struct Message {
-    #[superstruct(only(A), partial_getter(rename = &quot;inner_a&quot;))]
+    #[superstruct(only(A), partial_getter(rename = "inner_a"))]
     pub inner: InnerMessageA,
-    #[superstruct(only(B), partial_getter(rename = &quot;inner_b&quot;))]
+    #[superstruct(only(B), partial_getter(rename = "inner_b"))]
     pub inner: InnerMessageB,
 }
 <span class="boring">}</span></code></pre></pre>
-<p>If you wish to only flatten into only a subset of variants, you can define them like so: </p>
+<p>If you wish to only flatten into only a subset of variants, you can define them like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(A, B))]

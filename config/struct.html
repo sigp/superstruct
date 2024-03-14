@@ -184,14 +184,14 @@ See <a href="../codegen/variant-structs.html">variant structs</a>.</p>
 <p>The <code>variants</code> attribute is <em>not optional</em>.</p>
 <p><strong>Format</strong>: 1+ comma-separated identifiers.</p>
 <h2 id="cast-error"><a class="header" href="#cast-error">Cast error</a></h2>
-<pre><code>#[superstruct(cast_error(ty = &quot;..&quot;, expr = &quot;..&quot;))]
+<pre><code>#[superstruct(cast_error(ty = "..", expr = ".."))]
 </code></pre>
 <p>Define the error type to be returned from <a href="../codegen/enum.html#casting-methods">casting methods</a>.</p>
 <p>The expression must be of the given error type, and capable of being evaluated without any
 context (it is <em>not</em> a closure).</p>
 <p><strong>Format</strong>: quoted type for <code>ty</code>, quoted expression for <code>expr</code></p>
 <h2 id="partial-getter-error"><a class="header" href="#partial-getter-error">Partial getter error</a></h2>
-<pre><code>#[superstruct(cast_error(ty = &quot;..&quot;, expr = &quot;..&quot;))]
+<pre><code>#[superstruct(cast_error(ty = "..", expr = ".."))]
 </code></pre>
 <p>Define the error type to be returned from <a href="../codegen/enum.html#getters-and-setters">partial getter
 methods</a>.</p>

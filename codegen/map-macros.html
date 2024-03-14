@@ -270,9 +270,9 @@ type being mapped <em>into</em>.</p>
 )]
 #[derive(Debug, PartialEq, Clone)]
 pub struct Thing1 {
-    #[superstruct(only(A), partial_getter(rename = &quot;thing2a&quot;))]
+    #[superstruct(only(A), partial_getter(rename = "thing2a"))]
     thing2: Thing2A,
-    #[superstruct(only(B), partial_getter(rename = &quot;thing2b&quot;))]
+    #[superstruct(only(B), partial_getter(rename = "thing2b"))]
     thing2: Thing2B,
 }
 

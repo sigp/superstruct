@@ -246,7 +246,7 @@ control <code>superstruct</code>'s behaviour, including renaming getters, workin
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="setup"><a class="header" href="#setup">Setup</a></h1>
 <p>To use SuperStruct in your project add <code>superstruct</code> as a dependency in your <code>Cargo.toml</code>:</p>
-<pre><code class="language-toml">superstruct = &quot;0.4.0&quot;
+<pre><code class="language-toml">superstruct = "0.4.0"
 </code></pre>
 <p>For the latest published version please consult <a href="https://crates.io/crates/superstruct"><code>crates.io</code></a>.</p>
 <hr />
@@ -511,9 +511,9 @@ type being mapped <em>into</em>.</p>
 )]
 #[derive(Debug, PartialEq, Clone)]
 pub struct Thing1 {
-    #[superstruct(only(A), partial_getter(rename = &quot;thing2a&quot;))]
+    #[superstruct(only(A), partial_getter(rename = "thing2a"))]
     thing2: Thing2A,
-    #[superstruct(only(B), partial_getter(rename = &quot;thing2b&quot;))]
+    #[superstruct(only(B), partial_getter(rename = "thing2b"))]
     thing2: Thing2B,
 }
 
@@ -574,14 +574,14 @@ See <a href="config/../codegen/variant-structs.html">variant structs</a>.</p>
 <p>The <code>variants</code> attribute is <em>not optional</em>.</p>
 <p><strong>Format</strong>: 1+ comma-separated identifiers.</p>
 <h2 id="cast-error"><a class="header" href="#cast-error">Cast error</a></h2>
-<pre><code>#[superstruct(cast_error(ty = &quot;..&quot;, expr = &quot;..&quot;))]
+<pre><code>#[superstruct(cast_error(ty = "..", expr = ".."))]
 </code></pre>
 <p>Define the error type to be returned from <a href="config/../codegen/enum.html#casting-methods">casting methods</a>.</p>
 <p>The expression must be of the given error type, and capable of being evaluated without any
 context (it is <em>not</em> a closure).</p>
 <p><strong>Format</strong>: quoted type for <code>ty</code>, quoted expression for <code>expr</code></p>
 <h2 id="partial-getter-error"><a class="header" href="#partial-getter-error">Partial getter error</a></h2>
-<pre><code>#[superstruct(cast_error(ty = &quot;..&quot;, expr = &quot;..&quot;))]
+<pre><code>#[superstruct(cast_error(ty = "..", expr = ".."))]
 </code></pre>
 <p>Define the error type to be returned from <a href="config/../codegen/enum.html#getters-and-setters">partial getter
 methods</a>.</p>
@@ -648,7 +648,7 @@ created.</p>
 <h2 id="getter"><a class="header" href="#getter">Getter</a></h2>
 <pre><code>#[superstruct(getter(copy, ..))]
 #[superstruct(getter(no_mut, ..))]
-#[superstruct(getter(rename = &quot;..&quot;, ..))]
+#[superstruct(getter(rename = "..", ..))]
 </code></pre>
 <p>Customise the implementation of the <a href="config/../codegen/enum.html#getters-and-setters">getter functions</a> for
 this field.</p>
@@ -659,13 +659,13 @@ may be applied in a single attribute, e.g. <code>#[superstruct(getter(copy, no_m
 <li><code>copy</code>: return <code>T</code> rather than <code>&amp;T</code> where <code>T</code> is the type of the field. <code>T</code> must be <code>Copy</code>
 or the generated code will fail to typecheck.</li>
 <li><code>no_mut</code>: do not generate a mutating getter with <code>_mut</code> suffix.</li>
-<li><code>rename = &quot;name&quot;</code>: rename the immutable getter to <code>name()</code> and the mutable getter to <code>name_mut()</code>
+<li><code>rename = "name"</code>: rename the immutable getter to <code>name()</code> and the mutable getter to <code>name_mut()</code>
 (if enabled).</li>
 </ul>
 <h2 id="partial-getter"><a class="header" href="#partial-getter">Partial getter</a></h2>
 <pre><code>#[superstruct(partial_getter(copy, ..))]
 #[superstruct(partial_getter(no_mut, ..))]
-#[superstruct(partial_getter(rename = &quot;..&quot;, ..))]
+#[superstruct(partial_getter(rename = "..", ..))]
 </code></pre>
 <p>Customise the implementation of the <a href="config/../codegen/enum.html#getters-and-setters">partial getter
 functions</a> for this field.</p>
@@ -676,7 +676,7 @@ may be applied in a single attribute, e.g. <code>#[superstruct(partial_getter(co
 <li><code>copy</code>: return <code>Result&lt;T, E&gt;</code> rather than <code>Result&lt;&amp;T, E&gt;</code> where <code>T</code> is the type of the field. <code>T</code>
 must be <code>Copy</code> or the generated code will fail to typecheck.</li>
 <li><code>no_mut</code>: do not generate a mutating getter with <code>_mut</code> suffix.</li>
-<li><code>rename = &quot;name&quot;</code>: rename the immutable partial getter to <code>name()</code> and the mutable partial getter
+<li><code>rename = "name"</code>: rename the immutable partial getter to <code>name()</code> and the mutable partial getter
 to <code>name_mut()</code> (if enabled).</li>
 </ul>
 <p>The error type for partial getters can currently only be configured on a per-struct basis
@@ -714,13 +714,13 @@ struct InnerMessage {
 
 #[superstruct(variants(A, B))]
 struct Message {
-    #[superstruct(only(A), partial_getter(rename = &quot;inner_a&quot;))]
+    #[superstruct(only(A), partial_getter(rename = "inner_a"))]
     pub inner: InnerMessageA,
-    #[superstruct(only(B), partial_getter(rename = &quot;inner_b&quot;))]
+    #[superstruct(only(B), partial_getter(rename = "inner_b"))]
     pub inner: InnerMessageB,
 }
 <span class="boring">}</span></code></pre></pre>
-<p>If you wish to only flatten into only a subset of variants, you can define them like so: </p>
+<p>If you wish to only flatten into only a subset of variants, you can define them like so:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(A, B))]

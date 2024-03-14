@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/syn-1.0.109/src/error.rs`."><title>error.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="syn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/syn-1.0.109/src/error.rs`."><title>error.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="syn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -426,13 +427,13 @@
 <a href="#426" id="426">426</a>
 <a href="#427" id="427">427</a>
 <a href="#428" id="428">428</a>
-</pre></div><pre class="rust"><code><span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</pre></div><pre class="rust"><code><span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::buffer::Cursor;
 <span class="kw">use </span><span class="kw">crate</span>::thread::ThreadBound;
 <span class="kw">use </span>proc_macro2::{
     Delimiter, Group, Ident, LexError, Literal, Punct, Spacing, Span, TokenStream, TokenTree,
 };
-<span class="attr">#[cfg(feature = <span class="string">&quot;printing&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"printing"</span>)]
 </span><span class="kw">use </span>quote::ToTokens;
 <span class="kw">use </span>std::fmt::{<span class="self">self</span>, Debug, Display};
 <span class="kw">use </span>std::iter::FromIterator;
@@ -518,7 +519,7 @@
     <span class="comment">// Span is implemented as an index into a thread-local interner to keep the
     // size small. It is not safe to access from a different thread. We want
     // errors to be Send and Sync to play nicely with the Failure crate, so pin
-    // the span we&#39;re given to its original thread and assume it is
+    // the span we're given to its original thread and assume it is
     // Span::call_site if accessed from any other thread.
     </span>start_span: ThreadBound&lt;Span&gt;,
     end_span: ThreadBound&lt;Span&gt;,
@@ -546,15 +547,15 @@
     /// use syn::{Error, Ident, LitStr, Result, Token};
     /// use syn::parse::ParseStream;
     ///
-    /// // Parses input that looks like `name = &quot;string&quot;` where the key must be
+    /// // Parses input that looks like `name = "string"` where the key must be
     /// // the identifier `name` and the value may be any string literal.
     /// // Returns the string literal.
     /// fn parse_name(input: ParseStream) -&gt; Result&lt;LitStr&gt; {
     ///     let name_token: Ident = input.parse()?;
-    ///     if name_token != &quot;name&quot; {
+    ///     if name_token != "name" {
     ///         // Trigger an error not on the current position of the stream,
     ///         // but on the position of the unexpected identifier.
-    ///         return Err(Error::new(name_token.span(), &quot;expected `name`&quot;));
+    ///         return Err(Error::new(name_token.span(), "expected `name`"));
     ///     }
     ///     input.parse::&lt;Token![=]&gt;()?;
     ///     let s: LitStr = input.parse()?;
@@ -586,9 +587,9 @@
     /// `Error::new_spanned` may provide a higher-quality error message on
     /// stable Rust.
     ///
-    /// When in doubt it&#39;s recommended to stick to `Error::new` (or
+    /// When in doubt it's recommended to stick to `Error::new` (or
     /// `ParseStream::error`)!
-    </span><span class="attr">#[cfg(feature = <span class="string">&quot;printing&quot;</span>)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"printing"</span>)]
     </span><span class="kw">pub fn </span>new_spanned&lt;T: ToTokens, U: Display&gt;(tokens: T, message: U) -&gt; <span class="self">Self </span>{
         <span class="kw">return </span>new_spanned(tokens.into_token_stream(), message.to_string());
 
@@ -691,9 +692,9 @@
 
         <span class="comment">// compile_error!($message)
         </span>TokenStream::from_iter(<span class="macro">vec!</span>[
-            TokenTree::Ident(Ident::new(<span class="string">&quot;compile_error&quot;</span>, start)),
+            TokenTree::Ident(Ident::new(<span class="string">"compile_error"</span>, start)),
             TokenTree::Punct({
-                <span class="kw">let </span><span class="kw-2">mut </span>punct = Punct::new(<span class="string">&#39;!&#39;</span>, Spacing::Alone);
+                <span class="kw">let </span><span class="kw-2">mut </span>punct = Punct::new(<span class="string">'!'</span>, Spacing::Alone);
                 punct.set_span(start);
                 punct
             }),
@@ -712,17 +713,17 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
 </span><span class="kw">pub fn </span>new_at&lt;T: Display&gt;(scope: Span, cursor: Cursor, message: T) -&gt; Error {
     <span class="kw">if </span>cursor.eof() {
-        Error::new(scope, <span class="macro">format!</span>(<span class="string">&quot;unexpected end of input, {}&quot;</span>, message))
+        Error::new(scope, <span class="macro">format!</span>(<span class="string">"unexpected end of input, {}"</span>, message))
     } <span class="kw">else </span>{
         <span class="kw">let </span>span = <span class="kw">crate</span>::buffer::open_span_of_group(cursor);
         Error::new(span, message)
     }
 }
 
-<span class="attr">#[cfg(all(feature = <span class="string">&quot;parsing&quot;</span>, any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>)))]
+<span class="attr">#[cfg(all(feature = <span class="string">"parsing"</span>, any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>)))]
 </span><span class="kw">pub fn </span>new2&lt;T: Display&gt;(start: Span, end: Span, message: T) -&gt; Error {
     <span class="kw">return </span>new2(start, end, message.to_string());
 
@@ -741,12 +742,12 @@
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, formatter: <span class="kw-2">&amp;mut </span>fmt::Formatter) -&gt; fmt::Result {
         <span class="kw">if </span><span class="self">self</span>.messages.len() == <span class="number">1 </span>{
             formatter
-                .debug_tuple(<span class="string">&quot;Error&quot;</span>)
+                .debug_tuple(<span class="string">"Error"</span>)
                 .field(<span class="kw-2">&amp;</span><span class="self">self</span>.messages[<span class="number">0</span>])
                 .finish()
         } <span class="kw">else </span>{
             formatter
-                .debug_tuple(<span class="string">&quot;Error&quot;</span>)
+                .debug_tuple(<span class="string">"Error"</span>)
                 .field(<span class="kw-2">&amp;</span><span class="self">self</span>.messages)
                 .finish()
         }
@@ -793,7 +794,7 @@
 
 <span class="kw">impl </span>From&lt;LexError&gt; <span class="kw">for </span>Error {
     <span class="kw">fn </span>from(err: LexError) -&gt; <span class="self">Self </span>{
-        Error::new(err.span(), <span class="string">&quot;lex error&quot;</span>)
+        Error::new(err.span(), <span class="string">"lex error"</span>)
     }
 }
 
@@ -822,9 +823,9 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; IntoIterator <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Error {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; IntoIterator <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">'a </span>Error {
     <span class="kw">type </span>Item = Error;
-    <span class="kw">type </span>IntoIter = Iter&lt;<span class="lifetime">&#39;a</span>&gt;;
+    <span class="kw">type </span>IntoIter = Iter&lt;<span class="lifetime">'a</span>&gt;;
 
     <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
         Iter {
@@ -833,11 +834,11 @@
     }
 }
 
-<span class="kw">pub struct </span>Iter&lt;<span class="lifetime">&#39;a</span>&gt; {
-    messages: slice::Iter&lt;<span class="lifetime">&#39;a</span>, ErrorMessage&gt;,
+<span class="kw">pub struct </span>Iter&lt;<span class="lifetime">'a</span>&gt; {
+    messages: slice::Iter&lt;<span class="lifetime">'a</span>, ErrorMessage&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; Iterator <span class="kw">for </span>Iter&lt;<span class="lifetime">'a</span>&gt; {
     <span class="kw">type </span>Item = Error;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {

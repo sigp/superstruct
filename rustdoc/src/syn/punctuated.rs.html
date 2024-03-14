@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/syn-1.0.109/src/punctuated.rs`."><title>punctuated.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="syn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/syn-1.0.109/src/punctuated.rs`."><title>punctuated.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="syn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1107,11 +1108,11 @@
 //!                 ~~~~^ ~~~~^ ~~~~
 //! ```
 
-</span><span class="attr">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
+</span><span class="attr">#[cfg(feature = <span class="string">"extra-traits"</span>)]
 </span><span class="kw">use </span>std::fmt::{<span class="self">self</span>, Debug};
-<span class="attr">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"extra-traits"</span>)]
 </span><span class="kw">use </span>std::hash::{Hash, Hasher};
-<span class="attr">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]
+<span class="attr">#[cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))]
 </span><span class="kw">use </span>std::iter;
 <span class="kw">use </span>std::iter::FromIterator;
 <span class="kw">use </span>std::ops::{Index, IndexMut};
@@ -1120,9 +1121,9 @@
 <span class="kw">use </span>std::vec;
 
 <span class="kw">use </span><span class="kw">crate</span>::drops::{NoDrop, TrivialDrop};
-<span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::parse::{Parse, ParseStream, <span class="prelude-ty">Result</span>};
-<span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
 </span><span class="kw">use </span><span class="kw">crate</span>::token::Token;
 
 <span class="doccomment">/// A punctuated sequence of syntax tree nodes of type `T` separated by
@@ -1252,7 +1253,7 @@
     </span><span class="kw">pub fn </span>push_value(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: T) {
         <span class="macro">assert!</span>(
             <span class="self">self</span>.empty_or_trailing(),
-            <span class="string">&quot;Punctuated::push_value: cannot push value if Punctuated is missing trailing punctuation&quot;</span>,
+            <span class="string">"Punctuated::push_value: cannot push value if Punctuated is missing trailing punctuation"</span>,
         );
 
         <span class="self">self</span>.last = <span class="prelude-val">Some</span>(Box::new(value));
@@ -1268,7 +1269,7 @@
     </span><span class="kw">pub fn </span>push_punct(<span class="kw-2">&amp;mut </span><span class="self">self</span>, punctuation: P) {
         <span class="macro">assert!</span>(
             <span class="self">self</span>.last.is_some(),
-            <span class="string">&quot;Punctuated::push_punct: cannot push punctuation if Punctuated is empty or already has trailing punctuation&quot;</span>,
+            <span class="string">"Punctuated::push_punct: cannot push punctuation if Punctuated is empty or already has trailing punctuation"</span>,
         );
 
         <span class="kw">let </span>last = <span class="self">self</span>.last.take().unwrap();
@@ -1326,7 +1327,7 @@
     {
         <span class="macro">assert!</span>(
             index &lt;= <span class="self">self</span>.len(),
-            <span class="string">&quot;Punctuated::insert: index out of range&quot;</span>,
+            <span class="string">"Punctuated::insert: index out of range"</span>,
         );
 
         <span class="kw">if </span>index == <span class="self">self</span>.len() {
@@ -1348,10 +1349,10 @@
     /// Parsing continues until the end of this parse stream. The entire content
     /// of this parse stream must consist of `T` and `P`.
     ///
-    /// *This function is available only if Syn is built with the `&quot;parsing&quot;`
+    /// *This function is available only if Syn is built with the `"parsing"`
     /// feature.*
-    </span><span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
-    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    </span><span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">pub fn </span>parse_terminated(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
     <span class="kw">where
         </span>T: Parse,
@@ -1369,10 +1370,10 @@
     ///
     /// [`parse_terminated`]: Punctuated::parse_terminated
     ///
-    /// *This function is available only if Syn is built with the `&quot;parsing&quot;`
+    /// *This function is available only if Syn is built with the `"parsing"`
     /// feature.*
-    </span><span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
-    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    </span><span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">pub fn </span>parse_terminated_with(
         input: ParseStream,
         parser: <span class="kw">fn</span>(ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;,
@@ -1406,10 +1407,10 @@
     /// is not followed by a `P`, even if there are remaining tokens in the
     /// stream.
     ///
-    /// *This function is available only if Syn is built with the `&quot;parsing&quot;`
+    /// *This function is available only if Syn is built with the `"parsing"`
     /// feature.*
-    </span><span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
-    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    </span><span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">pub fn </span>parse_separated_nonempty(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
     <span class="kw">where
         </span>T: Parse,
@@ -1427,10 +1428,10 @@
     ///
     /// [`parse_separated_nonempty`]: Punctuated::parse_separated_nonempty
     ///
-    /// *This function is available only if Syn is built with the `&quot;parsing&quot;`
+    /// *This function is available only if Syn is built with the `"parsing"`
     /// feature.*
-    </span><span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
-    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    </span><span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">pub fn </span>parse_separated_nonempty_with(
         input: ParseStream,
         parser: <span class="kw">fn</span>(ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;,
@@ -1454,8 +1455,8 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)]
-#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)))]
+<span class="attr">#[cfg(feature = <span class="string">"clone-impls"</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"clone-impls"</span>)))]
 </span><span class="kw">impl</span>&lt;T, P&gt; Clone <span class="kw">for </span>Punctuated&lt;T, P&gt;
 <span class="kw">where
     </span>T: Clone,
@@ -1469,8 +1470,8 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
-#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]
+<span class="attr">#[cfg(feature = <span class="string">"extra-traits"</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"extra-traits"</span>)))]
 </span><span class="kw">impl</span>&lt;T, P&gt; Eq <span class="kw">for </span>Punctuated&lt;T, P&gt;
 <span class="kw">where
     </span>T: Eq,
@@ -1478,8 +1479,8 @@
 {
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
-#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]
+<span class="attr">#[cfg(feature = <span class="string">"extra-traits"</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"extra-traits"</span>)))]
 </span><span class="kw">impl</span>&lt;T, P&gt; PartialEq <span class="kw">for </span>Punctuated&lt;T, P&gt;
 <span class="kw">where
     </span>T: PartialEq,
@@ -1491,8 +1492,8 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
-#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]
+<span class="attr">#[cfg(feature = <span class="string">"extra-traits"</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"extra-traits"</span>)))]
 </span><span class="kw">impl</span>&lt;T, P&gt; Hash <span class="kw">for </span>Punctuated&lt;T, P&gt;
 <span class="kw">where
     </span>T: Hash,
@@ -1505,8 +1506,8 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
-#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]
+<span class="attr">#[cfg(feature = <span class="string">"extra-traits"</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"extra-traits"</span>)))]
 </span><span class="kw">impl</span>&lt;T: Debug, P: Debug&gt; Debug <span class="kw">for </span>Punctuated&lt;T, P&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter) -&gt; fmt::Result {
         <span class="kw">let </span><span class="kw-2">mut </span>list = f.debug_list();
@@ -1555,13 +1556,13 @@
     <span class="kw">fn </span>extend&lt;I: IntoIterator&lt;Item = Pair&lt;T, P&gt;&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, i: I) {
         <span class="macro">assert!</span>(
             <span class="self">self</span>.empty_or_trailing(),
-            <span class="string">&quot;Punctuated::extend: Punctuated is not empty or does not have a trailing punctuation&quot;</span>,
+            <span class="string">"Punctuated::extend: Punctuated is not empty or does not have a trailing punctuation"</span>,
         );
 
         <span class="kw">let </span><span class="kw-2">mut </span>nomore = <span class="bool-val">false</span>;
         <span class="kw">for </span>pair <span class="kw">in </span>i {
             <span class="kw">if </span>nomore {
-                <span class="macro">panic!</span>(<span class="string">&quot;Punctuated extended with items after a Pair::End&quot;</span>);
+                <span class="macro">panic!</span>(<span class="string">"Punctuated extended with items after a Pair::End"</span>);
             }
             <span class="kw">match </span>pair {
                 Pair::Punctuated(a, b) =&gt; <span class="self">self</span>.inner.push((a, b)),
@@ -1589,18 +1590,18 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; IntoIterator <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Punctuated&lt;T, P&gt; {
-    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T;
-    <span class="kw">type </span>IntoIter = Iter&lt;<span class="lifetime">&#39;a</span>, T&gt;;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; IntoIterator <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">'a </span>Punctuated&lt;T, P&gt; {
+    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T;
+    <span class="kw">type </span>IntoIter = Iter&lt;<span class="lifetime">'a</span>, T&gt;;
 
     <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
         Punctuated::iter(<span class="self">self</span>)
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; IntoIterator <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Punctuated&lt;T, P&gt; {
-    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T;
-    <span class="kw">type </span>IntoIter = IterMut&lt;<span class="lifetime">&#39;a</span>, T&gt;;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; IntoIterator <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>Punctuated&lt;T, P&gt; {
+    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T;
+    <span class="kw">type </span>IntoIter = IterMut&lt;<span class="lifetime">'a</span>, T&gt;;
 
     <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
         Punctuated::iter_mut(<span class="self">self</span>)
@@ -1618,13 +1619,13 @@
 /// Refer to the [module documentation] for details about punctuated sequences.
 ///
 /// [module documentation]: self
-</span><span class="kw">pub struct </span>Pairs&lt;<span class="lifetime">&#39;a</span>, T: <span class="lifetime">&#39;a</span>, P: <span class="lifetime">&#39;a</span>&gt; {
-    inner: slice::Iter&lt;<span class="lifetime">&#39;a</span>, (T, P)&gt;,
-    last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt;,
+</span><span class="kw">pub struct </span>Pairs&lt;<span class="lifetime">'a</span>, T: <span class="lifetime">'a</span>, P: <span class="lifetime">'a</span>&gt; {
+    inner: slice::Iter&lt;<span class="lifetime">'a</span>, (T, P)&gt;,
+    last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; Iterator <span class="kw">for </span>Pairs&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
-    <span class="kw">type </span>Item = Pair&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>P&gt;;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; Iterator <span class="kw">for </span>Pairs&lt;<span class="lifetime">'a</span>, T, P&gt; {
+    <span class="kw">type </span>Item = Pair&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>T, <span class="kw-2">&amp;</span><span class="lifetime">'a </span>P&gt;;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.inner
@@ -1638,7 +1639,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; DoubleEndedIterator <span class="kw">for </span>Pairs&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; DoubleEndedIterator <span class="kw">for </span>Pairs&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.last
             .next()
@@ -1647,14 +1648,14 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; ExactSizeIterator <span class="kw">for </span>Pairs&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; ExactSizeIterator <span class="kw">for </span>Pairs&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.inner.len() + <span class="self">self</span>.last.len()
     }
 }
 
 <span class="comment">// No Clone bound on T or P.
-</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; Clone <span class="kw">for </span>Pairs&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; Clone <span class="kw">for </span>Pairs&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         Pairs {
             inner: <span class="self">self</span>.inner.clone(),
@@ -1668,13 +1669,13 @@
 /// Refer to the [module documentation] for details about punctuated sequences.
 ///
 /// [module documentation]: self
-</span><span class="kw">pub struct </span>PairsMut&lt;<span class="lifetime">&#39;a</span>, T: <span class="lifetime">&#39;a</span>, P: <span class="lifetime">&#39;a</span>&gt; {
-    inner: slice::IterMut&lt;<span class="lifetime">&#39;a</span>, (T, P)&gt;,
-    last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt;,
+</span><span class="kw">pub struct </span>PairsMut&lt;<span class="lifetime">'a</span>, T: <span class="lifetime">'a</span>, P: <span class="lifetime">'a</span>&gt; {
+    inner: slice::IterMut&lt;<span class="lifetime">'a</span>, (T, P)&gt;,
+    last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; Iterator <span class="kw">for </span>PairsMut&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
-    <span class="kw">type </span>Item = Pair&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>P&gt;;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; Iterator <span class="kw">for </span>PairsMut&lt;<span class="lifetime">'a</span>, T, P&gt; {
+    <span class="kw">type </span>Item = Pair&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T, <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>P&gt;;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.inner
@@ -1688,7 +1689,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; DoubleEndedIterator <span class="kw">for </span>PairsMut&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; DoubleEndedIterator <span class="kw">for </span>PairsMut&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.last
             .next()
@@ -1697,7 +1698,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; ExactSizeIterator <span class="kw">for </span>PairsMut&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; ExactSizeIterator <span class="kw">for </span>PairsMut&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.inner.len() + <span class="self">self</span>.last.len()
     }
@@ -1805,40 +1806,40 @@
 /// Refer to the [module documentation] for details about punctuated sequences.
 ///
 /// [module documentation]: self
-</span><span class="kw">pub struct </span>Iter&lt;<span class="lifetime">&#39;a</span>, T: <span class="lifetime">&#39;a</span>&gt; {
-    <span class="comment">// The `Item = &amp;&#39;a T` needs to be specified to support rustc 1.31 and older.
-    // On modern compilers we would be able to write just IterTrait&lt;&#39;a, T&gt; where
+</span><span class="kw">pub struct </span>Iter&lt;<span class="lifetime">'a</span>, T: <span class="lifetime">'a</span>&gt; {
+    <span class="comment">// The `Item = &amp;'a T` needs to be specified to support rustc 1.31 and older.
+    // On modern compilers we would be able to write just IterTrait&lt;'a, T&gt; where
     // Item can be inferred unambiguously from the supertrait.
-    </span>inner: Box&lt;NoDrop&lt;<span class="kw">dyn </span>IterTrait&lt;<span class="lifetime">&#39;a</span>, T, Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt; + <span class="lifetime">&#39;a</span>&gt;&gt;,
+    </span>inner: Box&lt;NoDrop&lt;<span class="kw">dyn </span>IterTrait&lt;<span class="lifetime">'a</span>, T, Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt; + <span class="lifetime">'a</span>&gt;&gt;,
 }
 
-<span class="kw">trait </span>IterTrait&lt;<span class="lifetime">&#39;a</span>, T: <span class="lifetime">&#39;a</span>&gt;:
-    DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt; + ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt;
+<span class="kw">trait </span>IterTrait&lt;<span class="lifetime">'a</span>, T: <span class="lifetime">'a</span>&gt;:
+    DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt; + ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt;
 {
-    <span class="kw">fn </span>clone_box(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;NoDrop&lt;<span class="kw">dyn </span>IterTrait&lt;<span class="lifetime">&#39;a</span>, T, Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt; + <span class="lifetime">&#39;a</span>&gt;&gt;;
+    <span class="kw">fn </span>clone_box(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;NoDrop&lt;<span class="kw">dyn </span>IterTrait&lt;<span class="lifetime">'a</span>, T, Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt; + <span class="lifetime">'a</span>&gt;&gt;;
 }
 
-<span class="kw">struct </span>PrivateIter&lt;<span class="lifetime">&#39;a</span>, T: <span class="lifetime">&#39;a</span>, P: <span class="lifetime">&#39;a</span>&gt; {
-    inner: slice::Iter&lt;<span class="lifetime">&#39;a</span>, (T, P)&gt;,
-    last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt;,
+<span class="kw">struct </span>PrivateIter&lt;<span class="lifetime">'a</span>, T: <span class="lifetime">'a</span>, P: <span class="lifetime">'a</span>&gt; {
+    inner: slice::Iter&lt;<span class="lifetime">'a</span>, (T, P)&gt;,
+    last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; TrivialDrop <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">&#39;a</span>, T, P&gt;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; TrivialDrop <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">'a</span>, T, P&gt;
 <span class="kw">where
-    </span>slice::Iter&lt;<span class="lifetime">&#39;a</span>, (T, P)&gt;: TrivialDrop,
-    option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt;: TrivialDrop,
+    </span>slice::Iter&lt;<span class="lifetime">'a</span>, (T, P)&gt;: TrivialDrop,
+    option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt;: TrivialDrop,
 {
 }
 
-<span class="attr">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]
-</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>empty_punctuated_iter&lt;<span class="lifetime">&#39;a</span>, T&gt;() -&gt; Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="attr">#[cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>empty_punctuated_iter&lt;<span class="lifetime">'a</span>, T&gt;() -&gt; Iter&lt;<span class="lifetime">'a</span>, T&gt; {
     Iter {
         inner: Box::new(NoDrop::new(iter::empty())),
     }
 }
 
 <span class="comment">// No Clone bound on T.
-</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; Clone <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; Clone <span class="kw">for </span>Iter&lt;<span class="lifetime">'a</span>, T&gt; {
     <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         Iter {
             inner: <span class="self">self</span>.inner.clone_box(),
@@ -1846,8 +1847,8 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; Iterator <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
-    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; Iterator <span class="kw">for </span>Iter&lt;<span class="lifetime">'a</span>, T&gt; {
+    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.inner.next()
@@ -1858,20 +1859,20 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; DoubleEndedIterator <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; DoubleEndedIterator <span class="kw">for </span>Iter&lt;<span class="lifetime">'a</span>, T&gt; {
     <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.inner.next_back()
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; ExactSizeIterator <span class="kw">for </span>Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; ExactSizeIterator <span class="kw">for </span>Iter&lt;<span class="lifetime">'a</span>, T&gt; {
     <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.inner.len()
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; Iterator <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
-    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; Iterator <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">'a</span>, T, P&gt; {
+    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.inner
@@ -1881,7 +1882,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; DoubleEndedIterator <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; DoubleEndedIterator <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.last
             .next()
@@ -1889,14 +1890,14 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; ExactSizeIterator <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; ExactSizeIterator <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.inner.len() + <span class="self">self</span>.last.len()
     }
 }
 
 <span class="comment">// No Clone bound on T or P.
-</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; Clone <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+</span><span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; Clone <span class="kw">for </span>PrivateIter&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         PrivateIter {
             inner: <span class="self">self</span>.inner.clone(),
@@ -1905,16 +1906,16 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, I&gt; IterTrait&lt;<span class="lifetime">&#39;a</span>, T&gt; <span class="kw">for </span>I
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, I&gt; IterTrait&lt;<span class="lifetime">'a</span>, T&gt; <span class="kw">for </span>I
 <span class="kw">where
-    </span>T: <span class="lifetime">&#39;a</span>,
-    I: DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt;
-        + ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt;
+    </span>T: <span class="lifetime">'a</span>,
+    I: DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt;
+        + ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt;
         + Clone
         + TrivialDrop
-        + <span class="lifetime">&#39;a</span>,
+        + <span class="lifetime">'a</span>,
 {
-    <span class="kw">fn </span>clone_box(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;NoDrop&lt;<span class="kw">dyn </span>IterTrait&lt;<span class="lifetime">&#39;a</span>, T, Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt; + <span class="lifetime">&#39;a</span>&gt;&gt; {
+    <span class="kw">fn </span>clone_box(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;NoDrop&lt;<span class="kw">dyn </span>IterTrait&lt;<span class="lifetime">'a</span>, T, Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>T&gt; + <span class="lifetime">'a</span>&gt;&gt; {
         Box::new(NoDrop::new(<span class="self">self</span>.clone()))
     }
 }
@@ -1924,36 +1925,36 @@
 /// Refer to the [module documentation] for details about punctuated sequences.
 ///
 /// [module documentation]: self
-</span><span class="kw">pub struct </span>IterMut&lt;<span class="lifetime">&#39;a</span>, T: <span class="lifetime">&#39;a</span>&gt; {
-    inner: Box&lt;NoDrop&lt;<span class="kw">dyn </span>IterMutTrait&lt;<span class="lifetime">&#39;a</span>, T, Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt; + <span class="lifetime">&#39;a</span>&gt;&gt;,
+</span><span class="kw">pub struct </span>IterMut&lt;<span class="lifetime">'a</span>, T: <span class="lifetime">'a</span>&gt; {
+    inner: Box&lt;NoDrop&lt;<span class="kw">dyn </span>IterMutTrait&lt;<span class="lifetime">'a</span>, T, Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T&gt; + <span class="lifetime">'a</span>&gt;&gt;,
 }
 
-<span class="kw">trait </span>IterMutTrait&lt;<span class="lifetime">&#39;a</span>, T: <span class="lifetime">&#39;a</span>&gt;:
-    DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt; + ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt;
+<span class="kw">trait </span>IterMutTrait&lt;<span class="lifetime">'a</span>, T: <span class="lifetime">'a</span>&gt;:
+    DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T&gt; + ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T&gt;
 {
 }
 
-<span class="kw">struct </span>PrivateIterMut&lt;<span class="lifetime">&#39;a</span>, T: <span class="lifetime">&#39;a</span>, P: <span class="lifetime">&#39;a</span>&gt; {
-    inner: slice::IterMut&lt;<span class="lifetime">&#39;a</span>, (T, P)&gt;,
-    last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt;,
+<span class="kw">struct </span>PrivateIterMut&lt;<span class="lifetime">'a</span>, T: <span class="lifetime">'a</span>, P: <span class="lifetime">'a</span>&gt; {
+    inner: slice::IterMut&lt;<span class="lifetime">'a</span>, (T, P)&gt;,
+    last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; TrivialDrop <span class="kw">for </span>PrivateIterMut&lt;<span class="lifetime">&#39;a</span>, T, P&gt;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; TrivialDrop <span class="kw">for </span>PrivateIterMut&lt;<span class="lifetime">'a</span>, T, P&gt;
 <span class="kw">where
-    </span>slice::IterMut&lt;<span class="lifetime">&#39;a</span>, (T, P)&gt;: TrivialDrop,
-    option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt;: TrivialDrop,
+    </span>slice::IterMut&lt;<span class="lifetime">'a</span>, (T, P)&gt;: TrivialDrop,
+    option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T&gt;: TrivialDrop,
 {
 }
 
-<span class="attr">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]
-</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>empty_punctuated_iter_mut&lt;<span class="lifetime">&#39;a</span>, T&gt;() -&gt; IterMut&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="attr">#[cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>empty_punctuated_iter_mut&lt;<span class="lifetime">'a</span>, T&gt;() -&gt; IterMut&lt;<span class="lifetime">'a</span>, T&gt; {
     IterMut {
         inner: Box::new(NoDrop::new(iter::empty())),
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; Iterator <span class="kw">for </span>IterMut&lt;<span class="lifetime">&#39;a</span>, T&gt; {
-    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; Iterator <span class="kw">for </span>IterMut&lt;<span class="lifetime">'a</span>, T&gt; {
+    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.inner.next()
@@ -1964,20 +1965,20 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; DoubleEndedIterator <span class="kw">for </span>IterMut&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; DoubleEndedIterator <span class="kw">for </span>IterMut&lt;<span class="lifetime">'a</span>, T&gt; {
     <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.inner.next_back()
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T&gt; ExactSizeIterator <span class="kw">for </span>IterMut&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T&gt; ExactSizeIterator <span class="kw">for </span>IterMut&lt;<span class="lifetime">'a</span>, T&gt; {
     <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.inner.len()
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; Iterator <span class="kw">for </span>PrivateIterMut&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
-    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T;
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; Iterator <span class="kw">for </span>PrivateIterMut&lt;<span class="lifetime">'a</span>, T, P&gt; {
+    <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.inner
@@ -1987,7 +1988,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; DoubleEndedIterator <span class="kw">for </span>PrivateIterMut&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; DoubleEndedIterator <span class="kw">for </span>PrivateIterMut&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="self">self</span>.last
             .next()
@@ -1995,16 +1996,16 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, P&gt; ExactSizeIterator <span class="kw">for </span>PrivateIterMut&lt;<span class="lifetime">&#39;a</span>, T, P&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, P&gt; ExactSizeIterator <span class="kw">for </span>PrivateIterMut&lt;<span class="lifetime">'a</span>, T, P&gt; {
     <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.inner.len() + <span class="self">self</span>.last.len()
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, T, I&gt; IterMutTrait&lt;<span class="lifetime">&#39;a</span>, T&gt; <span class="kw">for </span>I
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, T, I&gt; IterMutTrait&lt;<span class="lifetime">'a</span>, T&gt; <span class="kw">for </span>I
 <span class="kw">where
-    </span>T: <span class="lifetime">&#39;a</span>,
-    I: DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt; + ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt; + <span class="lifetime">&#39;a</span>,
+    </span>T: <span class="lifetime">'a</span>,
+    I: DoubleEndedIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T&gt; + ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>T&gt; + <span class="lifetime">'a</span>,
 {
 }
 
@@ -2064,7 +2065,7 @@
     /// # let mut punctuated = Punctuated::&lt;TypeParamBound, Token![+]&gt;::new();
     /// # let span = Span::call_site();
     /// #
-    /// punctuated.insert(0, parse_quote!(&#39;lifetime));
+    /// punctuated.insert(0, parse_quote!('lifetime));
     /// if let Some(punct) = punctuated.pairs_mut().next().unwrap().punct_mut() {
     ///     punct.span = span;
     /// }
@@ -2095,8 +2096,8 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)]
-#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)))]
+<span class="attr">#[cfg(feature = <span class="string">"clone-impls"</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"clone-impls"</span>)))]
 </span><span class="kw">impl</span>&lt;T, P&gt; Clone <span class="kw">for </span>Pair&lt;T, P&gt;
 <span class="kw">where
     </span>T: Clone,
@@ -2138,13 +2139,13 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;printing&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"printing"</span>)]
 </span><span class="kw">mod </span>printing {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use </span>proc_macro2::TokenStream;
     <span class="kw">use </span>quote::{ToTokens, TokenStreamExt};
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl</span>&lt;T, P&gt; ToTokens <span class="kw">for </span>Punctuated&lt;T, P&gt;
     <span class="kw">where
         </span>T: ToTokens,
@@ -2155,7 +2156,7 @@
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl</span>&lt;T, P&gt; ToTokens <span class="kw">for </span>Pair&lt;T, P&gt;
     <span class="kw">where
         </span>T: ToTokens,
