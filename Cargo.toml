@@ -1,4 +1,3 @@
-workspace = { members = ["examples/features_example"] }
 [package]
 name = "superstruct"
 version = "0.7.0"
