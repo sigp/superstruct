@@ -1,3 +1,4 @@
+workspace = { members = ["examples/features_example"] }
 [package]
 name = "superstruct"
 version = "0.7.0"
@@ -22,4 +23,3 @@ syn = "1.0.82"
 smallvec = "1.8.0"
 serde = { version = "1.0.130", features = ["derive"] }
 serde_json = "1.0.72"
-macro_state = "0.2.0"

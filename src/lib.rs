@@ -1,5 +1,6 @@
 use attributes::{IdentList, NestedMetaList};
 use darling::FromMeta;
+use feature_expr::FeatureExpr;
 use from::{
     generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
     generate_from_variant_trait_impl_for_ref,
@@ -10,13 +11,16 @@ use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use quote::{format_ident, quote, ToTokens};
 use std::collections::HashMap;
+use std::fs::File;
 use std::iter::{self, FromIterator};
+use std::path::PathBuf;
 use syn::{
     parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemConst,
     ItemStruct, Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
 };
 
 mod attributes;
+mod feature_expr;
 mod from;
 mod macros;
 mod naming;
@@ -66,9 +70,9 @@ struct StructOpts {
      * FEATURE EXPERIMENT
      */
     #[darling(default)]
-    variants_and_features_from: Option<IdentList>,
+    variants_and_features_from: Option<String>,
     #[darling(default)]
-    feature_dependencies: Option<IdentList>,
+    feature_dependencies: Option<String>,
     #[darling(default)]
     variant_type: Option<IdentList>,
     #[darling(default)]
@@ -95,9 +99,7 @@ struct FieldOpts {
      * FEATURE EXPERIMENT
      */
     #[darling(default)]
-    from: Option<IdentList>,
-    #[darling(default)]
-    until: Option<IdentList>,
+    feature: Option<FeatureExpr>,
 }
 
 /// Getter configuration for a specific field
@@ -149,17 +151,23 @@ struct FieldData {
     name: Ident,
     field: Field,
     only: Option<Vec<Ident>>,
+    feature: Option<FeatureExpr>,
+    /// Variants for which this field is enabled.
+    variants: Vec<Ident>,
     getter_opts: GetterOpts,
     partial_getter_opts: GetterOpts,
 }
 
 impl FieldData {
     fn is_common(&self) -> bool {
-        self.only.is_none()
+        self.only.is_none() && self.feature.is_none()
     }
 }
 
-fn get_variant_and_feature_names(opts: &StructOpts) -> (Vec<Ident>, Option<Vec<Ident>>) {
+/// Return list of variants and mapping from variants to their full list of enabled features.
+fn get_variant_and_feature_names(
+    opts: &StructOpts,
+) -> (Vec<Ident>, Option<HashMap<Ident, Vec<Ident>>>) {
     // Fixed list of variants.
     if let Some(variants) = &opts.variants {
         assert!(
@@ -170,11 +178,74 @@ fn get_variant_and_feature_names(opts: &StructOpts) -> (Vec<Ident>, Option<Vec<I
     }
 
     // Dynamic list of variants and features.
-    // TODO:
-    // - read variants/features order from macro_state
-    // - generate a list of idents for variants & features
-    // - (optional) sanity check the variant order using the feature dependencies
-    todo!()
+    let Some(variants_and_features_from) = &opts.variants_and_features_from else {
+        panic!("either variants or variants_and_features_from must be set");
+    };
+    let Some(feature_dependencies) = &opts.feature_dependencies else {
+        panic!("variants_and_features_from requires feature_dependencies");
+    };
+
+    let out_dir = PathBuf::from(&std::env::var("OUT_DIR").expect("your crate needs a build.rs"));
+
+    let variants_path = out_dir.join(format!("{variants_and_features_from}.json"));
+    let features_path = out_dir.join(format!("{feature_dependencies}.json"));
+
+    let variants_file = File::open(&variants_path).expect("variants_and_features file exists");
+    let features_file = File::open(&features_path).expect("feature_dependencies file exists");
+
+    let variants_and_features: Vec<(String, Vec<String>)> =
+        serde_json::from_reader(variants_file).unwrap();
+    let feature_dependencies: Vec<(String, Vec<String>)> =
+        serde_json::from_reader(features_file).unwrap();
+
+    // Sanity check dependency graph.
+    // Create list of features enabled at each variant (cumulative).
+    let mut variant_features_cumulative: HashMap<String, Vec<String>> = HashMap::new();
+    for (i, (variant, features)) in variants_and_features.iter().enumerate() {
+        let variant_features = variant_features_cumulative
+            .entry(variant.clone())
+            .or_default();
+
+        for (_, prior_features) in variants_and_features.iter().take(i) {
+            variant_features.extend_from_slice(prior_features);
+        }
+        variant_features.extend_from_slice(features);
+    }
+
+    // Check dependency graph.
+    for (feature, dependencies) in feature_dependencies {
+        for (variant, _) in &variants_and_features {
+            let cumulative_features = variant_features_cumulative.get(variant).unwrap();
+            if cumulative_features.contains(&feature) {
+                // All feature dependencies are enabled for this variant.
+                for dependency in &dependencies {
+                    if !cumulative_features.contains(&dependency) {
+                        panic!("feature {feature} depends on {dependency} but it is not enabled for variant {variant}")
+                    }
+                }
+            }
+        }
+    }
+
+    let variants = variants_and_features
+        .iter()
+        .map(|(variant, _)| Ident::new(variant, Span::call_site()))
+        .collect();
+
+    let variant_features_cumulative_idents = variant_features_cumulative
+        .into_iter()
+        .map(|(variant, features)| {
+            (
+                Ident::new(&variant, Span::call_site()),
+                features
+                    .into_iter()
+                    .map(|feature| Ident::new(&feature, Span::call_site()))
+                    .collect(),
+            )
+        })
+        .collect();
+
+    (variants, Some(variant_features_cumulative_idents))
 }
 
 #[proc_macro_attribute]
@@ -184,6 +255,10 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
     // Early return for "helper" invocations.
     if opts.variants_and_features_decl.is_some() || opts.feature_dependencies_decl.is_some() {
+        let decl_name = opts
+            .variants_and_features_decl
+            .or(opts.feature_dependencies_decl)
+            .unwrap();
         let input2 = input.clone();
         let item = parse_macro_input!(input2 as ItemConst);
 
@@ -230,7 +305,11 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             })
             .collect::<Vec<_>>();
 
-        // TODO: write data as JSON using macro_state
+        let out_dir =
+            PathBuf::from(&std::env::var("OUT_DIR").expect("your crate needs a build.rs"));
+        let output_path = out_dir.join(format!("{decl_name}.json"));
+        let output_file = File::create(output_path).expect("create output file");
+        serde_json::to_writer(output_file, &data).expect("write output file");
 
         return input;
     }
@@ -248,7 +327,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let mk_struct_name = |variant_name: &Ident| format_ident!("{}{}", type_name, variant_name);
 
-    let (variant_names, feature_names) = get_variant_and_feature_names(&opts);
+    let (variant_names, all_variant_features) = get_variant_and_feature_names(&opts);
     let struct_names = variant_names.iter().map(mk_struct_name).collect_vec();
 
     // Vec of field data.
@@ -274,15 +353,32 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         output_field.attrs = discard_superstruct_attrs(&output_field.attrs);
 
         // Add the field to the `variant_fields` map for all applicable variants.
-        let field_variants = field_opts.only.as_ref().map_or_else(
-            || variant_names.clone(),
-            |only| only.keys().cloned().collect_vec(),
-        );
+        let field_variants = if let Some(only_variants) = field_opts.only.as_ref() {
+            only_variants.keys().cloned().collect_vec()
+        } else if let Some(feature_expr) = field_opts.feature.as_ref() {
+            let all_variant_features = all_variant_features
+                .as_ref()
+                .expect("all_variant_features is set");
+            // Check whether field is enabled for each variant.
+            variant_names
+                .iter()
+                .filter(|variant| {
+                    let variant_features = all_variant_features
+                        .get(&variant)
+                        .expect("variant should be in all_variant_features");
+                    feature_expr.eval(&variant_features)
+                })
+                .cloned()
+                .collect()
+        } else {
+            // Enable for all variants.
+            variant_names.clone()
+        };
 
-        for variant_name in field_variants {
+        for variant_name in &field_variants {
             variant_fields
-                .get_mut(&variant_name)
-                .expect("invalid variant name in `only`")
+                .get_mut(variant_name)
+                .expect("invalid variant name in `only` or `feature` expression")
                 .push(output_field.clone());
         }
 
@@ -292,8 +388,10 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         } else if field_opts.only.is_none() && field_opts.partial_getter.is_some() {
             panic!("can't set `partial_getter` options on common field");
         }
+        // TODO: check feature & only mutually exclusive
 
         let only = field_opts.only.map(|only| only.keys().cloned().collect());
+        let feature = field_opts.feature;
         let getter_opts = field_opts.getter.unwrap_or_default();
         let partial_getter_opts = field_opts.partial_getter.unwrap_or_default();
 
@@ -302,6 +400,8 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             name,
             field: output_field,
             only,
+            feature,
+            variants: field_variants,
             getter_opts,
             partial_getter_opts,
         });
@@ -453,7 +553,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         .filter(|f| !f.is_common())
         .cartesian_product(&[false, true])
         .flat_map(|(field_data, mutability)| {
-            let field_variants = field_data.only.as_ref()?;
+            let field_variants = &field_data.variants;
             Some(make_partial_getter(
                 type_name,
                 &field_data,
@@ -533,7 +633,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         .iter()
         .filter(|f| !f.is_common())
         .flat_map(|field_data| {
-            let field_variants = field_data.only.as_ref()?;
+            let field_variants = &field_data.variants;
             Some(make_partial_getter(
                 &ref_ty_name,
                 &field_data,
@@ -580,7 +680,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         .iter()
         .filter(|f| !f.is_common() && !f.partial_getter_opts.no_mut)
         .flat_map(|field_data| {
-            let field_variants = field_data.only.as_ref()?;
+            let field_variants = &field_data.variants;
             Some(make_partial_getter(
                 &ref_mut_ty_name,
                 &field_data,

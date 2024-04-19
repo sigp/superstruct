@@ -16,9 +16,10 @@ enum FeatureName {
     Blobs,
     EIP6110,
     Verge,
+    EIP7549,
 }
 
-#[superstruct(variants_and_features_decl = "fork_order")]
+#[superstruct(variants_and_features_decl = "FORK_ORDER")]
 const FORK_ORDER: &[(ForkName, &[FeatureName])] = &[
     (ForkName::Bellatrix, &[FeatureName::Merge]),
     (ForkName::Capella, &[FeatureName::Withdrawals]),
@@ -28,7 +29,7 @@ const FORK_ORDER: &[(ForkName, &[FeatureName])] = &[
     ),
 ];
 
-#[superstruct(feature_dependencies_decl = "feature_dependencies")]
+#[superstruct(feature_dependencies_decl = "FEATURE_DEPENDENCIES")]
 const FEATURE_DEPENDENCIES: &[(FeatureName, &[FeatureName])] = &[
     (FeatureName::Withdrawals, &[FeatureName::Merge]),
     (FeatureName::Blobs, &[FeatureName::Withdrawals]),
@@ -37,23 +38,37 @@ const FEATURE_DEPENDENCIES: &[(FeatureName, &[FeatureName])] = &[
 ];
 
 #[superstruct(
-    variants_and_features_from(FORK_ORDER),
-    feature_dependencies(FEATURE_DEPENDENCIES),
+    variants_and_features_from = "FORK_ORDER",
+    feature_dependencies = "FEATURE_DEPENDENCIES",
     variant_type(ForkName),
     feature_type(FeatureName)
 )]
 struct Block {
-    #[until(Withdrawals)] // until the fork that has Withdrawals feature
     historical_updates: String,
-    #[from(Withdrawals)]
+    #[superstruct(feature(Withdrawals))]
     historical_summaries: String,
-    #[from(Withdrawals)] // in the Withdrawals fork, and all subsequent
+    #[superstruct(feature(Withdrawals))] // in the Withdrawals fork, and all subsequent
     withdrawals: Vec<u64>,
-    #[from(Blobs)] // if Blobs is not enabled, this is completely disabled
+    #[superstruct(feature(Blobs))] // if Blobs is not enabled, this is completely disabled
     blobs: Vec<u64>,
-    #[from(EIP6110)]
+    #[superstruct(feature(EIP6110))]
     deposits: Vec<u64>,
 }
-// TODO: try some variants as well
+
+// Should generate this:
+/*
+impl Block {
+    fn fork_name(&self) -> ForkName;
+
+    fn feature_names(&self) -> &'static [FeatureName];
+
+    fn is_feature_enabled(&self, feature: FeatureName) -> bool {
+        match self {
+            Self::Capella => false,
+            Self::Electra => true,
+        }
+    }
+}
+*/
 
 fn main() {}
