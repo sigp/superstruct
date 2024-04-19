@@ -383,9 +383,11 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         }
 
         // Check field opts
-        if field_opts.only.is_some() && field_opts.getter.is_some() {
-            panic!("can't configure `only` and `getter` on the same field");
-        } else if field_opts.only.is_none() && field_opts.partial_getter.is_some() {
+        let common = field_opts.only.is_none() && field_opts.feature.is_none();
+
+        if !common && field_opts.getter.is_some() {
+            panic!("can't configure `getter` on non-common field");
+        } else if common && field_opts.partial_getter.is_some() {
             panic!("can't set `partial_getter` options on common field");
         }
         // TODO: check feature & only mutually exclusive
