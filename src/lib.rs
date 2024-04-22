@@ -614,6 +614,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let feature_getters = feature_getters::get_feature_getters(
         type_name,
         &variant_names,
+        all_variant_features.unwrap(), // TODO: Remove unwrap
         &opts.variant_type,
         &opts.feature_type,
     );

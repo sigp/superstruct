@@ -10,7 +10,7 @@ enum ForkName {
     Electra,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 enum FeatureName {
     Merge,
     Withdrawals,
@@ -42,7 +42,11 @@ const FEATURE_DEPENDENCIES: &[(FeatureName, &[FeatureName])] = &[
     variants_and_features_from = "FORK_ORDER",
     feature_dependencies = "FEATURE_DEPENDENCIES",
     variant_type(name = "ForkName", getter = "fork_name"),
-    feature_type(name = "FeatureName")
+    feature_type(
+        name = "FeatureName",
+        list = "feature_names",
+        check = "check_feature_enabled"
+    )
 )]
 struct Block {
     historical_updates: String,
@@ -87,4 +91,14 @@ fn main() {
     });
 
     assert_eq!(block.fork_name(), ForkName::Electra);
+    assert_eq!(
+        block.feature_names(),
+        vec![
+            FeatureName::Merge,
+            FeatureName::Withdrawals,
+            FeatureName::EIP6110,
+            FeatureName::Verge
+        ]
+    );
+    assert!(block.check_feature_enabled(FeatureName::EIP6110));
 }
