@@ -1,7 +1,8 @@
+// TODO: make this into a test
 use serde::{Deserialize, Serialize};
 use superstruct::superstruct;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 enum ForkName {
     Bellatrix,
     Capella,
@@ -40,8 +41,8 @@ const FEATURE_DEPENDENCIES: &[(FeatureName, &[FeatureName])] = &[
 #[superstruct(
     variants_and_features_from = "FORK_ORDER",
     feature_dependencies = "FEATURE_DEPENDENCIES",
-    variant_type(ForkName),
-    feature_type(FeatureName)
+    variant_type(name = "ForkName", getter = "fork_name"),
+    feature_type(name = "FeatureName")
 )]
 struct Block {
     historical_updates: String,
@@ -58,8 +59,6 @@ struct Block {
 // Should generate this:
 /*
 impl Block {
-    fn fork_name(&self) -> ForkName;
-
     fn feature_names(&self) -> &'static [FeatureName];
 
     fn is_feature_enabled(&self, feature: FeatureName) -> bool {
@@ -69,6 +68,23 @@ impl Block {
         }
     }
 }
+
+chain_spec
+    .fork_name_at_slot(slot)
+    .is_feature_enabled(feature)
+
+impl ForkName {
+    fn is_feature_enabled(&self, feature: FeatureName) -> bool
+}
 */
 
-fn main() {}
+fn main() {
+    let block = Block::Electra(BlockElectra {
+        historical_updates: "hey".into(),
+        historical_summaries: "thing".into(),
+        withdrawals: vec![1, 2, 3],
+        deposits: vec![0, 0, 0, 0, 0, 0],
+    });
+
+    assert_eq!(block.fork_name(), ForkName::Electra);
+}

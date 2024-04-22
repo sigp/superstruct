@@ -21,6 +21,7 @@ use syn::{
 
 mod attributes;
 mod feature_expr;
+mod feature_getters;
 mod from;
 mod macros;
 mod naming;
@@ -74,9 +75,12 @@ struct StructOpts {
     #[darling(default)]
     feature_dependencies: Option<String>,
     #[darling(default)]
-    variant_type: Option<IdentList>,
+    variant_type: Option<VariantTypeOpts>,
     #[darling(default)]
-    feature_type: Option<IdentList>,
+    feature_type: Option<FeatureTypeOpts>,
+
+    // variant_type(name = "ForkName", getter = "fork_name")
+    // feature_type(name = "FeatureName", list = "list_all_features", check = "is_feature_enabled")
 
     // Separate invocations
     #[darling(default)]
@@ -119,6 +123,22 @@ struct ErrorOpts {
     ty: Option<String>,
     #[darling(default)]
     expr: Option<String>,
+}
+
+#[derive(Debug, FromMeta)]
+struct VariantTypeOpts {
+    name: Ident,
+    #[darling(default)]
+    getter: Option<Ident>,
+}
+
+#[derive(Debug, FromMeta)]
+struct FeatureTypeOpts {
+    name: Ident,
+    #[darling(default)]
+    list: Option<Ident>,
+    #[darling(default)]
+    check: Option<Ident>,
 }
 
 impl ErrorOpts {
@@ -184,6 +204,10 @@ fn get_variant_and_feature_names(
     let Some(feature_dependencies) = &opts.feature_dependencies else {
         panic!("variants_and_features_from requires feature_dependencies");
     };
+
+    if opts.variant_type.is_none() || opts.feature_type.is_none() {
+        panic!("variant_type and feature_type must be defined");
+    }
 
     let out_dir = PathBuf::from(&std::env::var("OUT_DIR").expect("your crate needs a build.rs"));
 
@@ -587,6 +611,13 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         })
         .collect_vec();
 
+    let feature_getters = feature_getters::get_feature_getters(
+        type_name,
+        &variant_names,
+        &opts.variant_type,
+        &opts.feature_type,
+    );
+
     let impl_block = quote! {
         impl #impl_generics #type_name #ty_generics #where_clause {
             pub fn to_ref<#ref_ty_lifetime>(&#ref_ty_lifetime self) -> #ref_ty_name #ref_ty_generics {
@@ -616,6 +647,9 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             )*
             #(
                 #partial_getters
+            )*
+            #(
+                #feature_getters
             )*
         }
     };
