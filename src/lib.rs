@@ -209,10 +209,10 @@ fn get_variant_and_feature_names(
         panic!("variant_type and feature_type must be defined");
     }
 
-    let out_dir = PathBuf::from(&std::env::var("OUT_DIR").expect("your crate needs a build.rs"));
+    let target_dir = get_cargo_target_dir().expect("your crate needs a build.rs");
 
-    let variants_path = out_dir.join(format!("{variants_and_features_from}.json"));
-    let features_path = out_dir.join(format!("{feature_dependencies}.json"));
+    let variants_path = target_dir.join(format!("{variants_and_features_from}.json"));
+    let features_path = target_dir.join(format!("{feature_dependencies}.json"));
 
     let variants_file = File::open(&variants_path).expect("variants_and_features file exists");
     let features_file = File::open(&features_path).expect("feature_dependencies file exists");
@@ -329,9 +329,8 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             })
             .collect::<Vec<_>>();
 
-        let out_dir =
-            PathBuf::from(&std::env::var("OUT_DIR").expect("your crate needs a build.rs"));
-        let output_path = out_dir.join(format!("{decl_name}.json"));
+        let target_dir = get_cargo_target_dir().expect("your crate needs a build.rs");
+        let output_path = target_dir.join(format!("{decl_name}.json"));
         let output_file = File::create(output_path).expect("create output file");
         serde_json::to_writer(output_file, &data).expect("write output file");
 
@@ -614,7 +613,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
     let feature_getters = feature_getters::get_feature_getters(
         type_name,
         &variant_names,
-        all_variant_features.unwrap(), // TODO: Remove unwrap
+        all_variant_features,
         &opts.variant_type,
         &opts.feature_type,
     );
@@ -1026,4 +1025,15 @@ fn is_attr_with_ident(attr: &Attribute, ident: &str) -> bool {
     attr.path
         .get_ident()
         .map_or(false, |attr_ident| attr_ident.to_string() == ident)
+}
+
+fn get_cargo_target_dir() -> Result<PathBuf, Box<dyn std::error::Error>> {
+    let mut target_dir = PathBuf::from(&std::env::var("OUT_DIR")?);
+    // Pop 3 times to ensure that the files are generated in $CARGO_TARGET_DIR/$PROFILE.
+    // This workaround is required since the above env vars are not available at the time of the
+    // macro execution.
+    target_dir.pop();
+    target_dir.pop();
+    target_dir.pop();
+    Ok(target_dir)
 }

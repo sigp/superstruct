@@ -11,7 +11,7 @@ const DEFAULT_FEATURE_TYPE_CHECK: &str = "is_feature_enabled";
 pub fn get_feature_getters(
     type_name: &Ident,
     variant_names: &[Ident],
-    all_variant_features: HashMap<Ident, Vec<Ident>>,
+    all_variant_features_opts: Option<HashMap<Ident, Vec<Ident>>>,
     variant_type_opts: &Option<VariantTypeOpts>,
     feature_type_opts: &Option<FeatureTypeOpts>,
 ) -> Vec<TokenStream> {
@@ -21,6 +21,10 @@ pub fn get_feature_getters(
     let Some(feature_type) = feature_type_opts else {
         return vec![];
     };
+    let Some(all_variant_features) = all_variant_features_opts else {
+        return vec![];
+    };
+
     let mut output = vec![];
 
     output.extend(get_variant_type_getters(
