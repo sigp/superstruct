@@ -51,7 +51,7 @@ pub fn get_variant_type_getters(
         .clone()
         .unwrap_or_else(|| Ident::new(DEFAULT_VARIANT_TYPE_GETTER, Span::call_site()));
     let getter = quote! {
-        fn #getter_name(&self) -> #variant_type_name {
+        pub fn #getter_name(&self) -> #variant_type_name {
             match self {
                 #(
                     #type_name::#variant_names(..) => #variant_type_name::#variant_names,
@@ -82,7 +82,7 @@ pub fn get_feature_type_getters(
     }
 
     let feature_list = quote! {
-        fn #list_features(&self) -> &'static [#feature_type_name] {
+        pub fn #list_features(&self) -> &'static [#feature_type_name] {
             match self {
                 #(
                     #type_name::#all_variant_names(..) => &[#(#feature_type_name::#feature_sets),*],
@@ -96,7 +96,7 @@ pub fn get_feature_type_getters(
         .clone()
         .unwrap_or_else(|| Ident::new(DEFAULT_FEATURE_TYPE_CHECK, Span::call_site()));
     let feature_check = quote! {
-        fn #check_feature(&self, feature: #feature_type_name) -> bool {
+        pub fn #check_feature(&self, feature: #feature_type_name) -> bool {
             match self {
                 #(
                     #type_name::#all_variant_names(..) => self.#list_features().contains(&feature),
