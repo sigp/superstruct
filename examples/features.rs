@@ -60,27 +60,20 @@ struct Block {
     deposits: Vec<u64>,
 }
 
-// Should generate this:
-/*
-impl Block {
-    fn feature_names(&self) -> &'static [FeatureName];
-
-    fn is_feature_enabled(&self, feature: FeatureName) -> bool {
-        match self {
-            Self::Capella => false,
-            Self::Electra => true,
-        }
-    }
+#[superstruct(
+    feature(Merge),
+    variants_and_features_from = "FORK_ORDER",
+    feature_dependencies = "FEATURE_DEPENDENCIES",
+    variant_type(name = "ForkName", getter = "fork_name"),
+    feature_type(
+        name = "FeatureName",
+        list = "feature_names",
+        check = "check_feature_enabled"
+    )
+)]
+struct Payload {
+    transactions: Vec<u64>,
 }
-
-chain_spec
-    .fork_name_at_slot(slot)
-    .is_feature_enabled(feature)
-
-impl ForkName {
-    fn is_feature_enabled(&self, feature: FeatureName) -> bool
-}
-*/
 
 fn main() {
     let block = Block::Electra(BlockElectra {

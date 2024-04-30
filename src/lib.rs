@@ -78,6 +78,8 @@ struct StructOpts {
     variant_type: Option<VariantTypeOpts>,
     #[darling(default)]
     feature_type: Option<FeatureTypeOpts>,
+    #[darling(default)]
+    feature: Option<IdentList>,
 
     // variant_type(name = "ForkName", getter = "fork_name")
     // feature_type(name = "FeatureName", list = "list_all_features", check = "is_feature_enabled")
@@ -209,6 +211,16 @@ fn get_variant_and_feature_names(
         panic!("variant_type and feature_type must be defined");
     }
 
+    let starting_feature: Option<Ident> = opts
+        .feature
+        .as_ref()
+        .map(|f| {
+            assert!(f.idents.len() == 1, "feature must be singular");
+            f.idents.first()
+        })
+        .flatten()
+        .cloned();
+
     let target_dir = get_cargo_target_dir().expect("your crate needs a build.rs");
 
     let variants_path = target_dir.join(format!("{variants_and_features_from}.json"));
@@ -222,18 +234,29 @@ fn get_variant_and_feature_names(
     let feature_dependencies: Vec<(String, Vec<String>)> =
         serde_json::from_reader(features_file).unwrap();
 
+    let starting_index = if let Some(feature) = starting_feature {
+        variants_and_features
+            .iter()
+            .position(|(_, deps)| deps.iter().any(|f| *f == feature.to_string()))
+            .expect("variants_and_features does not contain the required feature")
+    } else {
+        0
+    };
+
     // Sanity check dependency graph.
     // Create list of features enabled at each variant (cumulative).
     let mut variant_features_cumulative: HashMap<String, Vec<String>> = HashMap::new();
     for (i, (variant, features)) in variants_and_features.iter().enumerate() {
-        let variant_features = variant_features_cumulative
-            .entry(variant.clone())
-            .or_default();
+        if i >= starting_index {
+            let variant_features = variant_features_cumulative
+                .entry(variant.clone())
+                .or_default();
 
-        for (_, prior_features) in variants_and_features.iter().take(i) {
-            variant_features.extend_from_slice(prior_features);
+            for (_, prior_features) in variants_and_features.iter().take(i) {
+                variant_features.extend_from_slice(prior_features);
+            }
+            variant_features.extend_from_slice(features);
         }
-        variant_features.extend_from_slice(features);
     }
 
     // Check dependency graph.
