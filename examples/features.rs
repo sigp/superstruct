@@ -61,7 +61,7 @@ struct Block {
 }
 
 #[superstruct(
-    feature(Merge),
+    feature(Withdrawals),
     variants_and_features_from = "FORK_ORDER",
     feature_dependencies = "FEATURE_DEPENDENCIES",
     variant_type(name = "ForkName", getter = "fork_name"),

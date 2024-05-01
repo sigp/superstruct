@@ -229,34 +229,23 @@ fn get_variant_and_feature_names(
     let variants_file = File::open(&variants_path).expect("variants_and_features file exists");
     let features_file = File::open(&features_path).expect("feature_dependencies file exists");
 
-    let variants_and_features: Vec<(String, Vec<String>)> =
+    let mut variants_and_features: Vec<(String, Vec<String>)> =
         serde_json::from_reader(variants_file).unwrap();
     let feature_dependencies: Vec<(String, Vec<String>)> =
         serde_json::from_reader(features_file).unwrap();
-
-    let starting_index = if let Some(feature) = starting_feature {
-        variants_and_features
-            .iter()
-            .position(|(_, deps)| deps.iter().any(|f| *f == feature.to_string()))
-            .expect("variants_and_features does not contain the required feature")
-    } else {
-        0
-    };
 
     // Sanity check dependency graph.
     // Create list of features enabled at each variant (cumulative).
     let mut variant_features_cumulative: HashMap<String, Vec<String>> = HashMap::new();
     for (i, (variant, features)) in variants_and_features.iter().enumerate() {
-        if i >= starting_index {
-            let variant_features = variant_features_cumulative
-                .entry(variant.clone())
-                .or_default();
+        let variant_features = variant_features_cumulative
+            .entry(variant.clone())
+            .or_default();
 
-            for (_, prior_features) in variants_and_features.iter().take(i) {
-                variant_features.extend_from_slice(prior_features);
-            }
-            variant_features.extend_from_slice(features);
+        for (_, prior_features) in variants_and_features.iter().take(i) {
+            variant_features.extend_from_slice(prior_features);
         }
+        variant_features.extend_from_slice(features);
     }
 
     // Check dependency graph.
@@ -273,6 +262,19 @@ fn get_variant_and_feature_names(
             }
         }
     }
+
+    // In some instances, we might want to restrict what variants are generated for a type.
+    // In this case, a `starting_feature` is defined and we only include variants starting from
+    // the first variant to include that feature as a dependency.
+    let starting_index = if let Some(feature) = starting_feature {
+        variants_and_features
+            .iter()
+            .position(|(_, deps)| deps.iter().any(|f| *f == feature.to_string()))
+            .expect("variants_and_features does not contain the required feature")
+    } else {
+        0
+    };
+    variants_and_features = variants_and_features[starting_index..].to_vec();
 
     let variants = variants_and_features
         .iter()

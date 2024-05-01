@@ -34,6 +34,7 @@ pub fn get_feature_getters(
     ));
     output.extend(get_feature_type_getters(
         type_name,
+        variant_names,
         all_variant_features,
         feature_type,
     ));
@@ -64,6 +65,7 @@ pub fn get_variant_type_getters(
 
 pub fn get_feature_type_getters(
     type_name: &Ident,
+    variant_names: &[Ident],
     all_variant_features: HashMap<Ident, Vec<Ident>>,
     feature_type: &FeatureTypeOpts,
 ) -> Vec<TokenStream> {
@@ -72,20 +74,23 @@ pub fn get_feature_type_getters(
         .list
         .clone()
         .unwrap_or_else(|| Ident::new(DEFAULT_FEATURE_TYPE_LIST, Span::call_site()));
-    let all_variant_names: Vec<_> = all_variant_features.keys().collect();
 
     let mut feature_sets: Vec<Vec<Ident>> = vec![];
 
-    for variant in all_variant_names.clone() {
-        let feature_set: &Vec<Ident> = all_variant_features.get(variant).unwrap(); // TODO: Remove unwrap
-        feature_sets.push(feature_set.clone());
+    for variant in variant_names {
+        // If not all variants are defined for this type, then skip.
+        if let Some(feature_set) = all_variant_features.get(variant) {
+            feature_sets.push(feature_set.clone());
+        } else {
+            continue;
+        }
     }
 
     let feature_list = quote! {
         pub fn #list_features(&self) -> &'static [#feature_type_name] {
             match self {
                 #(
-                    #type_name::#all_variant_names(..) => &[#(#feature_type_name::#feature_sets),*],
+                    #type_name::#variant_names(..) => &[#(#feature_type_name::#feature_sets),*],
                 )*
             }
         }
@@ -99,7 +104,7 @@ pub fn get_feature_type_getters(
         pub fn #check_feature(&self, feature: #feature_type_name) -> bool {
             match self {
                 #(
-                    #type_name::#all_variant_names(..) => self.#list_features().contains(&feature),
+                    #type_name::#variant_names(..) => self.#list_features().contains(&feature),
                 )*
             }
         }
