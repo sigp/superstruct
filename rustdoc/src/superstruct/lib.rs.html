@@ -1,5 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="superstruct" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><title>lib.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="superstruct" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../superstruct/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1286,9 +1287,9 @@
         ret_ty: <span class="kw">impl </span>ToTokens,
     ) -&gt; (proc_macro2::TokenStream, proc_macro2::TokenStream) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>((err_ty, err_expr)) = <span class="self">self</span>.parse() {
-            (<span class="macro">quote! </span>{ <span class="prelude-ty">Result</span>&lt;#ret_ty, #err_ty&gt; }, <span class="macro">quote! </span>{ #err_expr })
+            (<span class="macro">quote!</span> { <span class="prelude-ty">Result</span>&lt;#ret_ty, #err_ty&gt; }, <span class="macro">quote!</span> { #err_expr })
         } <span class="kw">else </span>{
-            (<span class="macro">quote! </span>{ <span class="prelude-ty">Result</span>&lt;#ret_ty, ()&gt; }, <span class="macro">quote! </span>{ () })
+            (<span class="macro">quote!</span> { <span class="prelude-ty">Result</span>&lt;#ret_ty, ()&gt; }, <span class="macro">quote!</span> { () })
         }
     }
 }
@@ -1613,7 +1614,7 @@
             .chain(specific_struct_attributes_meta.iter())
             .unique();
 
-        <span class="kw">let </span>variant_code = <span class="macro">quote! </span>{
+        <span class="kw">let </span>variant_code = <span class="macro">quote!</span> {
             #(
                 <span class="attr">#[#universal_struct_attributes]
             </span>)*
@@ -1700,7 +1701,7 @@
 
     <span class="comment">// Construct the top-level enum.
     </span><span class="kw">let </span>top_level_attrs = discard_superstruct_attrs(<span class="kw-2">&amp;</span>item.attrs);
-    <span class="kw">let </span>enum_item = <span class="macro">quote! </span>{
+    <span class="kw">let </span>enum_item = <span class="macro">quote!</span> {
         #(
             #top_level_attrs
         )*
@@ -1748,7 +1749,7 @@
         .as_ref()
         .map_or(<span class="kw-2">&amp;</span>[][..], |attrs| <span class="kw-2">&amp;</span>attrs.metas);
 
-    <span class="kw">let </span>ref_ty = <span class="macro">quote! </span>{
+    <span class="kw">let </span>ref_ty = <span class="macro">quote!</span> {
         #(
             <span class="attr">#[#ref_attributes]
         </span>)*
@@ -1780,7 +1781,7 @@
         .as_ref()
         .map_or(<span class="kw-2">&amp;</span>[][..], |attrs| <span class="kw-2">&amp;</span>attrs.metas);
 
-    <span class="kw">let </span>ref_mut_ty = <span class="macro">quote! </span>{
+    <span class="kw">let </span>ref_mut_ty = <span class="macro">quote!</span> {
         #(
             <span class="attr">#[#ref_mut_attributes]
         </span>)*
@@ -1844,7 +1845,7 @@
         })
         .collect_vec();
 
-    <span class="kw">let </span>impl_block = <span class="macro">quote! </span>{
+    <span class="kw">let </span>impl_block = <span class="macro">quote!</span> {
         <span class="kw">impl </span>#impl_generics #type_name #ty_generics #where_clause {
             <span class="kw">pub fn </span>to_ref&lt;#ref_ty_lifetime&gt;(<span class="kw-2">&amp;</span>#ref_ty_lifetime <span class="self">self</span>) -&gt; #ref_ty_name #ref_ty_generics {
                 <span class="kw">match </span><span class="self">self </span>{
@@ -1906,7 +1907,7 @@
             ))
         });
 
-    <span class="kw">let </span>ref_impl_block = <span class="macro">quote! </span>{
+    <span class="kw">let </span>ref_impl_block = <span class="macro">quote!</span> {
         <span class="kw">impl </span>#ref_impl_generics #ref_ty_name #ref_ty_generics #where_clause {
             #(
                 #ref_getters
@@ -1956,7 +1957,7 @@
             ))
         });
 
-    <span class="kw">let </span>ref_mut_impl_block = <span class="macro">quote! </span>{
+    <span class="kw">let </span>ref_mut_impl_block = <span class="macro">quote!</span> {
         <span class="kw">impl </span>#ref_mut_impl_generics #ref_mut_ty_name #ref_mut_ty_generics #where_clause {
             #(
                 #ref_mut_getters
@@ -2049,23 +2050,23 @@
 
     <span class="kw">let </span>fn_name = getter_opts.rename.as_ref().unwrap_or(field_name);
     <span class="kw">let </span>return_type = <span class="kw">if </span>getter_opts.copy {
-        <span class="macro">quote! </span>{ #field_type }
+        <span class="macro">quote!</span> { #field_type }
     } <span class="kw">else </span>{
-        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime #field_type}
+        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#lifetime #field_type}
     };
 
     <span class="kw">let </span>return_expr = <span class="kw">if </span>is_meta {
-        <span class="macro">quote! </span>{ inner.#field_name() }
+        <span class="macro">quote!</span> { inner.#field_name() }
     } <span class="kw">else if </span>getter_opts.copy {
-        <span class="macro">quote! </span>{ inner.#field_name }
+        <span class="macro">quote!</span> { inner.#field_name }
     } <span class="kw">else </span>{
-        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>inner.#field_name }
+        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>inner.#field_name }
     };
 
     <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.
     </span><span class="kw">let </span>cfg_attrs = get_cfg_attrs(<span class="kw-2">&amp;</span>field_data.field.attrs);
 
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
         #(
             #cfg_attrs
         )*
@@ -2094,18 +2095,18 @@
     <span class="kw">let </span>getter_opts = <span class="kw-2">&amp;</span>field_data.getter_opts;
 
     <span class="kw">let </span>fn_name = <span class="macro">format_ident!</span>(<span class="string">"{}_mut"</span>, getter_opts.rename.as_ref().unwrap_or(field_name));
-    <span class="kw">let </span>return_type = <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span>#field_type };
+    <span class="kw">let </span>return_type = <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span>#field_type };
     <span class="kw">let </span>param = make_self_arg(<span class="bool-val">true</span>, lifetime);
     <span class="kw">let </span>return_expr = <span class="kw">if </span>is_meta {
-        <span class="macro">quote! </span>{ inner.#fn_name() }
+        <span class="macro">quote!</span> { inner.#fn_name() }
     } <span class="kw">else </span>{
-        <span class="macro">quote! </span>{ <span class="kw-2">&amp;mut </span>inner.#field_name }
+        <span class="macro">quote!</span> { <span class="kw-2">&amp;mut </span>inner.#field_name }
     };
 
     <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.
     </span><span class="kw">let </span>cfg_attrs = get_cfg_attrs(<span class="kw-2">&amp;</span>field_data.field.attrs);
 
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
         #(
             #cfg_attrs
         )*
@@ -2123,11 +2124,11 @@
 
 <span class="kw">fn </span>make_self_arg(mutable: bool, lifetime: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Lifetime&gt;) -&gt; proc_macro2::TokenStream {
     <span class="kw">if </span>mutable {
-        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span><span class="self">self </span>}
+        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span><span class="self">self </span>}
     } <span class="kw">else </span>{
         <span class="comment">// Ignore the lifetime for immutable references. This allows `&amp;Ref&lt;'a&gt;` to be de-referenced
         // to an inner pointer with lifetime `'a`.
-        </span><span class="macro">quote! </span>{ <span class="kw-2">&amp;</span><span class="self">self </span>}
+        </span><span class="macro">quote!</span> { <span class="kw-2">&amp;</span><span class="self">self </span>}
     }
 }
 
@@ -2139,11 +2140,11 @@
 ) -&gt; proc_macro2::TokenStream {
     <span class="comment">// XXX: bit hacky, ignore `copy` if `mutable` is set
     </span><span class="kw">if </span>mutable {
-        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span>#ty }
+        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#lifetime <span class="kw-2">mut </span>#ty }
     } <span class="kw">else if </span>copy {
-        <span class="macro">quote! </span>{ #ty }
+        <span class="macro">quote!</span> { #ty }
     } <span class="kw">else </span>{
-        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#lifetime #ty }
+        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#lifetime #ty }
     }
 }
 
@@ -2185,20 +2186,20 @@
     <span class="kw">let </span>self_arg = make_self_arg(mutable, lifetime);
     <span class="kw">let </span>ret_ty = make_type_ref(<span class="kw-2">&amp;</span>field_data.field.ty, mutable, copy, lifetime);
     <span class="kw">let </span>ret_expr = <span class="kw">if </span>is_meta {
-        <span class="macro">quote! </span>{ inner.#fn_name()<span class="question-mark">? </span>}
+        <span class="macro">quote!</span> { inner.#fn_name()<span class="question-mark">? </span>}
     } <span class="kw">else if </span>mutable {
-        <span class="macro">quote! </span>{ <span class="kw-2">&amp;mut </span>inner.#field_name }
+        <span class="macro">quote!</span> { <span class="kw-2">&amp;mut </span>inner.#field_name }
     } <span class="kw">else if </span>copy {
-        <span class="macro">quote! </span>{ inner.#field_name }
+        <span class="macro">quote!</span> { inner.#field_name }
     } <span class="kw">else </span>{
-        <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>inner.#field_name }
+        <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>inner.#field_name }
     };
     <span class="kw">let </span>(res_ret_ty, err_expr) = error_opts.build_result_type(<span class="kw-2">&amp;</span>ret_ty);
 
     <span class="comment">// Pass-through `cfg` attributes as they affect the existence of this field.
     </span><span class="kw">let </span>cfg_attrs = get_cfg_attrs(<span class="kw-2">&amp;</span>field_data.field.attrs);
 
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
         #(
             #cfg_attrs
         )*
@@ -2225,21 +2226,21 @@
     <span class="kw">let </span>(suffix, arg, ret_ty, binding) = <span class="kw">if </span>mutable {
         (
             <span class="string">"_mut"</span>,
-            <span class="macro">quote! </span>{ <span class="kw-2">&amp;mut </span><span class="self">self </span>},
-            <span class="macro">quote! </span>{ <span class="kw-2">&amp;mut </span>#variant_ty #type_generics },
-            <span class="macro">quote! </span>{ <span class="kw-2">ref mut </span>inner },
+            <span class="macro">quote!</span> { <span class="kw-2">&amp;mut </span><span class="self">self </span>},
+            <span class="macro">quote!</span> { <span class="kw-2">&amp;mut </span>#variant_ty #type_generics },
+            <span class="macro">quote!</span> { <span class="kw-2">ref mut </span>inner },
         )
     } <span class="kw">else </span>{
         (
             <span class="string">""</span>,
-            <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span><span class="self">self </span>},
-            <span class="macro">quote! </span>{ <span class="kw-2">&amp;</span>#variant_ty #type_generics },
-            <span class="macro">quote! </span>{ <span class="kw-2">ref </span>inner },
+            <span class="macro">quote!</span> { <span class="kw-2">&amp;</span><span class="self">self </span>},
+            <span class="macro">quote!</span> { <span class="kw-2">&amp;</span>#variant_ty #type_generics },
+            <span class="macro">quote!</span> { <span class="kw-2">ref </span>inner },
         )
     };
     <span class="kw">let </span>(ret_res_ty, err_expr) = cast_err_opts.build_result_type(<span class="kw-2">&amp;</span>ret_ty);
     <span class="kw">let </span>fn_name = <span class="macro">format_ident!</span>(<span class="string">"as_{}{}"</span>, variant_name.to_string().to_lowercase(), suffix);
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
         <span class="kw">pub fn </span>#fn_name(#arg) -&gt; #ret_res_ty {
             <span class="kw">match </span><span class="self">self </span>{
                 #type_name::#variant_name(#binding) =&gt; <span class="prelude-val">Ok</span>(inner),
