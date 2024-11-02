@@ -1,6 +1,10 @@
+use std::{
+    collections::HashMap,
+    iter::{self, FromIterator},
+};
+
 use attributes::{IdentList, NestedMetaList};
-use darling::util::Override;
-use darling::FromMeta;
+use darling::{export::NestedMeta, util::Override, FromMeta};
 use from::{
     generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
     generate_from_variant_trait_impl_for_ref,
@@ -10,11 +14,9 @@ use macros::generate_all_map_macros;
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use quote::{format_ident, quote, ToTokens};
-use std::collections::HashMap;
-use std::iter::{self, FromIterator};
 use syn::{
-    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
-    Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
+    parse_macro_input, Attribute, Expr, Field, GenericParam, Ident, ItemStruct, Lifetime,
+    LifetimeParam, Type, TypeGenerics, TypeParamBound,
 };
 
 mod attributes;
@@ -170,7 +172,10 @@ struct VariantKey {
 
 #[proc_macro_attribute]
 pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
-    let attr_args = parse_macro_input!(args as AttributeArgs);
+    let attr_args = match NestedMeta::parse_meta_list(args.into()) {
+        Ok(args) => args,
+        Err(err) => return err.to_compile_error().into(),
+    };
     let item = parse_macro_input!(input as ItemStruct);
 
     let type_name = &item.ident;
@@ -229,10 +234,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             .attrs
             .iter()
             .filter(|attr| is_superstruct_attr(attr))
-            .map(|attr| {
-                let meta = attr.parse_meta().unwrap();
-                FieldOpts::from_meta(&meta).unwrap()
-            })
+            .map(|attr| FieldOpts::from_meta(&attr.meta).unwrap())
             .next()
             .unwrap_or_default();
 
@@ -444,8 +446,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             .map_or(&[][..], |attrs| &attrs.metas);
         let spatt = specific_struct_attributes
             .iter()
-            .chain(specific_struct_attributes_meta.iter())
-            .unique();
+            .chain(specific_struct_attributes_meta.iter());
 
         let variant_code = quote! {
             #(
@@ -556,7 +557,7 @@ fn generate_wrapper_enums(
     let mut ref_ty_decl_generics = decl_generics.clone();
     ref_ty_decl_generics.params.insert(
         0,
-        GenericParam::Lifetime(LifetimeDef::new(ref_ty_lifetime.clone())),
+        GenericParam::Lifetime(LifetimeParam::new(ref_ty_lifetime.clone())),
     );
 
     // If no lifetime bound exists for a generic param, inject one.
@@ -603,7 +604,7 @@ fn generate_wrapper_enums(
     let mut ref_mut_ty_decl_generics = decl_generics.clone();
     ref_mut_ty_decl_generics.params.insert(
         0,
-        GenericParam::Lifetime(LifetimeDef::new(ref_mut_ty_lifetime.clone())),
+        GenericParam::Lifetime(LifetimeParam::new(ref_mut_ty_lifetime.clone())),
     );
     let (ref_mut_impl_generics, ref_mut_ty_generics, _) =
         &ref_mut_ty_decl_generics.split_for_impl();
@@ -1123,7 +1124,7 @@ fn is_superstruct_attr(attr: &Attribute) -> bool {
 
 /// Predicate for determining whether an attribute has the given `ident` as its path.
 fn is_attr_with_ident(attr: &Attribute, ident: &str) -> bool {
-    attr.path
+    attr.path()
         .get_ident()
         .map_or(false, |attr_ident| *attr_ident == ident)
 }

@@ -14,12 +14,12 @@ name = "superstruct"
 proc-macro = true
 
 [dependencies]
-darling = "0.13.0"
-itertools = "0.10.1"
-proc-macro2 = "1.0.32"
-quote = "1.0.10"
-syn = "1.0.82"
-smallvec = "1.8.0"
+darling = "0.20.10"
+itertools = "0.13.0"
+proc-macro2 = "1.0.89"
+quote = "1.0.37"
+syn = "2.0.86"
+smallvec = "1.13.2"
 
 [dev-dependencies]
 serde = { version = "1.0.130", features = ["derive"] }

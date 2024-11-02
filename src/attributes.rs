@@ -1,6 +1,6 @@
 //! Utilities to help with parsing configuration attributes.
-use darling::{Error, FromMeta};
-use syn::{Ident, NestedMeta};
+use darling::{export::NestedMeta, Error, FromMeta};
+use syn::Ident;
 
 /// Parse a list of nested meta items.
 ///
