@@ -84,6 +84,7 @@ struct FieldOpts {
     getter: Option<GetterOpts>,
     #[darling(default)]
     partial_getter: Option<GetterOpts>,
+    no_getter: darling::util::Flag,
 }
 
 /// Getter configuration for a specific field
@@ -137,12 +138,17 @@ struct FieldData {
     only_combinations: Vec<VariantKey>,
     getter_opts: GetterOpts,
     partial_getter_opts: GetterOpts,
+    no_getter: bool,
     is_common: bool,
 }
 
 impl FieldData {
     fn is_common(&self) -> bool {
         self.is_common
+    }
+
+    fn no_getter(&self) -> bool {
+        self.no_getter
     }
 
     /// Checks whether this field should be included in creating
@@ -294,6 +300,12 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             panic!("can't set `flatten` and `getter` on the same field");
         } else if field_opts.flatten.is_some() && field_opts.partial_getter.is_some() {
             panic!("can't set `flatten` and `partial_getter` on the same field");
+        } else if field_opts.flatten.is_some() && field_opts.no_getter.is_present() {
+            panic!("can't set `flatten` and `no_getter` on the same field")
+        } else if field_opts.getter.is_some() && field_opts.no_getter.is_present() {
+            panic!("can't set `getter` and `no_getter` on the same field")
+        } else if field_opts.partial_getter.is_some() && field_opts.no_getter.is_present() {
+            panic!("can't set `partial_getter` and `no_getter` on the same field")
         }
 
         let getter_opts = field_opts.getter.unwrap_or_default();
@@ -397,6 +409,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     only_combinations: vec![variant_key.clone()],
                     getter_opts: <_>::default(),
                     partial_getter_opts,
+                    no_getter: false,
                     is_common: false,
                 });
 
@@ -420,6 +433,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     .collect_vec(),
                 getter_opts,
                 partial_getter_opts,
+                no_getter: field_opts.no_getter.is_present(),
                 is_common,
             });
         }
@@ -630,19 +644,19 @@ fn generate_wrapper_enums(
     // Construct the main impl block.
     let getters = fields
         .iter()
-        .filter(|f| f.is_common())
+        .filter(|f| f.is_common() && !f.no_getter())
         .map(|field_data| make_field_getter(type_name, variant_names, field_data, None, is_meta));
 
     let mut_getters = fields
         .iter()
-        .filter(|f| f.is_common() && !f.getter_opts.no_mut)
+        .filter(|f| f.is_common() && !f.no_getter() && !f.getter_opts.no_mut)
         .map(|field_data| {
             make_mut_field_getter(type_name, variant_names, field_data, None, is_meta)
         });
 
     let partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common())
+        .filter(|f| !f.is_common() && !f.no_getter())
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .cartesian_product(&[false, true])
         .flat_map(|(field_data, mutability)| {
@@ -714,19 +728,22 @@ fn generate_wrapper_enums(
     output_items.push(impl_block.into());
 
     // Construct the impl block for the *Ref type.
-    let ref_getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
-        make_field_getter(
-            &ref_ty_name,
-            variant_names,
-            field_data,
-            Some(&ref_ty_lifetime),
-            is_meta,
-        )
-    });
+    let ref_getters = fields
+        .iter()
+        .filter(|f| f.is_common() && !f.no_getter())
+        .map(|field_data| {
+            make_field_getter(
+                &ref_ty_name,
+                variant_names,
+                field_data,
+                Some(&ref_ty_lifetime),
+                is_meta,
+            )
+        });
 
     let ref_partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common())
+        .filter(|f| !f.is_common() && !f.no_getter())
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .flat_map(|field_data| {
             let field_variants = &field_data.only_combinations;
@@ -763,7 +780,7 @@ fn generate_wrapper_enums(
     // Construct the impl block for the *RefMut type.
     let ref_mut_getters = fields
         .iter()
-        .filter(|f| f.is_common() && !f.getter_opts.no_mut)
+        .filter(|f| f.is_common() && !f.no_getter() && !f.getter_opts.no_mut)
         .map(|field_data| {
             make_mut_field_getter(
                 &ref_mut_ty_name,
@@ -776,7 +793,7 @@ fn generate_wrapper_enums(
 
     let ref_mut_partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common() && !f.partial_getter_opts.no_mut)
+        .filter(|f| !f.is_common() && !f.no_getter() && !f.partial_getter_opts.no_mut)
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .flat_map(|field_data| {
             let field_variants = &field_data.only_combinations;
