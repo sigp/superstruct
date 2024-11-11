@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/darling_core-0.13.4/src/from_meta.rs`."><title>from_meta.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="darling_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
-            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../darling_core/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/darling_core-0.20.10/src/from_meta.rs`."><title>from_meta.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="darling_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -813,18 +811,321 @@
 <a href="#811" id="811">811</a>
 <a href="#812" id="812">812</a>
 <a href="#813" id="813">813</a>
+<a href="#814" id="814">814</a>
+<a href="#815" id="815">815</a>
+<a href="#816" id="816">816</a>
+<a href="#817" id="817">817</a>
+<a href="#818" id="818">818</a>
+<a href="#819" id="819">819</a>
+<a href="#820" id="820">820</a>
+<a href="#821" id="821">821</a>
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
+<a href="#830" id="830">830</a>
+<a href="#831" id="831">831</a>
+<a href="#832" id="832">832</a>
+<a href="#833" id="833">833</a>
+<a href="#834" id="834">834</a>
+<a href="#835" id="835">835</a>
+<a href="#836" id="836">836</a>
+<a href="#837" id="837">837</a>
+<a href="#838" id="838">838</a>
+<a href="#839" id="839">839</a>
+<a href="#840" id="840">840</a>
+<a href="#841" id="841">841</a>
+<a href="#842" id="842">842</a>
+<a href="#843" id="843">843</a>
+<a href="#844" id="844">844</a>
+<a href="#845" id="845">845</a>
+<a href="#846" id="846">846</a>
+<a href="#847" id="847">847</a>
+<a href="#848" id="848">848</a>
+<a href="#849" id="849">849</a>
+<a href="#850" id="850">850</a>
+<a href="#851" id="851">851</a>
+<a href="#852" id="852">852</a>
+<a href="#853" id="853">853</a>
+<a href="#854" id="854">854</a>
+<a href="#855" id="855">855</a>
+<a href="#856" id="856">856</a>
+<a href="#857" id="857">857</a>
+<a href="#858" id="858">858</a>
+<a href="#859" id="859">859</a>
+<a href="#860" id="860">860</a>
+<a href="#861" id="861">861</a>
+<a href="#862" id="862">862</a>
+<a href="#863" id="863">863</a>
+<a href="#864" id="864">864</a>
+<a href="#865" id="865">865</a>
+<a href="#866" id="866">866</a>
+<a href="#867" id="867">867</a>
+<a href="#868" id="868">868</a>
+<a href="#869" id="869">869</a>
+<a href="#870" id="870">870</a>
+<a href="#871" id="871">871</a>
+<a href="#872" id="872">872</a>
+<a href="#873" id="873">873</a>
+<a href="#874" id="874">874</a>
+<a href="#875" id="875">875</a>
+<a href="#876" id="876">876</a>
+<a href="#877" id="877">877</a>
+<a href="#878" id="878">878</a>
+<a href="#879" id="879">879</a>
+<a href="#880" id="880">880</a>
+<a href="#881" id="881">881</a>
+<a href="#882" id="882">882</a>
+<a href="#883" id="883">883</a>
+<a href="#884" id="884">884</a>
+<a href="#885" id="885">885</a>
+<a href="#886" id="886">886</a>
+<a href="#887" id="887">887</a>
+<a href="#888" id="888">888</a>
+<a href="#889" id="889">889</a>
+<a href="#890" id="890">890</a>
+<a href="#891" id="891">891</a>
+<a href="#892" id="892">892</a>
+<a href="#893" id="893">893</a>
+<a href="#894" id="894">894</a>
+<a href="#895" id="895">895</a>
+<a href="#896" id="896">896</a>
+<a href="#897" id="897">897</a>
+<a href="#898" id="898">898</a>
+<a href="#899" id="899">899</a>
+<a href="#900" id="900">900</a>
+<a href="#901" id="901">901</a>
+<a href="#902" id="902">902</a>
+<a href="#903" id="903">903</a>
+<a href="#904" id="904">904</a>
+<a href="#905" id="905">905</a>
+<a href="#906" id="906">906</a>
+<a href="#907" id="907">907</a>
+<a href="#908" id="908">908</a>
+<a href="#909" id="909">909</a>
+<a href="#910" id="910">910</a>
+<a href="#911" id="911">911</a>
+<a href="#912" id="912">912</a>
+<a href="#913" id="913">913</a>
+<a href="#914" id="914">914</a>
+<a href="#915" id="915">915</a>
+<a href="#916" id="916">916</a>
+<a href="#917" id="917">917</a>
+<a href="#918" id="918">918</a>
+<a href="#919" id="919">919</a>
+<a href="#920" id="920">920</a>
+<a href="#921" id="921">921</a>
+<a href="#922" id="922">922</a>
+<a href="#923" id="923">923</a>
+<a href="#924" id="924">924</a>
+<a href="#925" id="925">925</a>
+<a href="#926" id="926">926</a>
+<a href="#927" id="927">927</a>
+<a href="#928" id="928">928</a>
+<a href="#929" id="929">929</a>
+<a href="#930" id="930">930</a>
+<a href="#931" id="931">931</a>
+<a href="#932" id="932">932</a>
+<a href="#933" id="933">933</a>
+<a href="#934" id="934">934</a>
+<a href="#935" id="935">935</a>
+<a href="#936" id="936">936</a>
+<a href="#937" id="937">937</a>
+<a href="#938" id="938">938</a>
+<a href="#939" id="939">939</a>
+<a href="#940" id="940">940</a>
+<a href="#941" id="941">941</a>
+<a href="#942" id="942">942</a>
+<a href="#943" id="943">943</a>
+<a href="#944" id="944">944</a>
+<a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
+<a href="#948" id="948">948</a>
+<a href="#949" id="949">949</a>
+<a href="#950" id="950">950</a>
+<a href="#951" id="951">951</a>
+<a href="#952" id="952">952</a>
+<a href="#953" id="953">953</a>
+<a href="#954" id="954">954</a>
+<a href="#955" id="955">955</a>
+<a href="#956" id="956">956</a>
+<a href="#957" id="957">957</a>
+<a href="#958" id="958">958</a>
+<a href="#959" id="959">959</a>
+<a href="#960" id="960">960</a>
+<a href="#961" id="961">961</a>
+<a href="#962" id="962">962</a>
+<a href="#963" id="963">963</a>
+<a href="#964" id="964">964</a>
+<a href="#965" id="965">965</a>
+<a href="#966" id="966">966</a>
+<a href="#967" id="967">967</a>
+<a href="#968" id="968">968</a>
+<a href="#969" id="969">969</a>
+<a href="#970" id="970">970</a>
+<a href="#971" id="971">971</a>
+<a href="#972" id="972">972</a>
+<a href="#973" id="973">973</a>
+<a href="#974" id="974">974</a>
+<a href="#975" id="975">975</a>
+<a href="#976" id="976">976</a>
+<a href="#977" id="977">977</a>
+<a href="#978" id="978">978</a>
+<a href="#979" id="979">979</a>
+<a href="#980" id="980">980</a>
+<a href="#981" id="981">981</a>
+<a href="#982" id="982">982</a>
+<a href="#983" id="983">983</a>
+<a href="#984" id="984">984</a>
+<a href="#985" id="985">985</a>
+<a href="#986" id="986">986</a>
+<a href="#987" id="987">987</a>
+<a href="#988" id="988">988</a>
+<a href="#989" id="989">989</a>
+<a href="#990" id="990">990</a>
+<a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
+<a href="#996" id="996">996</a>
+<a href="#997" id="997">997</a>
+<a href="#998" id="998">998</a>
+<a href="#999" id="999">999</a>
+<a href="#1000" id="1000">1000</a>
+<a href="#1001" id="1001">1001</a>
+<a href="#1002" id="1002">1002</a>
+<a href="#1003" id="1003">1003</a>
+<a href="#1004" id="1004">1004</a>
+<a href="#1005" id="1005">1005</a>
+<a href="#1006" id="1006">1006</a>
+<a href="#1007" id="1007">1007</a>
+<a href="#1008" id="1008">1008</a>
+<a href="#1009" id="1009">1009</a>
+<a href="#1010" id="1010">1010</a>
+<a href="#1011" id="1011">1011</a>
+<a href="#1012" id="1012">1012</a>
+<a href="#1013" id="1013">1013</a>
+<a href="#1014" id="1014">1014</a>
+<a href="#1015" id="1015">1015</a>
+<a href="#1016" id="1016">1016</a>
+<a href="#1017" id="1017">1017</a>
+<a href="#1018" id="1018">1018</a>
+<a href="#1019" id="1019">1019</a>
+<a href="#1020" id="1020">1020</a>
+<a href="#1021" id="1021">1021</a>
+<a href="#1022" id="1022">1022</a>
+<a href="#1023" id="1023">1023</a>
+<a href="#1024" id="1024">1024</a>
+<a href="#1025" id="1025">1025</a>
+<a href="#1026" id="1026">1026</a>
+<a href="#1027" id="1027">1027</a>
+<a href="#1028" id="1028">1028</a>
+<a href="#1029" id="1029">1029</a>
+<a href="#1030" id="1030">1030</a>
+<a href="#1031" id="1031">1031</a>
+<a href="#1032" id="1032">1032</a>
+<a href="#1033" id="1033">1033</a>
+<a href="#1034" id="1034">1034</a>
+<a href="#1035" id="1035">1035</a>
+<a href="#1036" id="1036">1036</a>
+<a href="#1037" id="1037">1037</a>
+<a href="#1038" id="1038">1038</a>
+<a href="#1039" id="1039">1039</a>
+<a href="#1040" id="1040">1040</a>
+<a href="#1041" id="1041">1041</a>
+<a href="#1042" id="1042">1042</a>
+<a href="#1043" id="1043">1043</a>
+<a href="#1044" id="1044">1044</a>
+<a href="#1045" id="1045">1045</a>
+<a href="#1046" id="1046">1046</a>
+<a href="#1047" id="1047">1047</a>
+<a href="#1048" id="1048">1048</a>
+<a href="#1049" id="1049">1049</a>
+<a href="#1050" id="1050">1050</a>
+<a href="#1051" id="1051">1051</a>
+<a href="#1052" id="1052">1052</a>
+<a href="#1053" id="1053">1053</a>
+<a href="#1054" id="1054">1054</a>
+<a href="#1055" id="1055">1055</a>
+<a href="#1056" id="1056">1056</a>
+<a href="#1057" id="1057">1057</a>
+<a href="#1058" id="1058">1058</a>
+<a href="#1059" id="1059">1059</a>
+<a href="#1060" id="1060">1060</a>
+<a href="#1061" id="1061">1061</a>
+<a href="#1062" id="1062">1062</a>
+<a href="#1063" id="1063">1063</a>
+<a href="#1064" id="1064">1064</a>
+<a href="#1065" id="1065">1065</a>
+<a href="#1066" id="1066">1066</a>
+<a href="#1067" id="1067">1067</a>
+<a href="#1068" id="1068">1068</a>
+<a href="#1069" id="1069">1069</a>
+<a href="#1070" id="1070">1070</a>
+<a href="#1071" id="1071">1071</a>
+<a href="#1072" id="1072">1072</a>
+<a href="#1073" id="1073">1073</a>
+<a href="#1074" id="1074">1074</a>
+<a href="#1075" id="1075">1075</a>
+<a href="#1076" id="1076">1076</a>
+<a href="#1077" id="1077">1077</a>
+<a href="#1078" id="1078">1078</a>
+<a href="#1079" id="1079">1079</a>
+<a href="#1080" id="1080">1080</a>
+<a href="#1081" id="1081">1081</a>
+<a href="#1082" id="1082">1082</a>
+<a href="#1083" id="1083">1083</a>
+<a href="#1084" id="1084">1084</a>
+<a href="#1085" id="1085">1085</a>
+<a href="#1086" id="1086">1086</a>
+<a href="#1087" id="1087">1087</a>
+<a href="#1088" id="1088">1088</a>
+<a href="#1089" id="1089">1089</a>
+<a href="#1090" id="1090">1090</a>
+<a href="#1091" id="1091">1091</a>
+<a href="#1092" id="1092">1092</a>
+<a href="#1093" id="1093">1093</a>
+<a href="#1094" id="1094">1094</a>
+<a href="#1095" id="1095">1095</a>
+<a href="#1096" id="1096">1096</a>
+<a href="#1097" id="1097">1097</a>
+<a href="#1098" id="1098">1098</a>
+<a href="#1099" id="1099">1099</a>
+<a href="#1100" id="1100">1100</a>
+<a href="#1101" id="1101">1101</a>
+<a href="#1102" id="1102">1102</a>
+<a href="#1103" id="1103">1103</a>
+<a href="#1104" id="1104">1104</a>
+<a href="#1105" id="1105">1105</a>
+<a href="#1106" id="1106">1106</a>
+<a href="#1107" id="1107">1107</a>
+<a href="#1108" id="1108">1108</a>
+<a href="#1109" id="1109">1109</a>
+<a href="#1110" id="1110">1110</a>
+<a href="#1111" id="1111">1111</a>
+<a href="#1112" id="1112">1112</a>
+<a href="#1113" id="1113">1113</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
 <span class="kw">use </span>std::cell::RefCell;
 <span class="kw">use </span>std::collections::hash_map::HashMap;
 <span class="kw">use </span>std::collections::HashSet;
 <span class="kw">use </span>std::hash::BuildHasher;
+<span class="kw">use </span>std::num;
 <span class="kw">use </span>std::rc::Rc;
 <span class="kw">use </span>std::sync::atomic::AtomicBool;
 <span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>syn::{Expr, Lit, Meta, NestedMeta};
+<span class="kw">use </span>syn::{Expr, Lit, Meta};
 
-<span class="kw">use crate</span>::{util::path_to_string, Error, <span class="prelude-ty">Result</span>};
+<span class="kw">use </span><span class="kw">crate</span>::ast::NestedMeta;
+<span class="kw">use </span><span class="kw">crate</span>::util::path_to_string;
+<span class="kw">use crate</span>::{Error, <span class="prelude-ty">Result</span>};
 
 <span class="doccomment">/// Create an instance from an item in an attribute declaration.
 ///
@@ -881,17 +1182,27 @@
     </span><span class="kw">fn </span>from_meta(item: <span class="kw-2">&amp;</span>Meta) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         (<span class="kw">match </span><span class="kw-2">*</span>item {
             Meta::Path(<span class="kw">_</span>) =&gt; <span class="self">Self</span>::from_word(),
-            Meta::List(<span class="kw-2">ref </span>value) =&gt; <span class="self">Self</span>::from_list(
-                <span class="kw-2">&amp;</span>value
-                    .nested
-                    .iter()
-                    .cloned()
-                    .collect::&lt;Vec&lt;syn::NestedMeta&gt;&gt;()[..],
-            ),
-            Meta::NameValue(<span class="kw-2">ref </span>value) =&gt; <span class="self">Self</span>::from_value(<span class="kw-2">&amp;</span>value.lit),
+            Meta::List(<span class="kw-2">ref </span>value) =&gt; {
+                <span class="self">Self</span>::from_list(<span class="kw-2">&amp;</span>NestedMeta::parse_meta_list(value.tokens.clone())<span class="question-mark">?</span>[..])
+            }
+            Meta::NameValue(<span class="kw-2">ref </span>value) =&gt; <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>value.value),
         })
         .map_err(|e| e.with_span(item))
     }
+
+    <span class="doccomment">/// When a field is omitted from a parent meta-item, `from_none` is used to attempt
+    /// recovery before a missing field error is generated.
+    ///
+    /// **Most types should not override this method.** `darling` already allows field-level
+    /// missing-field recovery using `#[darling(default)]` and `#[darling(default = "...")]`,
+    /// and users who add a `String` field to their `FromMeta`-deriving struct would be surprised
+    /// if they get back `""` instead of a missing field error when that field is omitted.
+    ///
+    /// The primary use-case for this is `Option&lt;T&gt;` fields gracefully handlling absence without
+    /// needing `#[darling(default)]`.
+    </span><span class="kw">fn </span>from_none() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">None
+    </span>}
 
     <span class="doccomment">/// Create an instance from the presence of the word in the attribute with no
     /// additional options specified.
@@ -920,6 +1231,22 @@
             <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_lit_type(value)),
         })
         .map_err(|e| e.with_span(value))
+    }
+
+    <span class="kw">fn </span>from_expr(expr: <span class="kw-2">&amp;</span>Expr) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">match </span><span class="kw-2">*</span>expr {
+            Expr::Lit(<span class="kw-2">ref </span>lit) =&gt; <span class="self">Self</span>::from_value(<span class="kw-2">&amp;</span>lit.lit),
+            Expr::Group(<span class="kw-2">ref </span>group) =&gt; {
+                <span class="comment">// syn may generate this invisible group delimiter when the input to the darling
+                // proc macro (specifically, the attributes) are generated by a
+                // macro_rules! (e.g. propagating a macro_rules!'s expr)
+                // Since we want to basically ignore these invisible group delimiters,
+                // we just propagate the call to the inner expression.
+                </span><span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>group.expr)
+            }
+            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_expr_type(expr)),
+        }
+        .map_err(|e| e.with_span(expr))
     }
 
     <span class="doccomment">/// Create an instance from a char literal in a value position.
@@ -997,10 +1324,16 @@
     }
 }
 
+<span class="kw">impl </span>FromMeta <span class="kw">for </span>std::path::PathBuf {
+    <span class="kw">fn </span>from_string(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Ok</span>(s.into())
+    }
+}
+
 <span class="doccomment">/// Generate an impl of `FromMeta` that will accept strings which parse to numbers or
 /// integer literals.
 </span><span class="macro">macro_rules!</span> from_meta_num {
-    (<span class="macro-nonterminal">$ty</span>:ident) =&gt; {
+    (<span class="macro-nonterminal">$ty</span>:path) =&gt; {
         <span class="kw">impl </span>FromMeta <span class="kw">for </span><span class="macro-nonterminal">$ty </span>{
             <span class="kw">fn </span>from_string(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
                 s.parse().map_err(|<span class="kw">_</span>| Error::unknown_value(s))
@@ -1009,7 +1342,7 @@
             <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
                 (<span class="kw">match </span><span class="kw-2">*</span>value {
                     Lit::Str(<span class="kw-2">ref </span>s) =&gt; <span class="self">Self</span>::from_string(<span class="kw-2">&amp;</span>s.value()),
-                    Lit::Int(<span class="kw-2">ref </span>s) =&gt; <span class="prelude-val">Ok</span>(s.base10_parse::&lt;<span class="macro-nonterminal">$ty</span>&gt;().unwrap()),
+                    Lit::Int(<span class="kw-2">ref </span>s) =&gt; s.base10_parse::&lt;<span class="macro-nonterminal">$ty</span>&gt;().map_err(Error::from),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_lit_type(value)),
                 })
                 .map_err(|e| e.with_span(value))
@@ -1022,12 +1355,26 @@
 <span class="macro">from_meta_num!</span>(u16);
 <span class="macro">from_meta_num!</span>(u32);
 <span class="macro">from_meta_num!</span>(u64);
+<span class="macro">from_meta_num!</span>(u128);
 <span class="macro">from_meta_num!</span>(usize);
 <span class="macro">from_meta_num!</span>(i8);
 <span class="macro">from_meta_num!</span>(i16);
 <span class="macro">from_meta_num!</span>(i32);
 <span class="macro">from_meta_num!</span>(i64);
+<span class="macro">from_meta_num!</span>(i128);
 <span class="macro">from_meta_num!</span>(isize);
+<span class="macro">from_meta_num!</span>(num::NonZeroU8);
+<span class="macro">from_meta_num!</span>(num::NonZeroU16);
+<span class="macro">from_meta_num!</span>(num::NonZeroU32);
+<span class="macro">from_meta_num!</span>(num::NonZeroU64);
+<span class="macro">from_meta_num!</span>(num::NonZeroU128);
+<span class="macro">from_meta_num!</span>(num::NonZeroUsize);
+<span class="macro">from_meta_num!</span>(num::NonZeroI8);
+<span class="macro">from_meta_num!</span>(num::NonZeroI16);
+<span class="macro">from_meta_num!</span>(num::NonZeroI32);
+<span class="macro">from_meta_num!</span>(num::NonZeroI64);
+<span class="macro">from_meta_num!</span>(num::NonZeroI128);
+<span class="macro">from_meta_num!</span>(num::NonZeroIsize);
 
 <span class="doccomment">/// Generate an impl of `FromMeta` that will accept strings which parse to floats or
 /// float literals.
@@ -1041,7 +1388,7 @@
             <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
                 (<span class="kw">match </span><span class="kw-2">*</span>value {
                     Lit::Str(<span class="kw-2">ref </span>s) =&gt; <span class="self">Self</span>::from_string(<span class="kw-2">&amp;</span>s.value()),
-                    Lit::Float(<span class="kw-2">ref </span>s) =&gt; <span class="prelude-val">Ok</span>(s.base10_parse::&lt;<span class="macro-nonterminal">$ty</span>&gt;().unwrap()),
+                    Lit::Float(<span class="kw-2">ref </span>s) =&gt; s.base10_parse::&lt;<span class="macro-nonterminal">$ty</span>&gt;().map_err(Error::from),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_lit_type(value)),
                 })
                 .map_err(|e| e.with_span(value))
@@ -1068,7 +1415,132 @@
     }
 }
 
-<span class="doccomment">/// Adapter from `syn::parse::Parse` to `FromMeta`.
+<span class="doccomment">/// Support for arbitrary expressions as values in a meta item.
+///
+/// For backwards-compatibility to versions of `darling` based on `syn` 1,
+/// string literals will be "unwrapped" and their contents will be parsed
+/// as an expression.
+///
+/// See [`util::parse_expr`](crate::util::parse_expr) for functions to provide
+/// alternate parsing modes for this type.
+</span><span class="kw">impl </span>FromMeta <span class="kw">for </span>syn::Expr {
+    <span class="kw">fn </span>from_expr(expr: <span class="kw-2">&amp;</span>Expr) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">match </span>expr {
+            Expr::Lit(syn::ExprLit {
+                lit: lit @ syn::Lit::Str(<span class="kw">_</span>),
+                ..
+            }) =&gt; <span class="self">Self</span>::from_value(lit),
+            Expr::Group(group) =&gt; <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>group.expr), <span class="comment">// see FromMeta::from_expr
+            </span><span class="kw">_ </span>=&gt; <span class="prelude-val">Ok</span>(expr.clone()),
+        }
+    }
+
+    <span class="kw">fn </span>from_string(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        syn::parse_str(value).map_err(|<span class="kw">_</span>| Error::unknown_value(value))
+    }
+
+    <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>::syn::Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">if let </span>::syn::Lit::Str(<span class="kw-2">ref </span>v) = <span class="kw-2">*</span>value {
+            v.parse::&lt;syn::Expr&gt;()
+                .map_err(|<span class="kw">_</span>| Error::unknown_lit_str_value(v))
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::unexpected_lit_type(value))
+        }
+    }
+}
+
+<span class="doccomment">/// Parser for paths that supports both quote-wrapped and bare values.
+</span><span class="kw">impl </span>FromMeta <span class="kw">for </span>syn::Path {
+    <span class="kw">fn </span>from_string(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        syn::parse_str(value).map_err(|<span class="kw">_</span>| Error::unknown_value(value))
+    }
+
+    <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>::syn::Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">if let </span>::syn::Lit::Str(<span class="kw-2">ref </span>v) = <span class="kw-2">*</span>value {
+            v.parse().map_err(|<span class="kw">_</span>| Error::unknown_lit_str_value(v))
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::unexpected_lit_type(value))
+        }
+    }
+
+    <span class="kw">fn </span>from_expr(expr: <span class="kw-2">&amp;</span>Expr) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">match </span>expr {
+            Expr::Lit(lit) =&gt; <span class="self">Self</span>::from_value(<span class="kw-2">&amp;</span>lit.lit),
+            Expr::Path(path) =&gt; <span class="prelude-val">Ok</span>(path.path.clone()),
+            Expr::Group(group) =&gt; <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>group.expr), <span class="comment">// see FromMeta::from_expr
+            </span><span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_expr_type(expr)),
+        }
+    }
+}
+
+<span class="kw">impl </span>FromMeta <span class="kw">for </span>syn::Ident {
+    <span class="kw">fn </span>from_string(value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        syn::parse_str(value).map_err(|<span class="kw">_</span>| Error::unknown_value(value))
+    }
+
+    <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>syn::Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">if let </span>syn::Lit::Str(<span class="kw-2">ref </span>v) = <span class="kw-2">*</span>value {
+            v.parse().map_err(|<span class="kw">_</span>| Error::unknown_lit_str_value(v))
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Err</span>(Error::unexpected_lit_type(value))
+        }
+    }
+
+    <span class="kw">fn </span>from_expr(expr: <span class="kw-2">&amp;</span>Expr) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">match </span>expr {
+            Expr::Lit(lit) =&gt; <span class="self">Self</span>::from_value(<span class="kw-2">&amp;</span>lit.lit),
+            <span class="comment">// All idents are paths, but not all paths are idents -
+            // the get_ident() method does additional validation to
+            // make sure the path is actually an ident.
+            </span>Expr::Path(path) =&gt; <span class="kw">match </span>path.path.get_ident() {
+                <span class="prelude-val">Some</span>(ident) =&gt; <span class="prelude-val">Ok</span>(ident.clone()),
+                <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_expr_type(expr)),
+            },
+            Expr::Group(group) =&gt; <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>group.expr), <span class="comment">// see FromMeta::from_expr
+            </span><span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_expr_type(expr)),
+        }
+    }
+}
+
+<span class="doccomment">/// Adapter for various expression types.
+///
+/// Prior to syn 2.0, darling supported arbitrary expressions as long as they
+/// were wrapped in quotation marks. This was helpful for people writing
+/// libraries that needed expressions, but it now creates an ambiguity when
+/// parsing a meta item.
+///
+/// To address this, the macro supports both formats; if it cannot parse the
+/// item as an expression of the right type and the passed-in expression is
+/// a string literal, it will fall back to parsing the string contents.
+</span><span class="macro">macro_rules!</span> from_syn_expr_type {
+    (<span class="macro-nonterminal">$ty</span>:path, <span class="macro-nonterminal">$variant</span>:ident) =&gt; {
+        <span class="kw">impl </span>FromMeta <span class="kw">for </span><span class="macro-nonterminal">$ty </span>{
+            <span class="kw">fn </span>from_expr(expr: <span class="kw-2">&amp;</span>syn::Expr) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                <span class="kw">match </span>expr {
+                    syn::Expr::<span class="macro-nonterminal">$variant</span>(body) =&gt; <span class="prelude-val">Ok</span>(body.clone()),
+                    syn::Expr::Lit(expr_lit) =&gt; <span class="self">Self</span>::from_value(<span class="kw-2">&amp;</span>expr_lit.lit),
+                    syn::Expr::Group(group) =&gt; <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>group.expr), <span class="comment">// see FromMeta::from_expr
+                    </span><span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_expr_type(expr)),
+                }
+            }
+
+            <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>::syn::Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                <span class="kw">if let </span>syn::Lit::Str(body) = <span class="kw-2">&amp;</span>value {
+                    body.parse::&lt;<span class="macro-nonterminal">$ty</span>&gt;()
+                        .map_err(|<span class="kw">_</span>| Error::unknown_lit_str_value(body))
+                } <span class="kw">else </span>{
+                    <span class="prelude-val">Err</span>(Error::unexpected_lit_type(value))
+                }
+            }
+        }
+    };
+}
+
+<span class="macro">from_syn_expr_type!</span>(syn::ExprArray, Array);
+<span class="macro">from_syn_expr_type!</span>(syn::ExprPath, Path);
+
+<span class="doccomment">/// Adapter from `syn::parse::Parse` to `FromMeta` for items that cannot
+/// be expressed in a [`syn::MetaNameValue`].
 ///
 /// This cannot be a blanket impl, due to the `syn::Lit` family's need to handle non-string values.
 /// Therefore, we use a macro and a lot of impls.
@@ -1091,11 +1563,6 @@
     };
 }
 
-<span class="macro">from_syn_parse!</span>(syn::Ident);
-<span class="macro">from_syn_parse!</span>(syn::Expr);
-<span class="macro">from_syn_parse!</span>(syn::ExprArray);
-<span class="macro">from_syn_parse!</span>(syn::ExprPath);
-<span class="macro">from_syn_parse!</span>(syn::Path);
 <span class="macro">from_syn_parse!</span>(syn::Type);
 <span class="macro">from_syn_parse!</span>(syn::TypeArray);
 <span class="macro">from_syn_parse!</span>(syn::TypeBareFn);
@@ -1119,20 +1586,34 @@
     (<span class="macro-nonterminal">$ty</span>:ident) =&gt; {
         <span class="doccomment">/// Parsing an unsigned integer array, i.e. `example = "[1, 2, 3, 4]"`.
         </span><span class="kw">impl </span>FromMeta <span class="kw">for </span>Vec&lt;<span class="macro-nonterminal">$ty</span>&gt; {
-            <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-                <span class="kw">let </span>expr_array = syn::ExprArray::from_value(value)<span class="question-mark">?</span>;
-                <span class="comment">// To meet rust &lt;1.36 borrow checker rules on expr_array.elems
-                </span><span class="kw">let </span>v =
-                    expr_array
+            <span class="kw">fn </span>from_expr(expr: <span class="kw-2">&amp;</span>syn::Expr) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                <span class="kw">match </span>expr {
+                    syn::Expr::Array(expr_array) =&gt; expr_array
                         .elems
                         .iter()
-                        .map(|expr| <span class="kw">match </span>expr {
-                            Expr::Lit(lit) =&gt; <span class="macro-nonterminal">$ty::from_value</span>(<span class="kw-2">&amp;</span>lit.lit),
-                            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::custom(<span class="string">"Expected array of unsigned integers"</span>)
-                                .with_span(expr)),
+                        .map(|expr| {
+                            <span class="kw">let </span>unexpected = || {
+                                Error::custom(<span class="string">"Expected array of unsigned integers"</span>).with_span(expr)
+                            };
+                            <span class="kw">match </span>expr {
+                                Expr::Lit(lit) =&gt; <span class="macro-nonterminal">$ty::from_value</span>(<span class="kw-2">&amp;</span>lit.lit),
+                                Expr::Group(group) =&gt; <span class="kw">match </span><span class="kw-2">&amp;*</span>group.expr {
+                                    Expr::Lit(lit) =&gt; <span class="macro-nonterminal">$ty::from_value</span>(<span class="kw-2">&amp;</span>lit.lit),
+                                    <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(unexpected()),
+                                },
+                                <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(unexpected()),
+                            }
                         })
-                        .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="macro-nonterminal">$ty</span>&gt;&gt;&gt;();
-                v
+                        .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="macro-nonterminal">$ty</span>&gt;&gt;&gt;(),
+                    syn::Expr::Lit(expr_lit) =&gt; <span class="self">Self</span>::from_value(<span class="kw-2">&amp;</span>expr_lit.lit),
+                    syn::Expr::Group(group) =&gt; <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>group.expr), <span class="comment">// see FromMeta::from_expr
+                    </span><span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_expr_type(expr)),
+                }
+            }
+
+            <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                <span class="kw">let </span>expr_array = syn::ExprArray::from_value(value)<span class="question-mark">?</span>;
+                <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>syn::Expr::Array(expr_array))
             }
         }
     };
@@ -1158,6 +1639,33 @@
                     <span class="prelude-val">Ok</span>(value.clone())
                 } <span class="kw">else </span>{
                     <span class="prelude-val">Err</span>(Error::unexpected_lit_type(value))
+                }
+            }
+        }
+
+        <span class="kw">impl </span>FromMeta <span class="kw">for </span>Vec&lt;<span class="macro-nonterminal">$impl_ty</span>&gt; {
+            <span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[NestedMeta]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                items
+                    .iter()
+                    .map(&lt;<span class="macro-nonterminal">$impl_ty </span><span class="kw">as </span>FromMeta&gt;::from_nested_meta)
+                    .collect()
+            }
+
+            <span class="kw">fn </span>from_value(value: <span class="kw-2">&amp;</span>syn::Lit) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                <span class="kw">let </span>expr_array = syn::ExprArray::from_value(value)<span class="question-mark">?</span>;
+                <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>syn::Expr::Array(expr_array))
+            }
+
+            <span class="kw">fn </span>from_expr(expr: <span class="kw-2">&amp;</span>syn::Expr) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                <span class="kw">match </span>expr {
+                    syn::Expr::Array(expr_array) =&gt; expr_array
+                        .elems
+                        .iter()
+                        .map(&lt;<span class="macro-nonterminal">$impl_ty </span><span class="kw">as </span>FromMeta&gt;::from_expr)
+                        .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;&gt;(),
+                    syn::Expr::Lit(expr_lit) =&gt; <span class="self">Self</span>::from_value(<span class="kw-2">&amp;</span>expr_lit.lit),
+                    syn::Expr::Group(g) =&gt; <span class="self">Self</span>::from_expr(<span class="kw-2">&amp;</span>g.expr),
+                    <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::unexpected_expr_type(expr)),
                 }
             }
         }
@@ -1205,22 +1713,58 @@
 }
 
 <span class="kw">impl</span>&lt;T: FromMeta&gt; FromMeta <span class="kw">for </span><span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="kw">fn </span>from_none() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Some</span>(<span class="prelude-val">None</span>)
+    }
+
     <span class="kw">fn </span>from_meta(item: <span class="kw-2">&amp;</span>Meta) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         FromMeta::from_meta(item).map(<span class="prelude-val">Some</span>)
     }
 }
 
-<span class="kw">impl</span>&lt;T: FromMeta&gt; FromMeta <span class="kw">for </span>Box&lt;T&gt; {
-    <span class="kw">fn </span>from_meta(item: <span class="kw-2">&amp;</span>Meta) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-        FromMeta::from_meta(item).map(Box::new)
-    }
-}
-
 <span class="kw">impl</span>&lt;T: FromMeta&gt; FromMeta <span class="kw">for </span><span class="prelude-ty">Result</span>&lt;T&gt; {
+    <span class="kw">fn </span>from_none() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        T::from_none().map(<span class="prelude-val">Ok</span>)
+    }
+
+    <span class="comment">// `#[darling(flatten)]` forwards directly to this method, so it's
+    // necessary to declare it to avoid getting an unsupported format
+    // error if it's invoked directly.
+    </span><span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[NestedMeta]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Ok</span>(FromMeta::from_list(items))
+    }
+
     <span class="kw">fn </span>from_meta(item: <span class="kw-2">&amp;</span>Meta) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         <span class="prelude-val">Ok</span>(FromMeta::from_meta(item))
     }
 }
+
+<span class="doccomment">/// Create an impl that forwards to an inner type `T` for parsing.
+</span><span class="macro">macro_rules!</span> smart_pointer_t {
+    (<span class="macro-nonterminal">$ty</span>:path, <span class="macro-nonterminal">$map_fn</span>:path) =&gt; {
+        <span class="kw">impl</span>&lt;T: FromMeta&gt; FromMeta <span class="kw">for </span><span class="macro-nonterminal">$ty </span>{
+            <span class="kw">fn </span>from_none() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+                T::from_none().map(<span class="macro-nonterminal">$map_fn</span>)
+            }
+
+            <span class="comment">// `#[darling(flatten)]` forwards directly to this method, so it's
+            // necessary to declare it to avoid getting an unsupported format
+            // error if it's invoked directly.
+            </span><span class="kw">fn </span>from_list(items: <span class="kw-2">&amp;</span>[NestedMeta]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                FromMeta::from_list(items).map(<span class="macro-nonterminal">$map_fn</span>)
+            }
+
+            <span class="kw">fn </span>from_meta(item: <span class="kw-2">&amp;</span>Meta) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+                FromMeta::from_meta(item).map(<span class="macro-nonterminal">$map_fn</span>)
+            }
+        }
+    };
+}
+
+<span class="macro">smart_pointer_t!</span>(Box&lt;T&gt;, Box::new);
+<span class="macro">smart_pointer_t!</span>(Rc&lt;T&gt;, Rc::new);
+<span class="macro">smart_pointer_t!</span>(Arc&lt;T&gt;, Arc::new);
+<span class="macro">smart_pointer_t!</span>(RefCell&lt;T&gt;, RefCell::new);
 
 <span class="doccomment">/// Parses the meta-item, and in case of error preserves a copy of the input for
 /// later analysis.
@@ -1229,24 +1773,6 @@
         T::from_meta(item)
             .map(<span class="prelude-val">Ok</span>)
             .or_else(|<span class="kw">_</span>| <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(item.clone())))
-    }
-}
-
-<span class="kw">impl</span>&lt;T: FromMeta&gt; FromMeta <span class="kw">for </span>Rc&lt;T&gt; {
-    <span class="kw">fn </span>from_meta(item: <span class="kw-2">&amp;</span>Meta) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-        FromMeta::from_meta(item).map(Rc::new)
-    }
-}
-
-<span class="kw">impl</span>&lt;T: FromMeta&gt; FromMeta <span class="kw">for </span>Arc&lt;T&gt; {
-    <span class="kw">fn </span>from_meta(item: <span class="kw-2">&amp;</span>Meta) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-        FromMeta::from_meta(item).map(Arc::new)
-    }
-}
-
-<span class="kw">impl</span>&lt;T: FromMeta&gt; FromMeta <span class="kw">for </span>RefCell&lt;T&gt; {
-    <span class="kw">fn </span>from_meta(item: <span class="kw-2">&amp;</span>Meta) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-        FromMeta::from_meta(item).map(RefCell::new)
     }
 }
 
@@ -1296,7 +1822,7 @@
 <span class="macro">macro_rules!</span> hash_map {
     (<span class="macro-nonterminal">$key</span>:ty) =&gt; {
         <span class="kw">impl</span>&lt;V: FromMeta, S: BuildHasher + Default&gt; FromMeta <span class="kw">for </span>HashMap&lt;<span class="macro-nonterminal">$key</span>, V, S&gt; {
-            <span class="kw">fn </span>from_list(nested: <span class="kw-2">&amp;</span>[syn::NestedMeta]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+            <span class="kw">fn </span>from_list(nested: <span class="kw-2">&amp;</span>[NestedMeta]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
                 <span class="comment">// Convert the nested meta items into a sequence of (path, value result) result tuples.
                 // An outer Err means no (key, value) structured could be found, while an Err in the
                 // second position of the tuple means that value was rejected by FromMeta.
@@ -1307,14 +1833,14 @@
                     .iter()
                     .map(|item| -&gt; <span class="prelude-ty">Result</span>&lt;(<span class="kw-2">&amp;</span>syn::Path, <span class="prelude-ty">Result</span>&lt;V&gt;)&gt; {
                         <span class="kw">match </span><span class="kw-2">*</span>item {
-                            syn::NestedMeta::Meta(<span class="kw-2">ref </span>inner) =&gt; {
+                            NestedMeta::Meta(<span class="kw-2">ref </span>inner) =&gt; {
                                 <span class="kw">let </span>path = inner.path();
                                 <span class="prelude-val">Ok</span>((
                                     path,
                                     FromMeta::from_meta(inner).map_err(|e| e.at_path(<span class="kw-2">&amp;</span>path)),
                                 ))
                             }
-                            syn::NestedMeta::Lit(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(Error::unsupported_format(<span class="string">"literal"</span>)),
+                            NestedMeta::Lit(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(Error::unsupported_format(<span class="string">"expression"</span>)),
                         }
                     });
 
@@ -1381,24 +1907,29 @@
 /// it should not be considered by the parsing.
 </span><span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
+    <span class="kw">use </span>std::num::{NonZeroU32, NonZeroU64};
+
     <span class="kw">use </span>proc_macro2::TokenStream;
+    <span class="kw">use </span>quote::quote;
+    <span class="kw">use </span>syn::parse_quote;
 
     <span class="kw">use crate</span>::{Error, FromMeta, <span class="prelude-ty">Result</span>};
 
     <span class="doccomment">/// parse a string as a syn::Meta instance.
     </span><span class="kw">fn </span>pm(tokens: TokenStream) -&gt; ::std::result::Result&lt;syn::Meta, String&gt; {
         <span class="kw">let </span>attribute: syn::Attribute = <span class="macro">parse_quote!</span>(<span class="attr">#[#tokens]</span>);
-        attribute.parse_meta().map_err(|<span class="kw">_</span>| <span class="string">"Unable to parse"</span>.into())
+        <span class="prelude-val">Ok</span>(attribute.meta)
     }
 
-    <span class="kw">fn </span>fm&lt;T: FromMeta&gt;(tokens: TokenStream) -&gt; T {
+    <span class="attr">#[track_caller]
+    </span><span class="kw">fn </span>fm&lt;T: FromMeta&gt;(tokens: TokenStream) -&gt; T {
         FromMeta::from_meta(<span class="kw-2">&amp;</span>pm(tokens).expect(<span class="string">"Tests should pass well-formed input"</span>))
             .expect(<span class="string">"Tests should pass valid input"</span>)
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>unit_succeeds() {
-        <span class="kw">let </span>() = fm::&lt;()&gt;(<span class="macro">quote!</span>(ignore));
+        fm::&lt;()&gt;(<span class="macro">quote!</span>(ignore));
     }
 
     <span class="attr">#[test]
@@ -1435,11 +1966,33 @@
     }
 
     <span class="attr">#[test]
+    </span><span class="kw">fn </span>pathbuf_succeeds() {
+        <span class="macro">assert_eq!</span>(
+            fm::&lt;std::path::PathBuf&gt;(<span class="macro">quote!</span>(ignore = <span class="string">r#"C:\"#</span>)),
+            std::path::PathBuf::from(<span class="string">r#"C:\"#</span>)
+        );
+    }
+
+    <span class="attr">#[test]
     #[allow(clippy::float_cmp)] </span><span class="comment">// we want exact equality
     </span><span class="kw">fn </span>number_succeeds() {
         <span class="macro">assert_eq!</span>(fm::&lt;u8&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"2"</span>)), <span class="number">2u8</span>);
         <span class="macro">assert_eq!</span>(fm::&lt;i16&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"-25"</span>)), -<span class="number">25i16</span>);
         <span class="macro">assert_eq!</span>(fm::&lt;f64&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"1.4e10"</span>)), <span class="number">1.4e10</span>);
+    }
+
+    <span class="attr">#[should_panic(expected = <span class="string">"UnknownValue(\"0\")"</span>)]
+    #[test]
+    </span><span class="kw">fn </span>nonzero_number_fails() {
+        fm::&lt;NonZeroU64&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"0"</span>));
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>nonzero_number_succeeds() {
+        <span class="macro">assert_eq!</span>(
+            fm::&lt;NonZeroU32&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"2"</span>)),
+            NonZeroU32::new(<span class="number">2</span>).unwrap()
+        );
     }
 
     <span class="attr">#[test]
@@ -1453,11 +2006,22 @@
     }
 
     <span class="attr">#[test]
+    </span><span class="kw">fn </span>negative_int_without_quotes() {
+        <span class="macro">assert_eq!</span>(fm::&lt;i8&gt;(<span class="macro">quote!</span>(ignore = -<span class="number">2</span>)), -<span class="number">2i8</span>);
+        <span class="macro">assert_eq!</span>(fm::&lt;i32&gt;(<span class="macro">quote!</span>(ignore = -<span class="number">255</span>)), -<span class="number">255i32</span>);
+    }
+
+    <span class="attr">#[test]
     #[allow(clippy::float_cmp)] </span><span class="comment">// we want exact equality
     </span><span class="kw">fn </span>float_without_quotes() {
         <span class="macro">assert_eq!</span>(fm::&lt;f32&gt;(<span class="macro">quote!</span>(ignore = <span class="number">2.</span>)), <span class="number">2.0f32</span>);
         <span class="macro">assert_eq!</span>(fm::&lt;f32&gt;(<span class="macro">quote!</span>(ignore = <span class="number">2.0</span>)), <span class="number">2.0f32</span>);
         <span class="macro">assert_eq!</span>(fm::&lt;f64&gt;(<span class="macro">quote!</span>(ignore = <span class="number">1.4e10</span>)), <span class="number">1.4e10f64</span>);
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>too_large_int_produces_error() {
+        <span class="macro">assert!</span>(fm::&lt;<span class="prelude-ty">Result</span>&lt;u8&gt;&gt;(<span class="macro">quote!</span>(ignore = <span class="number">2000</span>)).is_err());
     }
 
     <span class="attr">#[test]
@@ -1596,6 +2160,18 @@
     }
 
     <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_expr_without_quotes() {
+        fm::&lt;syn::Expr&gt;(<span class="macro">quote!</span>(ignore = x + y));
+        fm::&lt;syn::Expr&gt;(<span class="macro">quote!</span>(ignore = an_object.method_call()));
+        fm::&lt;syn::Expr&gt;(<span class="macro">quote!</span>(
+            ignore = {
+                a_statement();
+                in_a_block
+            }
+        ));
+    }
+
+    <span class="attr">#[test]
     </span><span class="kw">fn </span>test_expr_path() {
         fm::&lt;syn::ExprPath&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"std::mem::replace"</span>));
         fm::&lt;syn::ExprPath&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"x"</span>));
@@ -1603,11 +2179,22 @@
     }
 
     <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_expr_path_without_quotes() {
+        fm::&lt;syn::ExprPath&gt;(<span class="macro">quote!</span>(ignore = std::mem::replace));
+        fm::&lt;syn::ExprPath&gt;(<span class="macro">quote!</span>(ignore = x));
+        fm::&lt;syn::ExprPath&gt;(<span class="macro">quote!</span>(ignore = example::&lt;Test&gt;));
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_path_without_quotes() {
+        fm::&lt;syn::Path&gt;(<span class="macro">quote!</span>(ignore = std::mem::replace));
+        fm::&lt;syn::Path&gt;(<span class="macro">quote!</span>(ignore = x));
+        fm::&lt;syn::Path&gt;(<span class="macro">quote!</span>(ignore = example::&lt;Test&gt;));
+    }
+
+    <span class="attr">#[test]
     </span><span class="kw">fn </span>test_number_array() {
-        <span class="macro">assert_eq!</span>(
-            fm::&lt;Vec&lt;u8&gt;&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"[16, 0xff]"</span>)),
-            <span class="macro">vec!</span>[<span class="number">0x10</span>, <span class="number">0xff</span>]
-        );
+        <span class="macro">assert_eq!</span>(fm::&lt;Vec&lt;u8&gt;&gt;(<span class="macro">quote!</span>(ignore = [<span class="number">16</span>, <span class="number">0xff</span>])), <span class="macro">vec!</span>[<span class="number">0x10</span>, <span class="number">0xff</span>]);
         <span class="macro">assert_eq!</span>(
             fm::&lt;Vec&lt;u16&gt;&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"[32, 0xffff]"</span>)),
             <span class="macro">vec!</span>[<span class="number">0x20</span>, <span class="number">0xffff</span>]
@@ -1624,6 +2211,17 @@
             fm::&lt;Vec&lt;usize&gt;&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"[80, 0xffffffff]"</span>)),
             <span class="macro">vec!</span>[<span class="number">0x50</span>, <span class="number">0xffffffff</span>]
         );
+    }
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>test_lit_array() {
+        fm::&lt;Vec&lt;syn::LitStr&gt;&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"[\"Hello World\", \"Test Array\"]"</span>));
+        fm::&lt;Vec&lt;syn::LitStr&gt;&gt;(<span class="macro">quote!</span>(ignore = [<span class="string">"Hello World"</span>, <span class="string">"Test Array"</span>]));
+        fm::&lt;Vec&lt;syn::LitChar&gt;&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"['a', 'b', 'c']"</span>));
+        fm::&lt;Vec&lt;syn::LitBool&gt;&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"[true]"</span>));
+        fm::&lt;Vec&lt;syn::LitStr&gt;&gt;(<span class="macro">quote!</span>(ignore = <span class="string">"[]"</span>));
+        fm::&lt;Vec&lt;syn::LitStr&gt;&gt;(<span class="macro">quote!</span>(ignore = []));
+        fm::&lt;Vec&lt;syn::LitBool&gt;&gt;(<span class="macro">quote!</span>(ignore = [<span class="bool-val">true</span>, <span class="bool-val">false</span>]));
     }
 }
 </code></pre></div></section></main></body></html>

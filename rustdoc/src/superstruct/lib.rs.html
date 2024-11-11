@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><title>lib.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="superstruct" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
-            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../superstruct/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="superstruct" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1165,9 +1163,31 @@
 <a href="#1163" id="1163">1163</a>
 <a href="#1164" id="1164">1164</a>
 <a href="#1165" id="1165">1165</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>attributes::{IdentList, NestedMetaList};
-<span class="kw">use </span>darling::util::Override;
-<span class="kw">use </span>darling::FromMeta;
+<a href="#1166" id="1166">1166</a>
+<a href="#1167" id="1167">1167</a>
+<a href="#1168" id="1168">1168</a>
+<a href="#1169" id="1169">1169</a>
+<a href="#1170" id="1170">1170</a>
+<a href="#1171" id="1171">1171</a>
+<a href="#1172" id="1172">1172</a>
+<a href="#1173" id="1173">1173</a>
+<a href="#1174" id="1174">1174</a>
+<a href="#1175" id="1175">1175</a>
+<a href="#1176" id="1176">1176</a>
+<a href="#1177" id="1177">1177</a>
+<a href="#1178" id="1178">1178</a>
+<a href="#1179" id="1179">1179</a>
+<a href="#1180" id="1180">1180</a>
+<a href="#1181" id="1181">1181</a>
+<a href="#1182" id="1182">1182</a>
+<a href="#1183" id="1183">1183</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+    collections::HashMap,
+    iter::{<span class="self">self</span>, FromIterator},
+};
+
+<span class="kw">use </span>attributes::{IdentList, NestedMetaList};
+<span class="kw">use </span>darling::{export::NestedMeta, util::Override, FromMeta};
 <span class="kw">use </span>from::{
     generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
     generate_from_variant_trait_impl_for_ref,
@@ -1177,11 +1197,9 @@
 <span class="kw">use </span>proc_macro::TokenStream;
 <span class="kw">use </span>proc_macro2::{Span, TokenStream <span class="kw">as </span>TokenStream2};
 <span class="kw">use </span>quote::{format_ident, quote, ToTokens};
-<span class="kw">use </span>std::collections::HashMap;
-<span class="kw">use </span>std::iter::{<span class="self">self</span>, FromIterator};
 <span class="kw">use </span>syn::{
-    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
-    Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
+    parse_macro_input, Attribute, Expr, Field, GenericParam, Ident, ItemStruct, Lifetime,
+    LifetimeParam, Type, TypeGenerics, TypeParamBound,
 };
 
 <span class="kw">mod </span>attributes;
@@ -1249,6 +1267,7 @@
     </span>getter: <span class="prelude-ty">Option</span>&lt;GetterOpts&gt;,
     <span class="attr">#[darling(default)]
     </span>partial_getter: <span class="prelude-ty">Option</span>&lt;GetterOpts&gt;,
+    no_getter: darling::util::Flag,
 }
 
 <span class="doccomment">/// Getter configuration for a specific field
@@ -1302,12 +1321,17 @@
     only_combinations: Vec&lt;VariantKey&gt;,
     getter_opts: GetterOpts,
     partial_getter_opts: GetterOpts,
+    no_getter: bool,
     is_common: bool,
 }
 
 <span class="kw">impl </span>FieldData {
     <span class="kw">fn </span>is_common(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.is_common
+    }
+
+    <span class="kw">fn </span>no_getter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.no_getter
     }
 
     <span class="doccomment">/// Checks whether this field should be included in creating
@@ -1337,7 +1361,10 @@
 
 <span class="attr">#[proc_macro_attribute]
 </span><span class="kw">pub fn </span>superstruct(args: TokenStream, input: TokenStream) -&gt; TokenStream {
-    <span class="kw">let </span>attr_args = <span class="macro">parse_macro_input!</span>(args <span class="kw">as </span>AttributeArgs);
+    <span class="kw">let </span>attr_args = <span class="kw">match </span>NestedMeta::parse_meta_list(args.into()) {
+        <span class="prelude-val">Ok</span>(args) =&gt; args,
+        <span class="prelude-val">Err</span>(err) =&gt; <span class="kw">return </span>err.to_compile_error().into(),
+    };
     <span class="kw">let </span>item = <span class="macro">parse_macro_input!</span>(input <span class="kw">as </span>ItemStruct);
 
     <span class="kw">let </span>type_name = <span class="kw-2">&amp;</span>item.ident;
@@ -1396,10 +1423,7 @@
             .attrs
             .iter()
             .filter(|attr| is_superstruct_attr(attr))
-            .map(|attr| {
-                <span class="kw">let </span>meta = attr.parse_meta().unwrap();
-                FieldOpts::from_meta(<span class="kw-2">&amp;</span>meta).unwrap()
-            })
+            .map(|attr| FieldOpts::from_meta(<span class="kw-2">&amp;</span>attr.meta).unwrap())
             .next()
             .unwrap_or_default();
 
@@ -1459,6 +1483,12 @@
             <span class="macro">panic!</span>(<span class="string">"can't set `flatten` and `getter` on the same field"</span>);
         } <span class="kw">else if </span>field_opts.flatten.is_some() &amp;&amp; field_opts.partial_getter.is_some() {
             <span class="macro">panic!</span>(<span class="string">"can't set `flatten` and `partial_getter` on the same field"</span>);
+        } <span class="kw">else if </span>field_opts.flatten.is_some() &amp;&amp; field_opts.no_getter.is_present() {
+            <span class="macro">panic!</span>(<span class="string">"can't set `flatten` and `no_getter` on the same field"</span>)
+        } <span class="kw">else if </span>field_opts.getter.is_some() &amp;&amp; field_opts.no_getter.is_present() {
+            <span class="macro">panic!</span>(<span class="string">"can't set `getter` and `no_getter` on the same field"</span>)
+        } <span class="kw">else if </span>field_opts.partial_getter.is_some() &amp;&amp; field_opts.no_getter.is_present() {
+            <span class="macro">panic!</span>(<span class="string">"can't set `partial_getter` and `no_getter` on the same field"</span>)
         }
 
         <span class="kw">let </span>getter_opts = field_opts.getter.unwrap_or_default();
@@ -1562,6 +1592,7 @@
                     </span>only_combinations: <span class="macro">vec!</span>[variant_key.clone()],
                     getter_opts: &lt;<span class="kw">_</span>&gt;::default(),
                     partial_getter_opts,
+                    no_getter: <span class="bool-val">false</span>,
                     is_common: <span class="bool-val">false</span>,
                 });
 
@@ -1585,6 +1616,7 @@
                     .collect_vec(),
                 getter_opts,
                 partial_getter_opts,
+                no_getter: field_opts.no_getter.is_present(),
                 is_common,
             });
         }
@@ -1611,8 +1643,7 @@
             .map_or(<span class="kw-2">&amp;</span>[][..], |attrs| <span class="kw-2">&amp;</span>attrs.metas);
         <span class="kw">let </span>spatt = specific_struct_attributes
             .iter()
-            .chain(specific_struct_attributes_meta.iter())
-            .unique();
+            .chain(specific_struct_attributes_meta.iter());
 
         <span class="kw">let </span>variant_code = <span class="macro">quote!</span> {
             #(
@@ -1723,7 +1754,7 @@
     </span><span class="kw">let </span><span class="kw-2">mut </span>ref_ty_decl_generics = decl_generics.clone();
     ref_ty_decl_generics.params.insert(
         <span class="number">0</span>,
-        GenericParam::Lifetime(LifetimeDef::new(ref_ty_lifetime.clone())),
+        GenericParam::Lifetime(LifetimeParam::new(ref_ty_lifetime.clone())),
     );
 
     <span class="comment">// If no lifetime bound exists for a generic param, inject one.
@@ -1770,7 +1801,7 @@
     </span><span class="kw">let </span><span class="kw-2">mut </span>ref_mut_ty_decl_generics = decl_generics.clone();
     ref_mut_ty_decl_generics.params.insert(
         <span class="number">0</span>,
-        GenericParam::Lifetime(LifetimeDef::new(ref_mut_ty_lifetime.clone())),
+        GenericParam::Lifetime(LifetimeParam::new(ref_mut_ty_lifetime.clone())),
     );
     <span class="kw">let </span>(ref_mut_impl_generics, ref_mut_ty_generics, <span class="kw">_</span>) =
         <span class="kw-2">&amp;</span>ref_mut_ty_decl_generics.split_for_impl();
@@ -1796,19 +1827,19 @@
     <span class="comment">// Construct the main impl block.
     </span><span class="kw">let </span>getters = fields
         .iter()
-        .filter(|f| f.is_common())
+        .filter(|f| f.is_common() &amp;&amp; !f.no_getter())
         .map(|field_data| make_field_getter(type_name, variant_names, field_data, <span class="prelude-val">None</span>, is_meta));
 
     <span class="kw">let </span>mut_getters = fields
         .iter()
-        .filter(|f| f.is_common() &amp;&amp; !f.getter_opts.no_mut)
+        .filter(|f| f.is_common() &amp;&amp; !f.no_getter() &amp;&amp; !f.getter_opts.no_mut)
         .map(|field_data| {
             make_mut_field_getter(type_name, variant_names, field_data, <span class="prelude-val">None</span>, is_meta)
         });
 
     <span class="kw">let </span>partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common())
+        .filter(|f| !f.is_common() &amp;&amp; !f.no_getter())
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .cartesian_product(<span class="kw-2">&amp;</span>[<span class="bool-val">false</span>, <span class="bool-val">true</span>])
         .flat_map(|(field_data, mutability)| {
@@ -1880,19 +1911,22 @@
     output_items.push(impl_block.into());
 
     <span class="comment">// Construct the impl block for the *Ref type.
-    </span><span class="kw">let </span>ref_getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
-        make_field_getter(
-            <span class="kw-2">&amp;</span>ref_ty_name,
-            variant_names,
-            field_data,
-            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_ty_lifetime),
-            is_meta,
-        )
-    });
+    </span><span class="kw">let </span>ref_getters = fields
+        .iter()
+        .filter(|f| f.is_common() &amp;&amp; !f.no_getter())
+        .map(|field_data| {
+            make_field_getter(
+                <span class="kw-2">&amp;</span>ref_ty_name,
+                variant_names,
+                field_data,
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ref_ty_lifetime),
+                is_meta,
+            )
+        });
 
     <span class="kw">let </span>ref_partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common())
+        .filter(|f| !f.is_common() &amp;&amp; !f.no_getter())
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .flat_map(|field_data| {
             <span class="kw">let </span>field_variants = <span class="kw-2">&amp;</span>field_data.only_combinations;
@@ -1929,7 +1963,7 @@
     <span class="comment">// Construct the impl block for the *RefMut type.
     </span><span class="kw">let </span>ref_mut_getters = fields
         .iter()
-        .filter(|f| f.is_common() &amp;&amp; !f.getter_opts.no_mut)
+        .filter(|f| f.is_common() &amp;&amp; !f.no_getter() &amp;&amp; !f.getter_opts.no_mut)
         .map(|field_data| {
             make_mut_field_getter(
                 <span class="kw-2">&amp;</span>ref_mut_ty_name,
@@ -1942,7 +1976,7 @@
 
     <span class="kw">let </span>ref_mut_partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common() &amp;&amp; !f.partial_getter_opts.no_mut)
+        .filter(|f| !f.is_common() &amp;&amp; !f.no_getter() &amp;&amp; !f.partial_getter_opts.no_mut)
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .flat_map(|field_data| {
             <span class="kw">let </span>field_variants = <span class="kw-2">&amp;</span>field_data.only_combinations;
@@ -2290,7 +2324,7 @@
 
 <span class="doccomment">/// Predicate for determining whether an attribute has the given `ident` as its path.
 </span><span class="kw">fn </span>is_attr_with_ident(attr: <span class="kw-2">&amp;</span>Attribute, ident: <span class="kw-2">&amp;</span>str) -&gt; bool {
-    attr.path
+    attr.path()
         .get_ident()
         .map_or(<span class="bool-val">false</span>, |attr_ident| <span class="kw-2">*</span>attr_ident == ident)
 }

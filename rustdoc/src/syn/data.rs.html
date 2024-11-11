@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/syn-1.0.109/src/data.rs`."><title>data.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="syn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
-            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../syn/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/syn-2.0.87/src/data.rs`."><title>data.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="syn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -424,87 +422,19 @@
 <a href="#422" id="422">422</a>
 <a href="#423" id="423">423</a>
 <a href="#424" id="424">424</a>
-<a href="#425" id="425">425</a>
-<a href="#426" id="426">426</a>
-<a href="#427" id="427">427</a>
-<a href="#428" id="428">428</a>
-<a href="#429" id="429">429</a>
-<a href="#430" id="430">430</a>
-<a href="#431" id="431">431</a>
-<a href="#432" id="432">432</a>
-<a href="#433" id="433">433</a>
-<a href="#434" id="434">434</a>
-<a href="#435" id="435">435</a>
-<a href="#436" id="436">436</a>
-<a href="#437" id="437">437</a>
-<a href="#438" id="438">438</a>
-<a href="#439" id="439">439</a>
-<a href="#440" id="440">440</a>
-<a href="#441" id="441">441</a>
-<a href="#442" id="442">442</a>
-<a href="#443" id="443">443</a>
-<a href="#444" id="444">444</a>
-<a href="#445" id="445">445</a>
-<a href="#446" id="446">446</a>
-<a href="#447" id="447">447</a>
-<a href="#448" id="448">448</a>
-<a href="#449" id="449">449</a>
-<a href="#450" id="450">450</a>
-<a href="#451" id="451">451</a>
-<a href="#452" id="452">452</a>
-<a href="#453" id="453">453</a>
-<a href="#454" id="454">454</a>
-<a href="#455" id="455">455</a>
-<a href="#456" id="456">456</a>
-<a href="#457" id="457">457</a>
-<a href="#458" id="458">458</a>
-<a href="#459" id="459">459</a>
-<a href="#460" id="460">460</a>
-<a href="#461" id="461">461</a>
-<a href="#462" id="462">462</a>
-<a href="#463" id="463">463</a>
-<a href="#464" id="464">464</a>
-<a href="#465" id="465">465</a>
-<a href="#466" id="466">466</a>
-<a href="#467" id="467">467</a>
-<a href="#468" id="468">468</a>
-<a href="#469" id="469">469</a>
-<a href="#470" id="470">470</a>
-<a href="#471" id="471">471</a>
-<a href="#472" id="472">472</a>
-<a href="#473" id="473">473</a>
-<a href="#474" id="474">474</a>
-<a href="#475" id="475">475</a>
-<a href="#476" id="476">476</a>
-<a href="#477" id="477">477</a>
-<a href="#478" id="478">478</a>
-<a href="#479" id="479">479</a>
-<a href="#480" id="480">480</a>
-<a href="#481" id="481">481</a>
-<a href="#482" id="482">482</a>
-<a href="#483" id="483">483</a>
-<a href="#484" id="484">484</a>
-<a href="#485" id="485">485</a>
-<a href="#486" id="486">486</a>
-<a href="#487" id="487">487</a>
-<a href="#488" id="488">488</a>
-<a href="#489" id="489">489</a>
-<a href="#490" id="490">490</a>
-<a href="#491" id="491">491</a>
-<a href="#492" id="492">492</a>
-<a href="#493" id="493">493</a>
-</pre></div><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<span class="kw">use </span><span class="kw">crate</span>::punctuated::Punctuated;
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::attr::Attribute;
+<span class="kw">use </span><span class="kw">crate</span>::expr::{Expr, Index, Member};
+<span class="kw">use </span><span class="kw">crate</span>::ident::Ident;
+<span class="kw">use </span><span class="kw">crate</span>::punctuated::{<span class="self">self</span>, Punctuated};
+<span class="kw">use </span><span class="kw">crate</span>::restriction::{FieldMutability, Visibility};
+<span class="kw">use </span><span class="kw">crate</span>::token;
+<span class="kw">use </span><span class="kw">crate</span>::ty::Type;
 
 <span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An enum variant.
-    ///
-    /// *This type is available only if Syn is built with the `"derive"` or `"full"`
-    /// feature.*
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
+    </span><span class="attr">#[cfg_attr(docsrs, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
     </span><span class="kw">pub struct </span>Variant {
-        <span class="doccomment">/// Attributes tagged on the variant.
-        </span><span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
+        <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
 
         <span class="doccomment">/// Name of the variant.
         </span><span class="kw">pub </span>ident: Ident,
@@ -520,15 +450,12 @@
 <span class="macro">ast_enum_of_structs!</span> {
     <span class="doccomment">/// Data stored within an enum variant or struct.
     ///
-    /// *This type is available only if Syn is built with the `"derive"` or `"full"`
-    /// feature.*
-    ///
     /// # Syntax tree enum
     ///
     /// This type is a [syntax tree enum].
     ///
-    /// [syntax tree enum]: Expr#syntax-tree-enums
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
+    /// [syntax tree enum]: crate::expr::Expr#syntax-tree-enums
+    </span><span class="attr">#[cfg_attr(docsrs, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
     </span><span class="kw">pub enum </span>Fields {
         <span class="doccomment">/// Named fields of a struct or struct variant such as `Point { x: f64,
         /// y: f64 }`.
@@ -545,10 +472,7 @@
 <span class="macro">ast_struct!</span> {
     <span class="doccomment">/// Named fields of a struct or struct variant such as `Point { x: f64,
     /// y: f64 }`.
-    ///
-    /// *This type is available only if Syn is built with the `"derive"` or
-    /// `"full"` feature.*
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
+    </span><span class="attr">#[cfg_attr(docsrs, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
     </span><span class="kw">pub struct </span>FieldsNamed {
         <span class="kw">pub </span>brace_token: token::Brace,
         <span class="kw">pub </span>named: Punctuated&lt;Field, <span class="macro">Token!</span>[,]&gt;,
@@ -557,10 +481,7 @@
 
 <span class="macro">ast_struct!</span> {
     <span class="doccomment">/// Unnamed fields of a tuple struct or tuple variant such as `Some(T)`.
-    ///
-    /// *This type is available only if Syn is built with the `"derive"` or
-    /// `"full"` feature.*
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
+    </span><span class="attr">#[cfg_attr(docsrs, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
     </span><span class="kw">pub struct </span>FieldsUnnamed {
         <span class="kw">pub </span>paren_token: token::Paren,
         <span class="kw">pub </span>unnamed: Punctuated&lt;Field, <span class="macro">Token!</span>[,]&gt;,
@@ -607,6 +528,47 @@
             Fields::Unnamed(f) =&gt; f.unnamed.is_empty(),
         }
     }
+
+    <span class="macro">return_impl_trait!</span> {
+        <span class="doccomment">/// Get an iterator over the fields of a struct or variant as [`Member`]s.
+        /// This iterator can be used to iterate over a named or unnamed struct or
+        /// variant's fields uniformly.
+        ///
+        /// # Example
+        ///
+        /// The following is a simplistic [`Clone`] derive for structs. (A more
+        /// complete implementation would additionally want to infer trait bounds on
+        /// the generic type parameters.)
+        ///
+        /// ```
+        /// # use quote::quote;
+        /// #
+        /// fn derive_clone(input: &amp;syn::ItemStruct) -&gt; proc_macro2::TokenStream {
+        ///     let ident = &amp;input.ident;
+        ///     let members = input.fields.members();
+        ///     let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+        ///     quote! {
+        ///         impl #impl_generics Clone for #ident #ty_generics #where_clause {
+        ///             fn clone(&amp;self) -&gt; Self {
+        ///                 Self {
+        ///                     #(#members: self.#members.clone()),*
+        ///                 }
+        ///             }
+        ///         }
+        ///     }
+        /// }
+        /// ```
+        ///
+        /// For structs with named fields, it produces an expression like `Self { a:
+        /// self.a.clone() }`. For structs with unnamed fields, `Self { 0:
+        /// self.0.clone() }`. And for unit structs, `Self {}`.
+        </span><span class="kw">pub fn </span>members(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = Member&gt; + Clone + <span class="lifetime">'_ </span>[Members] {
+            Members {
+                fields: <span class="self">self</span>.iter(),
+                index: <span class="number">0</span>,
+            }
+        }
+    }
 }
 
 <span class="kw">impl </span>IntoIterator <span class="kw">for </span>Fields {
@@ -642,16 +604,13 @@
 
 <span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A field of a struct or enum variant.
-    ///
-    /// *This type is available only if Syn is built with the `"derive"` or `"full"`
-    /// feature.*
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
+    </span><span class="attr">#[cfg_attr(docsrs, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
     </span><span class="kw">pub struct </span>Field {
-        <span class="doccomment">/// Attributes tagged on the field.
-        </span><span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
+        <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
 
-        <span class="doccomment">/// Visibility of the field.
-        </span><span class="kw">pub </span>vis: Visibility,
+        <span class="kw">pub </span>vis: Visibility,
+
+        <span class="kw">pub </span>mutability: FieldMutability,
 
         <span class="doccomment">/// Name of the field, if any.
         ///
@@ -660,85 +619,66 @@
 
         <span class="kw">pub </span>colon_token: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[:]&gt;,
 
-        <span class="doccomment">/// Type of the field.
-        </span><span class="kw">pub </span>ty: Type,
+        <span class="kw">pub </span>ty: Type,
     }
 }
 
-<span class="macro">ast_enum_of_structs!</span> {
-    <span class="doccomment">/// The visibility level of an item: inherited or `pub` or
-    /// `pub(restricted)`.
-    ///
-    /// *This type is available only if Syn is built with the `"derive"` or `"full"`
-    /// feature.*
-    ///
-    /// # Syntax tree enum
-    ///
-    /// This type is a [syntax tree enum].
-    ///
-    /// [syntax tree enum]: Expr#syntax-tree-enums
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
-    </span><span class="kw">pub enum </span>Visibility {
-        <span class="doccomment">/// A public visibility level: `pub`.
-        </span>Public(VisPublic),
+<span class="kw">pub struct </span>Members&lt;<span class="lifetime">'a</span>&gt; {
+    fields: punctuated::Iter&lt;<span class="lifetime">'a</span>, Field&gt;,
+    index: u32,
+}
 
-        <span class="doccomment">/// A crate-level visibility: `crate`.
-        </span>Crate(VisCrate),
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; Iterator <span class="kw">for </span>Members&lt;<span class="lifetime">'a</span>&gt; {
+    <span class="kw">type </span>Item = Member;
 
-        <span class="doccomment">/// A visibility level restricted to some path: `pub(self)` or
-        /// `pub(super)` or `pub(crate)` or `pub(in some::module)`.
-        </span>Restricted(VisRestricted),
-
-        <span class="doccomment">/// An inherited visibility, which usually means private.
-        </span>Inherited,
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">let </span>field = <span class="self">self</span>.fields.next()<span class="question-mark">?</span>;
+        <span class="kw">let </span>member = <span class="kw">match </span><span class="kw-2">&amp;</span>field.ident {
+            <span class="prelude-val">Some</span>(ident) =&gt; Member::Named(ident.clone()),
+            <span class="prelude-val">None </span>=&gt; {
+                <span class="attr">#[cfg(all(feature = <span class="string">"parsing"</span>, feature = <span class="string">"printing"</span>))]
+                </span><span class="kw">let </span>span = <span class="kw">crate</span>::spanned::Spanned::span(<span class="kw-2">&amp;</span>field.ty);
+                <span class="attr">#[cfg(not(all(feature = <span class="string">"parsing"</span>, feature = <span class="string">"printing"</span>)))]
+                </span><span class="kw">let </span>span = proc_macro2::Span::call_site();
+                Member::Unnamed(Index {
+                    index: <span class="self">self</span>.index,
+                    span,
+                })
+            }
+        };
+        <span class="self">self</span>.index += <span class="number">1</span>;
+        <span class="prelude-val">Some</span>(member)
     }
 }
 
-<span class="macro">ast_struct!</span> {
-    <span class="doccomment">/// A public visibility level: `pub`.
-    ///
-    /// *This type is available only if Syn is built with the `"derive"` or
-    /// `"full"` feature.*
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
-    </span><span class="kw">pub struct </span>VisPublic {
-        <span class="kw">pub </span>pub_token: <span class="macro">Token!</span>[<span class="kw">pub</span>],
-    }
-}
-
-<span class="macro">ast_struct!</span> {
-    <span class="doccomment">/// A crate-level visibility: `crate`.
-    ///
-    /// *This type is available only if Syn is built with the `"derive"` or
-    /// `"full"` feature.*
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
-    </span><span class="kw">pub struct </span>VisCrate {
-        <span class="kw">pub </span>crate_token: <span class="macro">Token!</span>[<span class="kw">crate</span>],
-    }
-}
-
-<span class="macro">ast_struct!</span> {
-    <span class="doccomment">/// A visibility level restricted to some path: `pub(self)` or
-    /// `pub(super)` or `pub(crate)` or `pub(in some::module)`.
-    ///
-    /// *This type is available only if Syn is built with the `"derive"` or
-    /// `"full"` feature.*
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(any(feature = <span class="string">"full"</span>, feature = <span class="string">"derive"</span>))))]
-    </span><span class="kw">pub struct </span>VisRestricted {
-        <span class="kw">pub </span>pub_token: <span class="macro">Token!</span>[<span class="kw">pub</span>],
-        <span class="kw">pub </span>paren_token: token::Paren,
-        <span class="kw">pub </span>in_token: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[<span class="kw">in</span>]&gt;,
-        <span class="kw">pub </span>path: Box&lt;Path&gt;,
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; Clone <span class="kw">for </span>Members&lt;<span class="lifetime">'a</span>&gt; {
+    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        Members {
+            fields: <span class="self">self</span>.fields.clone(),
+            index: <span class="self">self</span>.index,
+        }
     }
 }
 
 <span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
-</span><span class="kw">pub mod </span>parsing {
-    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use </span><span class="kw">crate</span>::ext::IdentExt;
-    <span class="kw">use </span><span class="kw">crate</span>::parse::discouraged::Speculative;
-    <span class="kw">use </span><span class="kw">crate</span>::parse::{Parse, ParseStream, <span class="prelude-ty">Result</span>};
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>parsing {
+    <span class="kw">use </span><span class="kw">crate</span>::attr::Attribute;
+    <span class="kw">use </span><span class="kw">crate</span>::data::{Field, Fields, FieldsNamed, FieldsUnnamed, Variant};
+    <span class="kw">use </span><span class="kw">crate</span>::error::Result;
+    <span class="kw">use </span><span class="kw">crate</span>::expr::Expr;
+    <span class="kw">use </span><span class="kw">crate</span>::ext::IdentExt <span class="kw">as _</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::ident::Ident;
+    <span class="attr">#[cfg(not(feature = <span class="string">"full"</span>))]
+    </span><span class="kw">use </span><span class="kw">crate</span>::parse::discouraged::Speculative <span class="kw">as _</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::parse::{Parse, ParseStream};
+    <span class="kw">use </span><span class="kw">crate</span>::restriction::{FieldMutability, Visibility};
+    <span class="attr">#[cfg(not(feature = <span class="string">"full"</span>))]
+    </span><span class="kw">use </span><span class="kw">crate</span>::scan_expr::scan_expr;
+    <span class="kw">use </span><span class="kw">crate</span>::token;
+    <span class="kw">use </span><span class="kw">crate</span>::ty::Type;
+    <span class="kw">use </span><span class="kw">crate</span>::verbatim;
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>Variant {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -753,7 +693,20 @@
             };
             <span class="kw">let </span>discriminant = <span class="kw">if </span>input.peek(<span class="macro">Token!</span>[=]) {
                 <span class="kw">let </span>eq_token: <span class="macro">Token!</span>[=] = input.parse()<span class="question-mark">?</span>;
-                <span class="kw">let </span>discriminant: Expr = input.parse()<span class="question-mark">?</span>;
+                <span class="attr">#[cfg(feature = <span class="string">"full"</span>)]
+                </span><span class="kw">let </span>discriminant: Expr = input.parse()<span class="question-mark">?</span>;
+                <span class="attr">#[cfg(not(feature = <span class="string">"full"</span>))]
+                </span><span class="kw">let </span>discriminant = {
+                    <span class="kw">let </span>begin = input.fork();
+                    <span class="kw">let </span>ahead = input.fork();
+                    <span class="kw">let </span><span class="kw-2">mut </span>discriminant: <span class="prelude-ty">Result</span>&lt;Expr&gt; = ahead.parse();
+                    <span class="kw">if </span>discriminant.is_ok() {
+                        input.advance_to(<span class="kw-2">&amp;</span>ahead);
+                    } <span class="kw">else if </span>scan_expr(input).is_ok() {
+                        discriminant = <span class="prelude-val">Ok</span>(Expr::Verbatim(verbatim::between(<span class="kw-2">&amp;</span>begin, input)));
+                    }
+                    discriminant<span class="question-mark">?
+                </span>};
                 <span class="prelude-val">Some</span>((eq_token, discriminant))
             } <span class="kw">else </span>{
                 <span class="prelude-val">None
@@ -767,155 +720,89 @@
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>FieldsNamed {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>content;
             <span class="prelude-val">Ok</span>(FieldsNamed {
                 brace_token: <span class="macro">braced!</span>(content <span class="kw">in </span>input),
-                named: content.parse_terminated(Field::parse_named)<span class="question-mark">?</span>,
+                named: content.parse_terminated(Field::parse_named, <span class="macro">Token!</span>[,])<span class="question-mark">?</span>,
             })
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>FieldsUnnamed {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>content;
             <span class="prelude-val">Ok</span>(FieldsUnnamed {
                 paren_token: <span class="macro">parenthesized!</span>(content <span class="kw">in </span>input),
-                unnamed: content.parse_terminated(Field::parse_unnamed)<span class="question-mark">?</span>,
+                unnamed: content.parse_terminated(Field::parse_unnamed, <span class="macro">Token!</span>[,])<span class="question-mark">?</span>,
             })
         }
     }
 
     <span class="kw">impl </span>Field {
         <span class="doccomment">/// Parses a named (braced struct) field.
-        </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
+        </span><span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"parsing"</span>)))]
         </span><span class="kw">pub fn </span>parse_named(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+            <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
+            <span class="kw">let </span>vis: Visibility = input.parse()<span class="question-mark">?</span>;
+
+            <span class="kw">let </span>unnamed_field = <span class="macro">cfg!</span>(feature = <span class="string">"full"</span>) &amp;&amp; input.peek(<span class="macro">Token!</span>[<span class="kw">_</span>]);
+            <span class="kw">let </span>ident = <span class="kw">if </span>unnamed_field {
+                input.call(Ident::parse_any)
+            } <span class="kw">else </span>{
+                input.parse()
+            }<span class="question-mark">?</span>;
+
+            <span class="kw">let </span>colon_token: <span class="macro">Token!</span>[:] = input.parse()<span class="question-mark">?</span>;
+
+            <span class="kw">let </span>ty: Type = <span class="kw">if </span>unnamed_field
+                &amp;&amp; (input.peek(<span class="macro">Token!</span>[<span class="kw">struct</span>])
+                    || input.peek(<span class="macro">Token!</span>[union]) &amp;&amp; input.peek2(token::Brace))
+            {
+                <span class="kw">let </span>begin = input.fork();
+                input.call(Ident::parse_any)<span class="question-mark">?</span>;
+                input.parse::&lt;FieldsNamed&gt;()<span class="question-mark">?</span>;
+                Type::Verbatim(verbatim::between(<span class="kw-2">&amp;</span>begin, input))
+            } <span class="kw">else </span>{
+                input.parse()<span class="question-mark">?
+            </span>};
+
             <span class="prelude-val">Ok</span>(Field {
-                attrs: input.call(Attribute::parse_outer)<span class="question-mark">?</span>,
-                vis: input.parse()<span class="question-mark">?</span>,
-                ident: <span class="prelude-val">Some</span>(<span class="kw">if </span>input.peek(<span class="macro">Token!</span>[<span class="kw">_</span>]) {
-                    input.call(Ident::parse_any)
-                } <span class="kw">else </span>{
-                    input.parse()
-                }<span class="question-mark">?</span>),
-                colon_token: <span class="prelude-val">Some</span>(input.parse()<span class="question-mark">?</span>),
-                ty: input.parse()<span class="question-mark">?</span>,
+                attrs,
+                vis,
+                mutability: FieldMutability::None,
+                ident: <span class="prelude-val">Some</span>(ident),
+                colon_token: <span class="prelude-val">Some</span>(colon_token),
+                ty,
             })
         }
 
         <span class="doccomment">/// Parses an unnamed (tuple struct) field.
-        </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
+        </span><span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"parsing"</span>)))]
         </span><span class="kw">pub fn </span>parse_unnamed(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="prelude-val">Ok</span>(Field {
                 attrs: input.call(Attribute::parse_outer)<span class="question-mark">?</span>,
                 vis: input.parse()<span class="question-mark">?</span>,
+                mutability: FieldMutability::None,
                 ident: <span class="prelude-val">None</span>,
                 colon_token: <span class="prelude-val">None</span>,
                 ty: input.parse()<span class="question-mark">?</span>,
             })
         }
     }
-
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
-    </span><span class="kw">impl </span>Parse <span class="kw">for </span>Visibility {
-        <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-            <span class="comment">// Recognize an empty None-delimited group, as produced by a $:vis
-            // matcher that matched no tokens.
-            </span><span class="kw">if </span>input.peek(token::Group) {
-                <span class="kw">let </span>ahead = input.fork();
-                <span class="kw">let </span>group = <span class="kw">crate</span>::group::parse_group(<span class="kw-2">&amp;</span>ahead)<span class="question-mark">?</span>;
-                <span class="kw">if </span>group.content.is_empty() {
-                    input.advance_to(<span class="kw-2">&amp;</span>ahead);
-                    <span class="kw">return </span><span class="prelude-val">Ok</span>(Visibility::Inherited);
-                }
-            }
-
-            <span class="kw">if </span>input.peek(<span class="macro">Token!</span>[<span class="kw">pub</span>]) {
-                <span class="self">Self</span>::parse_pub(input)
-            } <span class="kw">else if </span>input.peek(<span class="macro">Token!</span>[<span class="kw">crate</span>]) {
-                <span class="self">Self</span>::parse_crate(input)
-            } <span class="kw">else </span>{
-                <span class="prelude-val">Ok</span>(Visibility::Inherited)
-            }
-        }
-    }
-
-    <span class="kw">impl </span>Visibility {
-        <span class="kw">fn </span>parse_pub(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-            <span class="kw">let </span>pub_token = input.parse::&lt;<span class="macro">Token!</span>[<span class="kw">pub</span>]&gt;()<span class="question-mark">?</span>;
-
-            <span class="kw">if </span>input.peek(token::Paren) {
-                <span class="kw">let </span>ahead = input.fork();
-
-                <span class="kw">let </span>content;
-                <span class="kw">let </span>paren_token = <span class="macro">parenthesized!</span>(content <span class="kw">in </span>ahead);
-                <span class="kw">if </span>content.peek(<span class="macro">Token!</span>[<span class="kw">crate</span>])
-                    || content.peek(<span class="macro">Token!</span>[<span class="self">self</span>])
-                    || content.peek(<span class="macro">Token!</span>[<span class="kw">super</span>])
-                {
-                    <span class="kw">let </span>path = content.call(Ident::parse_any)<span class="question-mark">?</span>;
-
-                    <span class="comment">// Ensure there are no additional tokens within `content`.
-                    // Without explicitly checking, we may misinterpret a tuple
-                    // field as a restricted visibility, causing a parse error.
-                    // e.g. `pub (crate::A, crate::B)` (Issue #720).
-                    </span><span class="kw">if </span>content.is_empty() {
-                        input.advance_to(<span class="kw-2">&amp;</span>ahead);
-                        <span class="kw">return </span><span class="prelude-val">Ok</span>(Visibility::Restricted(VisRestricted {
-                            pub_token,
-                            paren_token,
-                            in_token: <span class="prelude-val">None</span>,
-                            path: Box::new(Path::from(path)),
-                        }));
-                    }
-                } <span class="kw">else if </span>content.peek(<span class="macro">Token!</span>[<span class="kw">in</span>]) {
-                    <span class="kw">let </span>in_token: <span class="macro">Token!</span>[<span class="kw">in</span>] = content.parse()<span class="question-mark">?</span>;
-                    <span class="kw">let </span>path = content.call(Path::parse_mod_style)<span class="question-mark">?</span>;
-
-                    input.advance_to(<span class="kw-2">&amp;</span>ahead);
-                    <span class="kw">return </span><span class="prelude-val">Ok</span>(Visibility::Restricted(VisRestricted {
-                        pub_token,
-                        paren_token,
-                        in_token: <span class="prelude-val">Some</span>(in_token),
-                        path: Box::new(path),
-                    }));
-                }
-            }
-
-            <span class="prelude-val">Ok</span>(Visibility::Public(VisPublic { pub_token }))
-        }
-
-        <span class="kw">fn </span>parse_crate(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-            <span class="kw">if </span>input.peek2(<span class="macro">Token!</span>[::]) {
-                <span class="prelude-val">Ok</span>(Visibility::Inherited)
-            } <span class="kw">else </span>{
-                <span class="prelude-val">Ok</span>(Visibility::Crate(VisCrate {
-                    crate_token: input.parse()<span class="question-mark">?</span>,
-                }))
-            }
-        }
-
-        <span class="attr">#[cfg(feature = <span class="string">"full"</span>)]
-        </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>is_some(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-            <span class="kw">match </span><span class="self">self </span>{
-                Visibility::Inherited =&gt; <span class="bool-val">false</span>,
-                <span class="kw">_ </span>=&gt; <span class="bool-val">true</span>,
-            }
-        }
-    }
 }
 
 <span class="attr">#[cfg(feature = <span class="string">"printing"</span>)]
 </span><span class="kw">mod </span>printing {
-    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::data::{Field, FieldsNamed, FieldsUnnamed, Variant};
     <span class="kw">use </span><span class="kw">crate</span>::print::TokensOrDefault;
     <span class="kw">use </span>proc_macro2::TokenStream;
     <span class="kw">use </span>quote::{ToTokens, TokenStreamExt};
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>Variant {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="kw-2">&amp;</span><span class="self">self</span>.attrs);
@@ -928,7 +815,7 @@
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>FieldsNamed {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="self">self</span>.brace_token.surround(tokens, |tokens| {
@@ -937,7 +824,7 @@
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>FieldsUnnamed {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="self">self</span>.paren_token.surround(tokens, |tokens| {
@@ -946,7 +833,7 @@
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
+    <span class="attr">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>Field {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="kw-2">&amp;</span><span class="self">self</span>.attrs);
@@ -956,33 +843,6 @@
                 TokensOrDefault(<span class="kw-2">&amp;</span><span class="self">self</span>.colon_token).to_tokens(tokens);
             }
             <span class="self">self</span>.ty.to_tokens(tokens);
-        }
-    }
-
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
-    </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>VisPublic {
-        <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
-            <span class="self">self</span>.pub_token.to_tokens(tokens);
-        }
-    }
-
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
-    </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>VisCrate {
-        <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
-            <span class="self">self</span>.crate_token.to_tokens(tokens);
-        }
-    }
-
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
-    </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>VisRestricted {
-        <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
-            <span class="self">self</span>.pub_token.to_tokens(tokens);
-            <span class="self">self</span>.paren_token.surround(tokens, |tokens| {
-                <span class="comment">// TODO: If we have a path which is not "self" or "super" or
-                // "crate", automatically add the "in" token.
-                </span><span class="self">self</span>.in_token.to_tokens(tokens);
-                <span class="self">self</span>.path.to_tokens(tokens);
-            });
         }
     }
 }

@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/itertools-0.10.5/src/powerset.rs`."><title>powerset.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="itertools" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
-            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../itertools/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/itertools-0.13.0/src/powerset.rs`."><title>powerset.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="itertools" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -90,13 +88,54 @@
 <a href="#88" id="88">88</a>
 <a href="#89" id="89">89</a>
 <a href="#90" id="90">90</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>alloc::vec::Vec;
+<span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::iter::FusedIterator;
-<span class="kw">use </span>std::usize;
-<span class="kw">use </span>alloc::vec::Vec;
 
-<span class="kw">use </span><span class="kw">super</span>::combinations::{Combinations, combinations};
-<span class="kw">use </span><span class="kw">super</span>::size_hint;
+<span class="kw">use </span><span class="kw">super</span>::combinations::{combinations, Combinations};
+<span class="kw">use </span><span class="kw">crate</span>::adaptors::checked_binomial;
+<span class="kw">use </span><span class="kw">crate</span>::size_hint::{<span class="self">self</span>, SizeHint};
 
 <span class="doccomment">/// An iterator to iterate through the powerset of the elements from an iterator.
 ///
@@ -105,79 +144,120 @@
 </span><span class="attr">#[must_use = <span class="string">"iterator adaptors are lazy and do nothing unless consumed"</span>]
 </span><span class="kw">pub struct </span>Powerset&lt;I: Iterator&gt; {
     combs: Combinations&lt;I&gt;,
-    <span class="comment">// Iterator `position` (equal to count of yielded elements).
-    </span>pos: usize,
 }
 
 <span class="kw">impl</span>&lt;I&gt; Clone <span class="kw">for </span>Powerset&lt;I&gt;
-    <span class="kw">where </span>I: Clone + Iterator,
-          I::Item: Clone,
+<span class="kw">where
+    </span>I: Clone + Iterator,
+    I::Item: Clone,
 {
-    <span class="macro">clone_fields!</span>(combs, pos);
+    <span class="macro">clone_fields!</span>(combs);
 }
 
 <span class="kw">impl</span>&lt;I&gt; fmt::Debug <span class="kw">for </span>Powerset&lt;I&gt;
-    <span class="kw">where </span>I: Iterator + fmt::Debug,
-          I::Item: fmt::Debug,
+<span class="kw">where
+    </span>I: Iterator + fmt::Debug,
+    I::Item: fmt::Debug,
 {
-    <span class="macro">debug_fmt_fields!</span>(Powerset, combs, pos);
+    <span class="macro">debug_fmt_fields!</span>(Powerset, combs);
 }
 
 <span class="doccomment">/// Create a new `Powerset` from a clonable iterator.
 </span><span class="kw">pub fn </span>powerset&lt;I&gt;(src: I) -&gt; Powerset&lt;I&gt;
-    <span class="kw">where </span>I: Iterator,
-          I::Item: Clone,
+<span class="kw">where
+    </span>I: Iterator,
+    I::Item: Clone,
 {
     Powerset {
         combs: combinations(src, <span class="number">0</span>),
-        pos: <span class="number">0</span>,
+    }
+}
+
+<span class="kw">impl</span>&lt;I: Iterator&gt; Powerset&lt;I&gt; {
+    <span class="doccomment">/// Returns true if `k` has been incremented, false otherwise.
+    </span><span class="kw">fn </span>increment_k(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">if </span><span class="self">self</span>.combs.k() &lt; <span class="self">self</span>.combs.n() || <span class="self">self</span>.combs.k() == <span class="number">0 </span>{
+            <span class="self">self</span>.combs.reset(<span class="self">self</span>.combs.k() + <span class="number">1</span>);
+            <span class="bool-val">true
+        </span>} <span class="kw">else </span>{
+            <span class="bool-val">false
+        </span>}
     }
 }
 
 <span class="kw">impl</span>&lt;I&gt; Iterator <span class="kw">for </span>Powerset&lt;I&gt;
-    <span class="kw">where
-        </span>I: Iterator,
-        I::Item: Clone,
+<span class="kw">where
+    </span>I: Iterator,
+    I::Item: Clone,
 {
     <span class="kw">type </span>Item = Vec&lt;I::Item&gt;;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(elt) = <span class="self">self</span>.combs.next() {
-            <span class="self">self</span>.pos = <span class="self">self</span>.pos.saturating_add(<span class="number">1</span>);
             <span class="prelude-val">Some</span>(elt)
-        } <span class="kw">else if </span><span class="self">self</span>.combs.k() &lt; <span class="self">self</span>.combs.n()
-            || <span class="self">self</span>.combs.k() == <span class="number">0
-        </span>{
-            <span class="self">self</span>.combs.reset(<span class="self">self</span>.combs.k() + <span class="number">1</span>);
-            <span class="self">self</span>.combs.next().map(|elt| {
-                <span class="self">self</span>.pos = <span class="self">self</span>.pos.saturating_add(<span class="number">1</span>);
-                elt
-            })
+        } <span class="kw">else if </span><span class="self">self</span>.increment_k() {
+            <span class="self">self</span>.combs.next()
         } <span class="kw">else </span>{
             <span class="prelude-val">None
         </span>}
     }
 
-    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
-        <span class="comment">// Total bounds for source iterator.
-        </span><span class="kw">let </span>src_total = size_hint::add_scalar(<span class="self">self</span>.combs.src().size_hint(), <span class="self">self</span>.combs.n());
-
-        <span class="comment">// Total bounds for self ( length(powerset(set) == 2 ^ length(set) )
-        </span><span class="kw">let </span>self_total = size_hint::pow_scalar_base(<span class="number">2</span>, src_total);
-
-        <span class="kw">if </span><span class="self">self</span>.pos &lt; usize::MAX {
-            <span class="comment">// Subtract count of elements already yielded from total.
-            </span>size_hint::sub_scalar(self_total, <span class="self">self</span>.pos)
-        } <span class="kw">else </span>{
-            <span class="comment">// Fallback: self.pos is saturated and no longer reliable.
-            </span>(<span class="number">0</span>, self_total.<span class="number">1</span>)
+    <span class="kw">fn </span>nth(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>n: usize) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">loop </span>{
+            <span class="kw">match </span><span class="self">self</span>.combs.try_nth(n) {
+                <span class="prelude-val">Ok</span>(item) =&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(item),
+                <span class="prelude-val">Err</span>(steps) =&gt; {
+                    <span class="kw">if </span>!<span class="self">self</span>.increment_k() {
+                        <span class="kw">return </span><span class="prelude-val">None</span>;
+                    }
+                    n -= steps;
+                }
+            }
         }
+    }
+
+    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; SizeHint {
+        <span class="kw">let </span>k = <span class="self">self</span>.combs.k();
+        <span class="comment">// Total bounds for source iterator.
+        </span><span class="kw">let </span>(n_min, n_max) = <span class="self">self</span>.combs.src().size_hint();
+        <span class="kw">let </span>low = remaining_for(n_min, k).unwrap_or(usize::MAX);
+        <span class="kw">let </span>upp = n_max.and_then(|n| remaining_for(n, k));
+        size_hint::add(<span class="self">self</span>.combs.size_hint(), (low, upp))
+    }
+
+    <span class="kw">fn </span>count(<span class="self">self</span>) -&gt; usize {
+        <span class="kw">let </span>k = <span class="self">self</span>.combs.k();
+        <span class="kw">let </span>(n, combs_count) = <span class="self">self</span>.combs.n_and_count();
+        combs_count + remaining_for(n, k).unwrap()
+    }
+
+    <span class="kw">fn </span>fold&lt;B, F&gt;(<span class="self">self</span>, <span class="kw-2">mut </span>init: B, <span class="kw-2">mut </span>f: F) -&gt; B
+    <span class="kw">where
+        </span>F: FnMut(B, <span class="self">Self</span>::Item) -&gt; B,
+    {
+        <span class="kw">let </span><span class="kw-2">mut </span>it = <span class="self">self</span>.combs;
+        <span class="kw">if </span>it.k() == <span class="number">0 </span>{
+            init = it.by_ref().fold(init, <span class="kw-2">&amp;mut </span>f);
+            it.reset(<span class="number">1</span>);
+        }
+        init = it.by_ref().fold(init, <span class="kw-2">&amp;mut </span>f);
+        <span class="comment">// n is now known for sure because k &gt;= 1 and all k-combinations have been generated.
+        </span><span class="kw">for </span>k <span class="kw">in </span>it.k() + <span class="number">1</span>..=it.n() {
+            it.reset(k);
+            init = it.by_ref().fold(init, <span class="kw-2">&amp;mut </span>f);
+        }
+        init
     }
 }
 
 <span class="kw">impl</span>&lt;I&gt; FusedIterator <span class="kw">for </span>Powerset&lt;I&gt;
-    <span class="kw">where
-        </span>I: Iterator,
-        I::Item: Clone,
-{}
+<span class="kw">where
+    </span>I: Iterator,
+    I::Item: Clone,
+{
+}
+
+<span class="kw">fn </span>remaining_for(n: usize, k: usize) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+    (k + <span class="number">1</span>..=n).try_fold(<span class="number">0usize</span>, |sum, i| sum.checked_add(checked_binomial(n, i)<span class="question-mark">?</span>))
+}
 </code></pre></div></section></main></body></html>
