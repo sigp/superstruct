@@ -1,6 +1,10 @@
+use std::{
+    collections::HashMap,
+    iter::{self, FromIterator},
+};
+
 use attributes::{IdentList, NestedMetaList};
-use darling::util::Override;
-use darling::FromMeta;
+use darling::{export::NestedMeta, util::Override, FromMeta};
 use from::{
     generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
     generate_from_variant_trait_impl_for_ref,
@@ -10,11 +14,9 @@ use macros::generate_all_map_macros;
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
 use quote::{format_ident, quote, ToTokens};
-use std::collections::HashMap;
-use std::iter::{self, FromIterator};
 use syn::{
-    parse_macro_input, Attribute, AttributeArgs, Expr, Field, GenericParam, Ident, ItemStruct,
-    Lifetime, LifetimeDef, Type, TypeGenerics, TypeParamBound,
+    parse_macro_input, Attribute, Expr, Field, GenericParam, Ident, ItemStruct, Lifetime,
+    LifetimeParam, Type, TypeGenerics, TypeParamBound,
 };
 
 mod attributes;
@@ -82,6 +84,7 @@ struct FieldOpts {
     getter: Option<GetterOpts>,
     #[darling(default)]
     partial_getter: Option<GetterOpts>,
+    no_getter: darling::util::Flag,
 }
 
 /// Getter configuration for a specific field
@@ -135,12 +138,17 @@ struct FieldData {
     only_combinations: Vec<VariantKey>,
     getter_opts: GetterOpts,
     partial_getter_opts: GetterOpts,
+    no_getter: bool,
     is_common: bool,
 }
 
 impl FieldData {
     fn is_common(&self) -> bool {
         self.is_common
+    }
+
+    fn no_getter(&self) -> bool {
+        self.no_getter
     }
 
     /// Checks whether this field should be included in creating
@@ -170,7 +178,10 @@ struct VariantKey {
 
 #[proc_macro_attribute]
 pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
-    let attr_args = parse_macro_input!(args as AttributeArgs);
+    let attr_args = match NestedMeta::parse_meta_list(args.into()) {
+        Ok(args) => args,
+        Err(err) => return err.to_compile_error().into(),
+    };
     let item = parse_macro_input!(input as ItemStruct);
 
     let type_name = &item.ident;
@@ -229,10 +240,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             .attrs
             .iter()
             .filter(|attr| is_superstruct_attr(attr))
-            .map(|attr| {
-                let meta = attr.parse_meta().unwrap();
-                FieldOpts::from_meta(&meta).unwrap()
-            })
+            .map(|attr| FieldOpts::from_meta(&attr.meta).unwrap())
             .next()
             .unwrap_or_default();
 
@@ -292,6 +300,12 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             panic!("can't set `flatten` and `getter` on the same field");
         } else if field_opts.flatten.is_some() && field_opts.partial_getter.is_some() {
             panic!("can't set `flatten` and `partial_getter` on the same field");
+        } else if field_opts.flatten.is_some() && field_opts.no_getter.is_present() {
+            panic!("can't set `flatten` and `no_getter` on the same field")
+        } else if field_opts.getter.is_some() && field_opts.no_getter.is_present() {
+            panic!("can't set `getter` and `no_getter` on the same field")
+        } else if field_opts.partial_getter.is_some() && field_opts.no_getter.is_present() {
+            panic!("can't set `partial_getter` and `no_getter` on the same field")
         }
 
         let getter_opts = field_opts.getter.unwrap_or_default();
@@ -395,6 +409,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     only_combinations: vec![variant_key.clone()],
                     getter_opts: <_>::default(),
                     partial_getter_opts,
+                    no_getter: false,
                     is_common: false,
                 });
 
@@ -418,6 +433,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
                     .collect_vec(),
                 getter_opts,
                 partial_getter_opts,
+                no_getter: field_opts.no_getter.is_present(),
                 is_common,
             });
         }
@@ -444,8 +460,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
             .map_or(&[][..], |attrs| &attrs.metas);
         let spatt = specific_struct_attributes
             .iter()
-            .chain(specific_struct_attributes_meta.iter())
-            .unique();
+            .chain(specific_struct_attributes_meta.iter());
 
         let variant_code = quote! {
             #(
@@ -556,7 +571,7 @@ fn generate_wrapper_enums(
     let mut ref_ty_decl_generics = decl_generics.clone();
     ref_ty_decl_generics.params.insert(
         0,
-        GenericParam::Lifetime(LifetimeDef::new(ref_ty_lifetime.clone())),
+        GenericParam::Lifetime(LifetimeParam::new(ref_ty_lifetime.clone())),
     );
 
     // If no lifetime bound exists for a generic param, inject one.
@@ -603,7 +618,7 @@ fn generate_wrapper_enums(
     let mut ref_mut_ty_decl_generics = decl_generics.clone();
     ref_mut_ty_decl_generics.params.insert(
         0,
-        GenericParam::Lifetime(LifetimeDef::new(ref_mut_ty_lifetime.clone())),
+        GenericParam::Lifetime(LifetimeParam::new(ref_mut_ty_lifetime.clone())),
     );
     let (ref_mut_impl_generics, ref_mut_ty_generics, _) =
         &ref_mut_ty_decl_generics.split_for_impl();
@@ -629,19 +644,19 @@ fn generate_wrapper_enums(
     // Construct the main impl block.
     let getters = fields
         .iter()
-        .filter(|f| f.is_common())
+        .filter(|f| f.is_common() && !f.no_getter())
         .map(|field_data| make_field_getter(type_name, variant_names, field_data, None, is_meta));
 
     let mut_getters = fields
         .iter()
-        .filter(|f| f.is_common() && !f.getter_opts.no_mut)
+        .filter(|f| f.is_common() && !f.no_getter() && !f.getter_opts.no_mut)
         .map(|field_data| {
             make_mut_field_getter(type_name, variant_names, field_data, None, is_meta)
         });
 
     let partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common())
+        .filter(|f| !f.is_common() && !f.no_getter())
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .cartesian_product(&[false, true])
         .flat_map(|(field_data, mutability)| {
@@ -713,19 +728,22 @@ fn generate_wrapper_enums(
     output_items.push(impl_block.into());
 
     // Construct the impl block for the *Ref type.
-    let ref_getters = fields.iter().filter(|f| f.is_common()).map(|field_data| {
-        make_field_getter(
-            &ref_ty_name,
-            variant_names,
-            field_data,
-            Some(&ref_ty_lifetime),
-            is_meta,
-        )
-    });
+    let ref_getters = fields
+        .iter()
+        .filter(|f| f.is_common() && !f.no_getter())
+        .map(|field_data| {
+            make_field_getter(
+                &ref_ty_name,
+                variant_names,
+                field_data,
+                Some(&ref_ty_lifetime),
+                is_meta,
+            )
+        });
 
     let ref_partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common())
+        .filter(|f| !f.is_common() && !f.no_getter())
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .flat_map(|field_data| {
             let field_variants = &field_data.only_combinations;
@@ -762,7 +780,7 @@ fn generate_wrapper_enums(
     // Construct the impl block for the *RefMut type.
     let ref_mut_getters = fields
         .iter()
-        .filter(|f| f.is_common() && !f.getter_opts.no_mut)
+        .filter(|f| f.is_common() && !f.no_getter() && !f.getter_opts.no_mut)
         .map(|field_data| {
             make_mut_field_getter(
                 &ref_mut_ty_name,
@@ -775,7 +793,7 @@ fn generate_wrapper_enums(
 
     let ref_mut_partial_getters = fields
         .iter()
-        .filter(|f| !f.is_common() && !f.partial_getter_opts.no_mut)
+        .filter(|f| !f.is_common() && !f.no_getter() && !f.partial_getter_opts.no_mut)
         .filter(|f| is_meta || f.exists_in_meta(type_name))
         .flat_map(|field_data| {
             let field_variants = &field_data.only_combinations;
@@ -1123,7 +1141,7 @@ fn is_superstruct_attr(attr: &Attribute) -> bool {
 
 /// Predicate for determining whether an attribute has the given `ident` as its path.
 fn is_attr_with_ident(attr: &Attribute, ident: &str) -> bool {
-    attr.path
+    attr.path()
         .get_ident()
         .map_or(false, |attr_ident| *attr_ident == ident)
 }

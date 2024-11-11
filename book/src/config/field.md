@@ -69,6 +69,20 @@ The error type for partial getters can currently only be configured on a per-str
 via the [`partial_getter_error`](./struct.md#partial-getter-error) attribute, although this may
 change in a future release.
 
+## No Getter
+Disable the generation of (partial) getter functions for this field.
+This can be used for when two fields have the same name but different types:
+
+```rust
+#[superstruct(variants(A, B))]
+struct NoGetter {
+    #[superstruct(only(A), no_getter)]
+    pub x: u64,
+    #[superstruct(only(B), no_getter)]
+    pub x: String,
+}
+```
+
 ## Flatten
 
 ```

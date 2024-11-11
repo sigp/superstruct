@@ -138,3 +138,15 @@ fn no_enum() {
     let b: MessageB = MessageB { y: 0 };
     assert_eq!(a.x, b.y);
 }
+
+#[test]
+#[allow(dead_code)]
+fn no_getter() {
+    #[superstruct(variants(A, B))]
+    struct NoGetter {
+        #[superstruct(only(A), no_getter)]
+        pub x: u64,
+        #[superstruct(only(B), no_getter)]
+        pub x: String,
+    }
+}
