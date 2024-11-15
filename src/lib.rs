@@ -9,7 +9,7 @@ use from::{
     generate_from_enum_trait_impl_for_ref, generate_from_variant_trait_impl,
     generate_from_variant_trait_impl_for_ref,
 };
-use itertools::Itertools;
+use itertools::{izip, Itertools};
 use macros::generate_all_map_macros;
 use proc_macro::TokenStream;
 use proc_macro2::{Span, TokenStream as TokenStream2};
@@ -39,6 +39,12 @@ struct StructOpts {
     /// List of attributes to apply to a selection of named variant structs.
     #[darling(default)]
     specific_variant_attributes: Option<HashMap<Ident, NestedMetaList>>,
+    /// List of attributes to apply to the enum variants.
+    #[darling(default)]
+    enum_variant_attributes: Option<NestedMetaList>,
+    /// List of attributes to apply to a selection of named enum variants.
+    #[darling(default)]
+    specific_enum_variant_attributes: Option<HashMap<Ident, NestedMetaList>>,
     /// List of attributes to apply to the generated Ref type.
     #[darling(default)]
     ref_attributes: Option<NestedMetaList>,
@@ -480,6 +486,11 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
 
     // If the `no_enum` attribute is set, stop after generating variant structs.
     if opts.no_enum {
+        if opts.enum_variant_attributes.is_some() {
+            panic!("can't set both `no_enum` and `enum_variant_attributes`")
+        } else if opts.specific_enum_variant_attributes.is_some() {
+            panic!("can't set both `no_enum` and `enum_specific_variant_attributes`")
+        }
         return TokenStream::from_iter(output_items);
     }
 
@@ -542,10 +553,34 @@ fn generate_wrapper_enums(
     is_meta: bool,
 ) {
     let visibility = &item.vis;
+    let enum_variant_attributes = opts
+        .enum_variant_attributes
+        .as_ref()
+        .map_or(&[][..], |attrs| &attrs.metas);
     // Extract the generics to use for the top-level type and all variant structs.
     let decl_generics = &item.generics;
     // Generics used for the impl block.
     let (impl_generics, ty_generics, where_clause) = &item.generics.split_for_impl();
+
+    // Construct the enum variants
+    let mut variants = Vec::new();
+    for (variant_name, struct_name) in izip!(variant_names, struct_names) {
+        let specific_enum_variant_attributes = opts
+            .specific_enum_variant_attributes
+            .as_ref()
+            .and_then(|map| map.get(variant_name))
+            .map_or(&[][..], |attrs| &attrs.metas);
+        let variant = quote! {
+            #(
+                #[#enum_variant_attributes]
+            )*
+            #(
+                #[#specific_enum_variant_attributes]
+            )*
+            #variant_name(#struct_name #ty_generics),
+        };
+        variants.push(variant);
+    }
 
     // Construct the top-level enum.
     let top_level_attrs = discard_superstruct_attrs(&item.attrs);
@@ -555,7 +590,7 @@ fn generate_wrapper_enums(
         )*
         #visibility enum #type_name #decl_generics #where_clause {
             #(
-                #variant_names(#struct_names #ty_generics),
+                #variants
             )*
         }
     };
