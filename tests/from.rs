@@ -1,3 +1,5 @@
+#![allow(non_local_definitions)] // for macros on structs within test functions
+
 use std::fmt::Display;
 use superstruct::superstruct;
 

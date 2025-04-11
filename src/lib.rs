@@ -265,7 +265,7 @@ pub fn superstruct(args: TokenStream, input: TokenStream) -> TokenStream {
         let is_common_meta = opts
             .meta_variants
             .as_ref()
-            .map_or(true, |struct_meta_variants| {
+            .is_none_or(|struct_meta_variants| {
                 struct_meta_variants.idents.len() == field_meta_variants.len()
             });
         let is_common = field_variants.len() == variant_names.len() && is_common_meta;
@@ -1143,7 +1143,7 @@ fn is_superstruct_attr(attr: &Attribute) -> bool {
 fn is_attr_with_ident(attr: &Attribute, ident: &str) -> bool {
     attr.path()
         .get_ident()
-        .map_or(false, |attr_ident| *attr_ident == ident)
+        .is_some_and(|attr_ident| *attr_ident == ident)
 }
 
 /// Predicate for determining whether a field should be excluded from a flattened
@@ -1160,7 +1160,7 @@ fn should_skip(
         Override::Inherit => false,
         Override::Explicit(map) => {
             let contains_variant = map.contains_key(variant);
-            let contains_meta_variant = meta_variant.map_or(true, |mv| map.contains_key(mv));
+            let contains_meta_variant = meta_variant.is_none_or(|mv| map.contains_key(mv));
 
             let variants_exist = variant_names.iter().any(|v| map.contains_key(v));
             let meta_variants_exist = meta_variant_names

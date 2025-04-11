@@ -26,7 +26,7 @@ pub fn snake_case(ident: &str) -> String {
 /// Create a generics block like `<_, _, _>` with `num_generics` underscores.
 pub fn underscore_generics(num_generics: usize) -> proc_macro2::TokenStream {
     let underscore = Token![_](Span::call_site());
-    let underscores = std::iter::repeat(quote! { #underscore }).take(num_generics);
+    let underscores = std::iter::repeat_n(quote! { #underscore }, num_generics);
     quote! { <#(#underscores),*> }
 }
 
