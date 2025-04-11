@@ -1,3 +1,5 @@
+#![allow(non_local_definitions)] // for macros on structs within test functions
+
 use superstruct::superstruct;
 
 // Check that we can convert a Ref to an inner reference with the same lifetime as `message`.
