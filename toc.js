@@ -10,7 +10,7 @@ class MDBookSidebarScrollbox extends HTMLElement {
     connectedCallback() {
         this.innerHTML = '<ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="setup.html"><strong aria-hidden="true">2.</strong> Setup</a></li><li class="chapter-item expanded "><a href="codegen.html"><strong aria-hidden="true">3.</strong> Code generation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="codegen/variant-structs.html"><strong aria-hidden="true">3.1.</strong> Variant structs</a></li><li class="chapter-item expanded "><a href="codegen/enum.html"><strong aria-hidden="true">3.2.</strong> Top-level enum</a></li><li class="chapter-item expanded "><a href="codegen/ref-and-refmut.html"><strong aria-hidden="true">3.3.</strong> Ref and RefMut</a></li><li class="chapter-item expanded "><a href="codegen/map-macros.html"><strong aria-hidden="true">3.4.</strong> Mapping macros</a></li></ol></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="config/struct.html"><strong aria-hidden="true">4.1.</strong> Struct attributes</a></li><li class="chapter-item expanded "><a href="config/field.html"><strong aria-hidden="true">4.2.</strong> Field attributes</a></li></ol></li></ol>';
         // Set the current, active page, and reveal it if it's hidden
-        let current_page = document.location.href.toString();
+        let current_page = document.location.href.toString().split("#")[0];
         if (current_page.endsWith("/")) {
             current_page += "index.html";
         }
