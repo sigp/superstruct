@@ -67,6 +67,19 @@ procedural macro is being invoked on the variant struct which requires different
 
 **Format**: zero or more variant names, with variant attributes nested in parens
 
+## Enum variant attributes
+
+```
+#[superstruct(enum_variant_attributes(...))]
+```
+
+Provide a list of attributes to be applied verbatim to each of the enum variants.
+
+This is useful when using another proc-macro on the enum and needing to add an attribute
+to all enum variants.
+
+**Format**: any.
+
 ## `Ref` attributes
 
 ```
