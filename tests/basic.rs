@@ -1,5 +1,6 @@
 #![allow(non_local_definitions)] // for macros on structs within test functions
 
+use std::borrow::Cow;
 use serde::Deserialize;
 use superstruct::superstruct;
 
@@ -150,5 +151,24 @@ fn no_getter() {
         pub x: u64,
         #[superstruct(only(B), no_getter)]
         pub x: String,
+    }
+}
+
+#[test]
+#[allow(dead_code)]
+fn enum_variant_attribute() {
+    #[superstruct(
+        variants(A, B),
+        variant_attributes(derive(Deserialize)),
+        enum_variant_attributes(serde(borrow))
+    )]
+    #[derive(Deserialize)]
+    struct EnumVariantAttribute<'a> {
+        #[superstruct(only(A))]
+        #[serde(borrow)]
+        pub x: Cow<'a, str>,
+        #[superstruct(only(B))]
+        #[serde(borrow)]
+        pub y: Cow<'a, [u8]>,
     }
 }
