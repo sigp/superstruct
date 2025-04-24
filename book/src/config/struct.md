@@ -80,6 +80,17 @@ to all enum variants.
 
 **Format**: any.
 
+## Specific enum variant attributes
+
+```
+#[superstruct(specific_enum_variant_attributes(A(...), B(...), ...))]
+```
+
+Similar to `enum_variant_attributes`, but applies the attributes only to the named enum variants.
+This is useful if e.g. one enum variant needs an attribute while the others cannot.
+
+**Format**: zero or more variant names, with enum variant attributes nested in parens.
+
 ## `Ref` attributes
 
 ```
@@ -119,7 +130,7 @@ Disable generation of the top-level enum, and all code except the
 
 Generate mapping macros from the top-level enum, the `Ref` type or the `RefMut` type as appropriate.
 
-Please see the documentation on [Mapping into other types](./codegen/map-macros.md#mapping-into-other-types)
+Please see the documentation on [Mapping into other types](../codegen/map-macros.md#mapping-into-other-types)
 for an explanation of how these macros operate.
 
 **Format**: one or more `superstruct` type names

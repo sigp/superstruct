@@ -2,7 +2,7 @@
 
 SuperStruct generates an enum that combines all of the generated variant structs.
 
-Consider the the `MyStruct` example from the previous page:
+Consider the `MyStruct` example from the previous page:
 
 ```rust,no_run,no_playground
 #[superstruct(variants(Foo, Bar))]
@@ -68,3 +68,37 @@ are described [here](./ref-and-refmut.md).
 The top-level enum has `From` implementations for converting (owned) variant structs, i.e.
 
 * `impl From<{VariantStruct}> for {BaseName}` for all variants
+
+## Attributes on the enum variants
+
+To add attributes to the enum variants, `enum_variant_attributes` and `specific_enum_variant_attributes`
+can be used.
+
+Consider a variant of the `MyStruct` example where you want to derive `serde::Serialize`. However, one
+of the fields has a lifetime thus the `#[serde(borrow)]` attribute is required on the enum variants.
+In addition, you want to change the name of one of the enum variants when it's serialized:
+```rust,no_run,no_playground
+#[superstruct(
+    variants(Foo, Bar),
+    enum_variant_attributes(serde(borrow)),
+    specific_enum_variant_attributes(Bar(serde(rename = "Baz"))),
+)]
+#[derive(serde::Serialize)]
+struct MyStruct<'a> {
+    name: &'a str,
+    #[superstruct(only(Foo))]
+    location: u16,
+}
+```
+
+The generated enum is:
+
+```rust,no_run,no_playground
+#[derive(serde::Serialize)]
+enum MyStruct<'a> {
+    #[serde(borrow)]
+    Foo(MyStructFoo<'a>),
+    #[serde(borrow, rename = "Baz")]
+    Bar(MyStructBar<'a>),
+}
+```

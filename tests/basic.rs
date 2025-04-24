@@ -160,7 +160,8 @@ fn enum_variant_attribute() {
     #[superstruct(
         variants(A, B),
         variant_attributes(derive(Deserialize)),
-        enum_variant_attributes(serde(borrow))
+        enum_variant_attributes(serde(borrow)),
+        specific_enum_variant_attributes(B(serde(rename = "C"))),
     )]
     #[derive(Deserialize)]
     struct EnumVariantAttribute<'a> {
