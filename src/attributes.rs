@@ -35,15 +35,14 @@ impl FromMeta for IdentList {
                     NestedMeta::Meta(m) => m,
                     NestedMeta::Lit(l) => {
                         return Err(Error::custom(format!(
-                            "expected ident, got literal: {:?}",
-                            l
+                            "expected ident, got literal: {l:?}"
                         )))
                     }
                 };
                 let path = meta.path();
                 path.get_ident()
                     .cloned()
-                    .ok_or(Error::custom(format!("can't parse as ident: {:?}", path)))
+                    .ok_or(Error::custom(format!("can't parse as ident: {path:?}")))
             })
             .collect::<Result<_, _>>()?;
         Ok(Self { idents })
