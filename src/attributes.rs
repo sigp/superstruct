@@ -34,9 +34,7 @@ impl FromMeta for IdentList {
                 let meta = match nested_meta {
                     NestedMeta::Meta(m) => m,
                     NestedMeta::Lit(l) => {
-                        return Err(Error::custom(format!(
-                            "expected ident, got literal: {l:?}"
-                        )))
+                        return Err(Error::custom(format!("expected ident, got literal: {l:?}")))
                     }
                 };
                 let path = meta.path();
