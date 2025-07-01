@@ -272,6 +272,7 @@ fn main() {
 <li><a href="./codegen/enum.html">Top-level enum</a>.</li>
 <li><a href="./codegen/ref-and-refmut.html"><code>Ref</code> and <code>RefMut</code></a>.</li>
 <li><a href="./codegen/map-macros.html">Mapping macros</a>.</li>
+<li><a href="./codegen/meta-variants.html">Meta variant structs and enums</a>.</li>
 </ol>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
 <p>For a full, up-to-date example of the code generated, please see the <a href="./rustdoc/request">RustDoc output for
@@ -307,7 +308,7 @@ For more information see <a href="codegen/../config/struct.html">Struct attribut
 <p>The variant structs are unified as part of the <a href="codegen/./enum.html">top-level enum</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="top-level-enum"><a class="header" href="#top-level-enum">Top-level enum</a></h1>
 <p>SuperStruct generates an enum that combines all of the generated variant structs.</p>
-<p>Consider the the <code>MyStruct</code> example from the previous page:</p>
+<p>Consider the <code>MyStruct</code> example from the previous page:</p>
 <pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(Foo, Bar))]
@@ -362,6 +363,37 @@ are described <a href="codegen/./ref-and-refmut.html">here</a>.</p>
 <ul>
 <li><code>impl From&lt;{VariantStruct}&gt; for {BaseName}</code> for all variants</li>
 </ul>
+<h2 id="attributes-on-the-enum-variants"><a class="header" href="#attributes-on-the-enum-variants">Attributes on the enum variants</a></h2>
+<p>To add attributes to the enum variants, <code>enum_variant_attributes</code> and <code>specific_enum_variant_attributes</code>
+can be used.</p>
+<p>Consider a variant of the <code>MyStruct</code> example where you want to derive <code>serde::Serialize</code>. However, one
+of the fields has a lifetime thus the <code>#[serde(borrow)]</code> attribute is required on the enum variants.
+In addition, you want to change the name of one of the enum variants when it's serialized:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[superstruct(
+    variants(Foo, Bar),
+    enum_variant_attributes(serde(borrow)),
+    specific_enum_variant_attributes(Bar(serde(rename = "Baz"))),
+)]
+#[derive(serde::Serialize)]
+struct MyStruct&lt;'a&gt; {
+    name: &amp;'a str,
+    #[superstruct(only(Foo))]
+    location: u16,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The generated enum is:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(serde::Serialize)]
+enum MyStruct&lt;'a&gt; {
+    #[serde(borrow)]
+    Foo(MyStructFoo&lt;'a&gt;),
+    #[serde(borrow, rename = "Baz")]
+    Bar(MyStructBar&lt;'a&gt;),
+}
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ref-and-refmut"><a class="header" href="#ref-and-refmut"><code>Ref</code> and <code>RefMut</code></a></h1>
 <p>SuperStruct generates two reference-like structs which are designed to simplify working with nested
 <code>superstruct</code> types.</p>
@@ -547,6 +579,72 @@ support proper closures.</li>
 <li>Macros are scoped per-module, so you need to be more mindful of name collisions than when
 defining regular types.</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="meta-variant-structs-and-enums"><a class="header" href="#meta-variant-structs-and-enums">Meta variant structs and enums</a></h1>
+<p>Meta variants are an optional feature, useful for scenarios where you'd want nested
+enums at the top-level. structs will be created for all combinations of <code>meta_variants</code>
+and <code>variants</code>, names in the format <code>{BaseName}{MetaVariantName}{VariantName}</code>.
+Additionally, enums will be created for each <code>meta_variant</code> named <code>{BaseName}{MetaVariantName}</code>.</p>
+<p>For example:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[superstruct(meta_variants(Baz, Qux), variants(Foo, Bar))]
+struct MyStruct {
+    name: String,
+    #[superstruct(only(Foo))]
+    location: u16,
+    #[superstruct(meta_only(Baz))]
+    score: u64,
+    #[superstruct(only(Bar), meta_only(Qux))]
+    id: usize,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Here the <code>BaseName</code> is <code>MyStruct</code> and there are two variants in the meta-enum called
+<code>Baz</code> and <code>Qux</code>.</p>
+<p>The generated enums are:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum MyStruct {
+    Baz(MyStructBaz),
+    Qux(MyStructQux),
+}
+
+enum MyStructBaz {
+    Foo(MyStructBazFoo),
+    Bar(MyStructBazBar),
+}
+
+enum MyStructQux {
+    Foo(MyStructQuxFoo),
+    Bar(MyStructQuxBar),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The generated variant structs are:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct MyStructBazFoo {
+    name: String,
+    location: u16,
+    score: u64,
+}
+
+struct MyStructBazBar {
+    name: String,
+    score: u64,
+}
+
+struct MyStructQuxFoo {
+    name: String,
+    location: u16,
+}
+
+struct MyStructQuxBar {
+    name: String,
+    id: usize,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Note how the <code>only</code> attribute still applies, and a new <code>meta_only</code> attribute can be used to
+control the presence of fields in each meta variant.</p>
+<p>For more information see <a href="codegen/../config/struct.html">Struct attributes</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>SuperStruct is a procedural macro, and is configured by <code>superstruct</code> attributes on the
 type being defined.</p>
@@ -594,6 +692,19 @@ context (it is <em>not</em> a closure).</p>
 is useful if e.g. one variant needs to derive a trait which the others cannot, or if another
 procedural macro is being invoked on the variant struct which requires different parameters.</p>
 <p><strong>Format</strong>: zero or more variant names, with variant attributes nested in parens</p>
+<h2 id="enum-variant-attributes"><a class="header" href="#enum-variant-attributes">Enum variant attributes</a></h2>
+<pre><code>#[superstruct(enum_variant_attributes(...))]
+</code></pre>
+<p>Provide a list of attributes to be applied verbatim to each of the enum variants.</p>
+<p>This is useful when using another proc-macro on the enum and needing to add an attribute
+to all enum variants.</p>
+<p><strong>Format</strong>: any.</p>
+<h2 id="specific-enum-variant-attributes"><a class="header" href="#specific-enum-variant-attributes">Specific enum variant attributes</a></h2>
+<pre><code>#[superstruct(specific_enum_variant_attributes(A(...), B(...), ...))]
+</code></pre>
+<p>Similar to <code>enum_variant_attributes</code>, but applies the attributes only to the named enum variants.
+This is useful if e.g. one enum variant needs an attribute while the others cannot.</p>
+<p><strong>Format</strong>: zero or more variant names, with enum variant attributes nested in parens.</p>
 <h2 id="ref-attributes"><a class="header" href="#ref-attributes"><code>Ref</code> attributes</a></h2>
 <pre><code>#[superstruct(ref_attributes(...))]
 </code></pre>
@@ -615,7 +726,7 @@ procedural macro is being invoked on the variant struct which requires different
 #[map_ref_mut_into(ty1, ty2, ..)]
 </code></pre>
 <p>Generate mapping macros from the top-level enum, the <code>Ref</code> type or the <code>RefMut</code> type as appropriate.</p>
-<p>Please see the documentation on <a href="config/./codegen/map-macros.html#mapping-into-other-types">Mapping into other types</a>
+<p>Please see the documentation on <a href="config/../codegen/map-macros.html#mapping-into-other-types">Mapping into other types</a>
 for an explanation of how these macros operate.</p>
 <p><strong>Format</strong>: one or more <code>superstruct</code> type names</p>
 <h2 id="meta-variants"><a class="header" href="#meta-variants">Meta variants</a></h2>

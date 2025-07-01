@@ -204,6 +204,19 @@ context (it is <em>not</em> a closure).</p>
 is useful if e.g. one variant needs to derive a trait which the others cannot, or if another
 procedural macro is being invoked on the variant struct which requires different parameters.</p>
 <p><strong>Format</strong>: zero or more variant names, with variant attributes nested in parens</p>
+<h2 id="enum-variant-attributes"><a class="header" href="#enum-variant-attributes">Enum variant attributes</a></h2>
+<pre><code>#[superstruct(enum_variant_attributes(...))]
+</code></pre>
+<p>Provide a list of attributes to be applied verbatim to each of the enum variants.</p>
+<p>This is useful when using another proc-macro on the enum and needing to add an attribute
+to all enum variants.</p>
+<p><strong>Format</strong>: any.</p>
+<h2 id="specific-enum-variant-attributes"><a class="header" href="#specific-enum-variant-attributes">Specific enum variant attributes</a></h2>
+<pre><code>#[superstruct(specific_enum_variant_attributes(A(...), B(...), ...))]
+</code></pre>
+<p>Similar to <code>enum_variant_attributes</code>, but applies the attributes only to the named enum variants.
+This is useful if e.g. one enum variant needs an attribute while the others cannot.</p>
+<p><strong>Format</strong>: zero or more variant names, with enum variant attributes nested in parens.</p>
 <h2 id="ref-attributes"><a class="header" href="#ref-attributes"><code>Ref</code> attributes</a></h2>
 <pre><code>#[superstruct(ref_attributes(...))]
 </code></pre>
@@ -225,7 +238,7 @@ procedural macro is being invoked on the variant struct which requires different
 #[map_ref_mut_into(ty1, ty2, ..)]
 </code></pre>
 <p>Generate mapping macros from the top-level enum, the <code>Ref</code> type or the <code>RefMut</code> type as appropriate.</p>
-<p>Please see the documentation on <a href="./codegen/map-macros.html#mapping-into-other-types">Mapping into other types</a>
+<p>Please see the documentation on <a href="../codegen/map-macros.html#mapping-into-other-types">Mapping into other types</a>
 for an explanation of how these macros operate.</p>
 <p><strong>Format</strong>: one or more <code>superstruct</code> type names</p>
 <h2 id="meta-variants"><a class="header" href="#meta-variants">Meta variants</a></h2>

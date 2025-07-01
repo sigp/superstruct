@@ -168,7 +168,7 @@
                     <main>
                         <h1 id="top-level-enum"><a class="header" href="#top-level-enum">Top-level enum</a></h1>
 <p>SuperStruct generates an enum that combines all of the generated variant structs.</p>
-<p>Consider the the <code>MyStruct</code> example from the previous page:</p>
+<p>Consider the <code>MyStruct</code> example from the previous page:</p>
 <pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(Foo, Bar))]
@@ -223,6 +223,37 @@ are described <a href="./ref-and-refmut.html">here</a>.</p>
 <ul>
 <li><code>impl From&lt;{VariantStruct}&gt; for {BaseName}</code> for all variants</li>
 </ul>
+<h2 id="attributes-on-the-enum-variants"><a class="header" href="#attributes-on-the-enum-variants">Attributes on the enum variants</a></h2>
+<p>To add attributes to the enum variants, <code>enum_variant_attributes</code> and <code>specific_enum_variant_attributes</code>
+can be used.</p>
+<p>Consider a variant of the <code>MyStruct</code> example where you want to derive <code>serde::Serialize</code>. However, one
+of the fields has a lifetime thus the <code>#[serde(borrow)]</code> attribute is required on the enum variants.
+In addition, you want to change the name of one of the enum variants when it's serialized:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[superstruct(
+    variants(Foo, Bar),
+    enum_variant_attributes(serde(borrow)),
+    specific_enum_variant_attributes(Bar(serde(rename = "Baz"))),
+)]
+#[derive(serde::Serialize)]
+struct MyStruct&lt;'a&gt; {
+    name: &amp;'a str,
+    #[superstruct(only(Foo))]
+    location: u16,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The generated enum is:</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(serde::Serialize)]
+enum MyStruct&lt;'a&gt; {
+    #[serde(borrow)]
+    Foo(MyStructFoo&lt;'a&gt;),
+    #[serde(borrow, rename = "Baz")]
+    Bar(MyStructBar&lt;'a&gt;),
+}
+<span class="boring">}</span></code></pre></pre>
 
                     </main>
 
