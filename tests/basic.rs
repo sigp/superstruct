@@ -1,6 +1,7 @@
 #![allow(non_local_definitions)] // for macros on structs within test functions
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use std::borrow::Cow;
 use superstruct::superstruct;
 
 #[test]
@@ -151,4 +152,32 @@ fn no_getter() {
         #[superstruct(only(B), no_getter)]
         pub x: String,
     }
+}
+
+#[test]
+#[allow(dead_code)]
+fn enum_variant_attribute() {
+    #[superstruct(
+        variants(A, B),
+        variant_attributes(derive(Deserialize, Serialize)),
+        enum_variant_attributes(serde(borrow)),
+        specific_enum_variant_attributes(B(serde(rename = "C")))
+    )]
+    #[derive(Deserialize, Serialize)]
+    struct EnumVariantAttribute<'a> {
+        #[superstruct(only(A))]
+        #[serde(borrow)]
+        pub x: Cow<'a, str>,
+        #[superstruct(only(B))]
+        #[serde(borrow)]
+        pub y: Cow<'a, [u8]>,
+    }
+
+    assert_eq!(
+        serde_json::to_string(&EnumVariantAttribute::B(EnumVariantAttributeB {
+            y: Cow::Borrowed(&[0])
+        }))
+        .unwrap(),
+        r#"{"C":{"y":[0]}}"#
+    );
 }
