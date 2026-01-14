@@ -1,6 +1,5 @@
 [book]
 authors = ["Sigma Prime"]
 language = "en"
-multilingual = false
 src = "src"
 title = "SuperStruct Guide"
