@@ -13,21 +13,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" id="highlight-css" href="highlight.css">
-        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
-        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -37,9 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-29aef1fc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="toc-57a2e618.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div id="body-container">
+    <div id="mdbook-body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -82,56 +82,59 @@
             html.classList.add("js");
         </script>
 
-        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             let sidebar = null;
-            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
+                sidebar_toggle.checked = false;
             }
-            sidebar_toggle.checked = sidebar === 'visible';
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
                 <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
             </noscript>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="mdbook-page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
                         </label>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
                         </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
                         </button>
                     </div>
 
@@ -139,54 +142,59 @@
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
                         </a>
 
                     </div>
                 </div>
 
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
                     </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
                         </ul>
                     </div>
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script>
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
                         link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
                     });
                 </script>
 
-                <div id="content" class="content">
+                <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>SuperStruct is a Rust library for working with versioned data. It allows you to define and operate
 on <em>variants</em> of a <code>struct</code> which share some fields in common.</p>
-<p>As an example, imagine you're working on a program that accepts a <code>Request</code> struct from the user.
+<p>As an example, imagine you’re working on a program that accepts a <code>Request</code> struct from the user.
 In the first version of the program you only allow users to specify a <code>start: u16</code> field:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub struct Request {
     start: u16,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>After a while you realise that it would be nice if users could also specify an <code>end: u16</code> in their
 requests, so you would like to change the definition of <code>Request</code> to:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub struct Request {
     start: u16,
     end: u16,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Now imagine that your program needs to work with old versions of <code>Request</code> as well as new, i.e.
 it needs to be backwards-compatible. This is reasonably common when databases are involved and
 you need to write schema migrations, or when working with network protocols.</p>
@@ -216,7 +224,7 @@ fn main() {
 <li>An enum <code>Request</code> with variants <code>V1</code> and <code>V2</code> wrapping <code>RequestV1</code> and <code>RequestV2</code> respectively.</li>
 <li>A getter function on <code>Request</code> for the shared <code>start</code> field, e.g. <code>r1.start()</code>.</li>
 <li>A <em>partial</em> getter function returning <code>Result&lt;&amp;u16, ()&gt;</code> for <code>end</code>, e.g. <code>r2.end()</code>.</li>
-<li>Lots of other useful goodies that are covered in the <a href="./codegen.html">Codegen</a> section of the book.</li>
+<li>Lots of other useful goodies that are covered in the <a href="#code-generation">Codegen</a> section of the book.</li>
 </ul>
 <h2 id="when-should-you-use-superstruct"><a class="header" href="#when-should-you-use-superstruct">When <em>should</em> you use SuperStruct?</a></h2>
 <ul>
@@ -232,17 +240,18 @@ fn main() {
 </ul>
 <h2 id="what-next"><a class="header" href="#what-next">What next?</a></h2>
 <ul>
-<li>Check out the <a href="./codegen.html">Code Generation</a> docs.</li>
-<li>Check out the <a href="./config.html">Configuration</a> docs for information on how to
-control <code>superstruct</code>'s behaviour, including renaming getters, working with
+<li>Check out the <a href="#code-generation">Code Generation</a> docs.</li>
+<li>Check out the <a href="#configuration">Configuration</a> docs for information on how to
+control <code>superstruct</code>’s behaviour, including renaming getters, working with
 <code>Copy</code> types, etc.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="setup"><a class="header" href="#setup">Setup</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="setup"><a class="header" href="#setup">Setup</a></h1>
 <p>To use SuperStruct in your project add <code>superstruct</code> as a dependency in your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">superstruct = "0.4.0"
 </code></pre>
 <p>For the latest published version please consult <a href="https://crates.io/crates/superstruct"><code>crates.io</code></a>.</p>
-<hr />
+<hr>
 <p>To use SuperStruct, import the <code>superstruct</code> procedural macro with <code>use superstruct::superstruct</code>,
 like so:</p>
 <pre><code class="language-rust no_run noplayground">use superstruct::superstruct;
@@ -263,25 +272,27 @@ fn main() {
     assert_eq!(r1.end(), Err(()));
     assert_eq!(r2.end(), Ok(&amp;10));
 }</code></pre>
-<p>For more information on this example see the <a href="./intro.html">Introduction</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="code-generation"><a class="header" href="#code-generation">Code generation</a></h1>
+<p>For more information on this example see the <a href="#introduction">Introduction</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="code-generation"><a class="header" href="#code-generation">Code generation</a></h1>
 <p>SuperStruct generates several types, methods and trait implementations.</p>
 <p>You should visit each of the sub-pages in order to understand how the generated code fits together:</p>
 <ol>
-<li><a href="./codegen/variant-structs.html">Variant structs</a>.</li>
-<li><a href="./codegen/enum.html">Top-level enum</a>.</li>
-<li><a href="./codegen/ref-and-refmut.html"><code>Ref</code> and <code>RefMut</code></a>.</li>
-<li><a href="./codegen/map-macros.html">Mapping macros</a>.</li>
-<li><a href="./codegen/meta-variants.html">Meta variant structs and enums</a>.</li>
+<li><a href="#variant-structs">Variant structs</a>.</li>
+<li><a href="#top-level-enum">Top-level enum</a>.</li>
+<li><a href="#ref-and-refmut"><code>Ref</code> and <code>RefMut</code></a>.</li>
+<li><a href="#mapping-macros">Mapping macros</a>.</li>
+<li><a href="#meta-variant-structs-and-enums">Meta variant structs and enums</a>.</li>
 </ol>
 <h2 id="example"><a class="header" href="#example">Example</a></h2>
-<p>For a full, up-to-date example of the code generated, please see the <a href="./rustdoc/request">RustDoc output for
+<p>For a full, up-to-date example of the code generated, please see the <a href="rustdoc/request">RustDoc output for
 the <code>Request</code> example</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="variant-structs"><a class="header" href="#variant-structs">Variant structs</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="variant-structs"><a class="header" href="#variant-structs">Variant structs</a></h1>
 <p>The most basic items generated by SuperStruct are the variant structs. For each
 variant listed in the top-level <code>superstruct(variants(..)</code> list, a struct with
 the name <code>{BaseName}{VariantName}</code> will be created. For example:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(Foo, Bar))]
 struct MyStruct {
@@ -289,10 +300,10 @@ struct MyStruct {
     #[superstruct(only(Foo))]
     location: u16,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Here the <code>BaseName</code> is <code>MyStruct</code> and there are two variants called <code>Foo</code> and <code>Bar</code>.</p>
 <p>The generated variant structs are:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct MyStructFoo {
     name: String,
@@ -302,14 +313,15 @@ struct MyStruct {
 struct MyStructBar {
     name: String,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Note how the <code>only</code> attribute controls the presence of fields in each variant.
-For more information see <a href="codegen/../config/struct.html">Struct attributes</a>.</p>
-<p>The variant structs are unified as part of the <a href="codegen/./enum.html">top-level enum</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="top-level-enum"><a class="header" href="#top-level-enum">Top-level enum</a></h1>
+For more information see <a href="#struct-attributes">Struct attributes</a>.</p>
+<p>The variant structs are unified as part of the <a href="#top-level-enum">top-level enum</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="top-level-enum"><a class="header" href="#top-level-enum">Top-level enum</a></h1>
 <p>SuperStruct generates an enum that combines all of the generated variant structs.</p>
 <p>Consider the <code>MyStruct</code> example from the previous page:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(Foo, Bar))]
 struct MyStruct {
@@ -317,19 +329,19 @@ struct MyStruct {
     #[superstruct(only(Foo))]
     location: u16,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The generated enum is:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum MyStruct {
     Foo(MyStructFoo),
     Bar(MyStructBar),
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The enum has one variant per variant in <code>superstruct(variants(..))</code>, and each
 variant contains its generated variant struct. It is named <code>{BaseName}</code>.</p>
 <p>Generation of the top-level enum can be disabled using the <code>no_enum</code> attribute. For more information
-see the <a href="codegen/../config/struct.html">Struct attributes</a>.</p>
+see the <a href="#struct-attributes">Struct attributes</a>.</p>
 <h2 id="getters-and-setters"><a class="header" href="#getters-and-setters">Getters and setters</a></h2>
 <p>The top-level enum has getters and setters for each of the variant fields. They are named:</p>
 <ul>
@@ -343,17 +355,17 @@ setters are <em>partial</em> and return <code>Result&lt;&amp;T, E&gt;</code> and
 respectively.</p>
 <p>Many aspects of the getters and setters can be configured, including their
 names, whether they <code>Copy</code> and which error type <code>E</code> is used.
-See <a href="codegen/../config/field.html">Field attributes</a>.</p>
+See <a href="#field-attributes">Field attributes</a>.</p>
 <h2 id="casting-methods"><a class="header" href="#casting-methods">Casting methods</a></h2>
 <p>The top-level enum has methods to <em>cast</em> it to each of the variants:</p>
 <ul>
 <li><code>as_{variantname}</code> returning <code>Result&lt;&amp;{VariantStruct}, E&gt;</code>.</li>
 <li><code>as_{variantname}_mut</code> returning <code>Result&lt;&amp;mut {VariantStruct}, E&gt;</code>.</li>
 </ul>
-<p>The error type <code>E</code> may be controlled by the <a href="codegen/../config/struct.html#cast-error"><code>cast_error</code> attribute</a>.</p>
+<p>The error type <code>E</code> may be controlled by the <a href="#cast-error"><code>cast_error</code> attribute</a>.</p>
 <h2 id="reference-methods"><a class="header" href="#reference-methods">Reference methods</a></h2>
 <p>The top-level enum has methods for converting it into the <code>Ref</code> and <code>RefMut</code> types, which
-are described <a href="codegen/./ref-and-refmut.html">here</a>.</p>
+are described <a href="#ref-and-refmut">here</a>.</p>
 <ul>
 <li><code>to_ref</code> returning <code>{BaseName}Ref</code>.</li>
 <li><code>to_mut</code> returning <code>{BaseName}RefMut</code>.</li>
@@ -368,8 +380,8 @@ are described <a href="codegen/./ref-and-refmut.html">here</a>.</p>
 can be used.</p>
 <p>Consider a variant of the <code>MyStruct</code> example where you want to derive <code>serde::Serialize</code>. However, one
 of the fields has a lifetime thus the <code>#[serde(borrow)]</code> attribute is required on the enum variants.
-In addition, you want to change the name of one of the enum variants when it's serialized:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+In addition, you want to change the name of one of the enum variants when it’s serialized:</p>
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(
     variants(Foo, Bar),
@@ -382,9 +394,9 @@ struct MyStruct&lt;'a&gt; {
     #[superstruct(only(Foo))]
     location: u16,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The generated enum is:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[derive(serde::Serialize)]
 enum MyStruct&lt;'a&gt; {
@@ -393,8 +405,9 @@ enum MyStruct&lt;'a&gt; {
     #[serde(borrow, rename = "Baz")]
     Bar(MyStructBar&lt;'a&gt;),
 }
-<span class="boring">}</span></code></pre></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ref-and-refmut"><a class="header" href="#ref-and-refmut"><code>Ref</code> and <code>RefMut</code></a></h1>
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="ref-and-refmut"><a class="header" href="#ref-and-refmut"><code>Ref</code> and <code>RefMut</code></a></h1>
 <p>SuperStruct generates two reference-like structs which are designed to simplify working with nested
 <code>superstruct</code> types.</p>
 <p>The immutable reference type is named <code>{BaseName}Ref</code> and has all of the immutable getter methods
@@ -402,7 +415,7 @@ from the top-level enum.</p>
 <p>The mutable reference type is named <code>{BaseName}RefMut</code> and has all of the mutable getter methods
 from the top-level enum.</p>
 <p>Consider the <code>MyStruct</code> example again:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(Foo, Bar))]
 struct MyStruct {
@@ -410,9 +423,9 @@ struct MyStruct {
     #[superstruct(only(Foo))]
     location: u16,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The generated <code>Ref</code> types look like this:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum MyStructRef&lt;'a&gt; {
     Foo(&amp;'a MyStructFoo),
@@ -423,7 +436,7 @@ enum MyStructRefMut&lt;'a&gt; {
     Foo(&amp;'a mut MyStructFoo),
     Bar(&amp;'a mut MyStructFoo),
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The reason these types can be useful (particularly with nesting) is that they do not require a full
 reference to a <code>MyStruct</code> in order to construct: a reference to a single variant struct will suffice.</p>
 <h2 id="trait-implementations"><a class="header" href="#trait-implementations">Trait Implementations</a></h2>
@@ -437,16 +450,17 @@ or references to the top-level enum type, i.e.</p>
 <li><code>impl From&lt;&amp;'a {BaseName}&gt; for {BaseName}Ref&lt;'a&gt;</code> (same as <code>to_ref()</code>).</li>
 </ul>
 <h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
-<p>Please see <a href="codegen/../rustdoc/src/nested/nested.rs.html"><code>examples/nested.rs</code></a> and its
-generated <a href="codegen/../rustdoc/nested/">documentation</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="mapping-macros"><a class="header" href="#mapping-macros">Mapping macros</a></h1>
+<p>Please see <a href="rustdoc/src/nested/nested.rs.html"><code>examples/nested.rs</code></a> and its
+generated <a href="rustdoc/nested">documentation</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="mapping-macros"><a class="header" href="#mapping-macros">Mapping macros</a></h1>
 <p>To facilitate code that is generic over all variants of a <code>superstruct</code>, we generate several
 <em>mapping macros</em> with names like <code>map_foo!</code> and <code>map_foo_into_bar!</code>.</p>
 <h2 id="mapping-into-self"><a class="header" href="#mapping-into-self">Mapping into <code>Self</code></a></h2>
 <p>For every top-level enum we generate a mapping macro that matches on values of
 <code>Self</code> and is equipped with a variant constructor for <code>Self</code>.</p>
 <p>Consider the following type:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(First, Second)]
 struct Foo {
@@ -454,9 +468,9 @@ struct Foo {
     #[only(Second)]
     y: u8
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The mapping macro for <code>Foo</code> will be:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>macro_rules! map_foo {
     ($value:expr, $f:expr) =&gt; {
@@ -466,7 +480,7 @@ struct Foo {
         }
     }
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>i.e. <code>map_foo!</code> is a macro taking two arguments:</p>
 <ul>
 <li><code>value</code>: an expression which must be of type <code>Foo</code>.</li>
@@ -481,7 +495,7 @@ of the <code>First</code> branch.</li>
 </li>
 </ul>
 <p>Example usage looks like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Foo {
     fn increase_x(self) -&gt; Self {
@@ -491,14 +505,14 @@ of the <code>First</code> branch.</li>
         })
     }
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Although the type of <code>inner</code> could be <code>FooFirst</code> or <code>FooSecond</code>, both have an <code>x</code> field, so it is
 legal to increment it. The <code>constructor</code> is then used to re-construct an instance of <code>Foo</code> by
 injecting the updated <code>inner</code> value. If an invalid closure is provided then the type errors may
 be quite opaque. On the other hand, if your code type-checks while using <code>map!</code> then you can rest
-assured that it is valid (<code>superstruct</code> doesn't use any <code>unsafe</code> blocks or do any spicy casting).</p>
+assured that it is valid (<code>superstruct</code> doesn’t use any <code>unsafe</code> blocks or do any spicy casting).</p>
 <blockquote>
-<p>Tip: You don't need to use the constructor argument if you are implementing a straight-forward
+<p>Tip: You don’t need to use the constructor argument if you are implementing a straight-forward
 projection on <code>Self</code>. Although in some cases you may need to provide a type
 hint to the compiler, like <code>let _ = constructor(inner)</code>.</p>
 </blockquote>
@@ -507,7 +521,7 @@ hint to the compiler, like <code>let _ = constructor(inner)</code>.</p>
 (supplied as a reference to <code>_</code>) as their first argument, which must correspond to the lifetime
 on the <code>Ref</code>/<code>RefMut</code> type.</p>
 <p>Example usage for <code>Foo</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>impl Foo {
     fn get_x&lt;'a&gt;(&amp;'a self) -&gt; &amp;'a u64 {
@@ -516,7 +530,7 @@ on the <code>Ref</code>/<code>RefMut</code> type.</p>
         })
     }
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="mapping-into-other-types"><a class="header" href="#mapping-into-other-types">Mapping into other types</a></h2>
 <p>Mappings can also be generated between two <code>superstruct</code>s with identically named variants.</p>
 <p>These mapping macros are available for the top-level enum, <code>Ref</code> and <code>RefMut</code>, and take the same
@@ -525,7 +539,7 @@ type being mapped <em>into</em>.</p>
 <p>The name of the mapping macro is <code>map_X_into_Y!</code> where <code>X</code> is the snake-cased
 <code>Self</code> type and <code>Y</code> is the snake-cased target type.</p>
 <p>Example:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(
     variants(A, B),
@@ -561,7 +575,7 @@ fn thing1_ref_mut_to_thing2_ref_mut&lt;'a&gt;(thing1: Thing1RefMut&lt;'a&gt;) -&
         cons(&amp;mut inner.thing2)
     })
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="naming"><a class="header" href="#naming">Naming</a></h2>
 <p>Type names are converted from <code>CamelCase</code> to <code>snake_case</code> on a best-effort basis. E.g.</p>
 <ul>
@@ -579,13 +593,14 @@ support proper closures.</li>
 <li>Macros are scoped per-module, so you need to be more mindful of name collisions than when
 defining regular types.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="meta-variant-structs-and-enums"><a class="header" href="#meta-variant-structs-and-enums">Meta variant structs and enums</a></h1>
-<p>Meta variants are an optional feature, useful for scenarios where you'd want nested
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="meta-variant-structs-and-enums"><a class="header" href="#meta-variant-structs-and-enums">Meta variant structs and enums</a></h1>
+<p>Meta variants are an optional feature, useful for scenarios where you’d want nested
 enums at the top-level. structs will be created for all combinations of <code>meta_variants</code>
 and <code>variants</code>, names in the format <code>{BaseName}{MetaVariantName}{VariantName}</code>.
 Additionally, enums will be created for each <code>meta_variant</code> named <code>{BaseName}{MetaVariantName}</code>.</p>
 <p>For example:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(meta_variants(Baz, Qux), variants(Foo, Bar))]
 struct MyStruct {
@@ -597,11 +612,11 @@ struct MyStruct {
     #[superstruct(only(Bar), meta_only(Qux))]
     id: usize,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Here the <code>BaseName</code> is <code>MyStruct</code> and there are two variants in the meta-enum called
 <code>Baz</code> and <code>Qux</code>.</p>
 <p>The generated enums are:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum MyStruct {
     Baz(MyStructBaz),
@@ -617,9 +632,9 @@ enum MyStructQux {
     Foo(MyStructQuxFoo),
     Bar(MyStructQuxBar),
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>The generated variant structs are:</p>
-<pre><pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust no_run no_playground"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>struct MyStructBazFoo {
     name: String,
@@ -641,40 +656,42 @@ struct MyStructQuxBar {
     name: String,
     id: usize,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Note how the <code>only</code> attribute still applies, and a new <code>meta_only</code> attribute can be used to
 control the presence of fields in each meta variant.</p>
-<p>For more information see <a href="codegen/../config/struct.html">Struct attributes</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<p>For more information see <a href="#struct-attributes">Struct attributes</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>SuperStruct is a procedural macro, and is configured by <code>superstruct</code> attributes on the
 type being defined.</p>
 <ul>
-<li><a href="./config/struct.html">Struct attributes</a> are applied to the top-level type and configure
+<li><a href="#struct-attributes">Struct attributes</a> are applied to the top-level type and configure
 properties relevant to that, as well as defaults for error types.</li>
-<li><a href="./config/field.html">Field attributes</a> are applied to each struct field and determine
+<li><a href="#field-attributes">Field attributes</a> are applied to each struct field and determine
 the fields of variants, as well as the characteristics of getters and setters.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="struct-attributes"><a class="header" href="#struct-attributes">Struct attributes</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="struct-attributes"><a class="header" href="#struct-attributes">Struct attributes</a></h1>
 <p>The following attributes may be used in a <code>superstruct</code> macro invocation on a
 <code>struct</code> item. All attributes are optional unless stated otherwise.</p>
 <h2 id="variants"><a class="header" href="#variants">Variants</a></h2>
 <pre><code>#[superstruct(variants(A, B, ...))]
 </code></pre>
 <p>Define the list of variants that this type has.
-See <a href="config/../codegen/variant-structs.html">variant structs</a>.</p>
+See <a href="#variant-structs">variant structs</a>.</p>
 <p>The <code>variants</code> attribute is <em>not optional</em>.</p>
 <p><strong>Format</strong>: 1+ comma-separated identifiers.</p>
 <h2 id="cast-error"><a class="header" href="#cast-error">Cast error</a></h2>
 <pre><code>#[superstruct(cast_error(ty = "..", expr = ".."))]
 </code></pre>
-<p>Define the error type to be returned from <a href="config/../codegen/enum.html#casting-methods">casting methods</a>.</p>
+<p>Define the error type to be returned from <a href="#casting-methods">casting methods</a>.</p>
 <p>The expression must be of the given error type, and capable of being evaluated without any
 context (it is <em>not</em> a closure).</p>
 <p><strong>Format</strong>: quoted type for <code>ty</code>, quoted expression for <code>expr</code></p>
 <h2 id="partial-getter-error"><a class="header" href="#partial-getter-error">Partial getter error</a></h2>
 <pre><code>#[superstruct(cast_error(ty = "..", expr = ".."))]
 </code></pre>
-<p>Define the error type to be returned from <a href="config/../codegen/enum.html#getters-and-setters">partial getter
+<p>Define the error type to be returned from <a href="#getters-and-setters">partial getter
 methods</a>.</p>
 <p>The expression must be of the given error type, and capable of being evaluated without any
 context (it is <em>not</em> a closure).</p>
@@ -719,24 +736,25 @@ This is useful if e.g. one enum variant needs an attribute while the others cann
 <pre><code>#[superstruct(no_enum)]
 </code></pre>
 <p>Disable generation of the top-level enum, and all code except the
-<a href="config/../codegen/variant-structs.html">variant structs</a>.</p>
+<a href="#variant-structs">variant structs</a>.</p>
 <h2 id="map-into"><a class="header" href="#map-into">Map Into</a></h2>
 <pre><code>#[map_into(ty1, ty2, ..)]
 #[map_ref_into(ty1, ty2, ..)]
 #[map_ref_mut_into(ty1, ty2, ..)]
 </code></pre>
 <p>Generate mapping macros from the top-level enum, the <code>Ref</code> type or the <code>RefMut</code> type as appropriate.</p>
-<p>Please see the documentation on <a href="config/../codegen/map-macros.html#mapping-into-other-types">Mapping into other types</a>
+<p>Please see the documentation on <a href="#mapping-into-other-types">Mapping into other types</a>
 for an explanation of how these macros operate.</p>
 <p><strong>Format</strong>: one or more <code>superstruct</code> type names</p>
 <h2 id="meta-variants"><a class="header" href="#meta-variants">Meta variants</a></h2>
 <pre><code>#[superstruct(meta_variants(A, B, ...), variants(C, D, ...))]
 </code></pre>
 <p>Generate a two-dimensional superstruct.
-See <a href="config/../codegen/meta-variants.html">meta variant structs</a>.</p>
+See <a href="#meta-variant-structs-and-enums">meta variant structs</a>.</p>
 <p>The <code>meta_variants</code> attribute is optional.</p>
 <p><strong>Format</strong>: 1+ comma-separated identifiers.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="field-attributes"><a class="header" href="#field-attributes">Field attributes</a></h1>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="field-attributes"><a class="header" href="#field-attributes">Field attributes</a></h1>
 <p>Field attributes may be applied to fields within a <code>struct</code> that has a <code>superstruct</code> attribute
 to it at the top-level.</p>
 <p>All attributes are optional.</p>
@@ -747,14 +765,14 @@ to it at the top-level.</p>
 <p>The <code>only</code> attribute is currently the only way that different variants are
 created.</p>
 <p>The selected variants should be a subset of the variants defined in the top-level
-<a href="config/./struct.html#variants"><code>variants</code></a> attribute.</p>
+<a href="#variants"><code>variants</code></a> attribute.</p>
 <p><strong>Format</strong>: 1+ comma-separated identifiers.</p>
 <h2 id="getter"><a class="header" href="#getter">Getter</a></h2>
 <pre><code>#[superstruct(getter(copy, ..))]
 #[superstruct(getter(no_mut, ..))]
 #[superstruct(getter(rename = "..", ..))]
 </code></pre>
-<p>Customise the implementation of the <a href="config/../codegen/enum.html#getters-and-setters">getter functions</a> for
+<p>Customise the implementation of the <a href="#getters-and-setters">getter functions</a> for
 this field.</p>
 <p>This attribute can only be applied to <strong>common</strong> fields (i.e. ones with no <code>only</code> attribute).</p>
 <p>All of the sub-attributes <code>copy</code>, <code>no_mut</code> and <code>rename</code> are optional and any subset of them
@@ -771,7 +789,7 @@ or the generated code will fail to typecheck.</li>
 #[superstruct(partial_getter(no_mut, ..))]
 #[superstruct(partial_getter(rename = "..", ..))]
 </code></pre>
-<p>Customise the implementation of the <a href="config/../codegen/enum.html#getters-and-setters">partial getter
+<p>Customise the implementation of the <a href="#getters-and-setters">partial getter
 functions</a> for this field.</p>
 <p>This attribute can only be applied to <strong><em>non</em>-common</strong> fields (i.e. ones <em>with</em> an <code>only</code> attribute).</p>
 <p>All of the sub-attributes <code>copy</code>, <code>no_mut</code> and <code>rename</code> are optional and any subset of them
@@ -784,12 +802,12 @@ must be <code>Copy</code> or the generated code will fail to typecheck.</li>
 to <code>name_mut()</code> (if enabled).</li>
 </ul>
 <p>The error type for partial getters can currently only be configured on a per-struct basis
-via the <a href="config/./struct.html#partial-getter-error"><code>partial_getter_error</code></a> attribute, although this may
+via the <a href="#partial-getter-error"><code>partial_getter_error</code></a> attribute, although this may
 change in a future release.</p>
 <h2 id="no-getter"><a class="header" href="#no-getter">No Getter</a></h2>
 <p>Disable the generation of (partial) getter functions for this field.
 This can be used for when two fields have the same name but different types:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(A, B))]
 struct NoGetter {
@@ -798,7 +816,7 @@ struct NoGetter {
     #[superstruct(only(B), no_getter)]
     pub x: String,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <h2 id="flatten"><a class="header" href="#flatten">Flatten</a></h2>
 <pre><code>#[superstruct(flatten)]
 </code></pre>
@@ -806,7 +824,7 @@ struct NoGetter {
 superstruct. This is useful for nesting superstructs whose variant types should be linked.</p>
 <p>This will automatically create a partial getter for each variant. The following two examples are equivalent.</p>
 <p>Using <code>flatten</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(A, B))]
 struct InnerMessage {
@@ -819,9 +837,9 @@ struct Message {
     #[superstruct(flatten)]
     pub inner: InnerMessage,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>Equivalent without <code>flatten</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(A, B))]
 struct InnerMessage {
@@ -836,9 +854,9 @@ struct Message {
     #[superstruct(only(B), partial_getter(rename = "inner_b"))]
     pub inner: InnerMessageB,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 <p>If you wish to only flatten into only a subset of variants, you can define them like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[superstruct(variants(A, B))]
 struct InnerMessage {
@@ -851,7 +869,7 @@ struct Message {
     #[superstruct(flatten(A,B))]
     pub inner: InnerMessage,
 }
-<span class="boring">}</span></code></pre></pre>
+<span class="boring">}</span></code></pre>
 
                     </main>
 
@@ -870,6 +888,11 @@ struct Message {
 
         </div>
 
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
 
 
 
@@ -878,13 +901,13 @@ struct Message {
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
 
         <!-- Custom JS scripts -->
 
@@ -893,6 +916,7 @@ struct Message {
             window.setTimeout(window.print, 100);
         });
         </script>
+
 
     </div>
     </body>
