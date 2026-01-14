@@ -3,7 +3,7 @@
 To use SuperStruct in your project add `superstruct` as a dependency in your `Cargo.toml`:
 
 ```toml
-superstruct = "0.4.0"
+superstruct = "0.10"
 ```
 
 For the latest published version please consult [`crates.io`](https://crates.io/crates/superstruct).
